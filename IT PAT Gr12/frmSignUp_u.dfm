@@ -4,7 +4,7 @@ object frmFlylee: TfrmFlylee
   Caption = 'Flylee Sign Up'
   ClientHeight = 490
   ClientWidth = 828
-  Color = clBtnFace
+  Color = clCream
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
@@ -137,13 +137,14 @@ object frmFlylee: TfrmFlylee
     000FE0000007E0000007C0000007C0000003C0000003C0000003C0000003C000
     0003C0000003E0000007E0000007E0000007F000000FF000000FF800001FFC00
     003FFE00007FFF0000FFFFC003FFFFF81FFFFFFFFFFF}
+  Position = poScreenCenter
   OnCreate = FormCreate
   TextHeight = 15
   object imgCorner: TImage
-    Left = 408
+    Left = 440
     Top = 0
-    Width = 425
-    Height = 313
+    Width = 393
+    Height = 281
     Stretch = True
   end
   object imgTitle: TImage
@@ -154,21 +155,21 @@ object frmFlylee: TfrmFlylee
     Stretch = True
   end
   object imgPlane: TImage
-    Left = 424
-    Top = 64
+    Left = 410
+    Top = 8
     Width = 170
     Height = 170
   end
   object imgPlane2: TImage
-    Left = 544
-    Top = 127
+    Left = 594
+    Top = 159
     Width = 170
     Height = 170
   end
   object lblTitle: TLabel
     Left = 568
     Top = 40
-    Width = 233
+    Width = 226
     Height = 81
     Caption = 'Sign Up'
     Font.Charset = ANSI_CHARSET
@@ -177,5 +178,107 @@ object frmFlylee: TfrmFlylee
     Font.Name = 'Harlow Solid Italic'
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
+  end
+  object lblAlready: TLabel
+    Left = 506
+    Top = 442
+    Width = 220
+    Height = 23
+    Caption = 'Already have an account?'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Roboto'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblLogIn: TLabel
+    Left = 732
+    Top = 440
+    Width = 65
+    Height = 25
+    Caption = 'Log In'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -21
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    OnMouseEnter = lblLogInMouseEnter
+    OnMouseLeave = lblLogInMouseLeave
+  end
+  object lblName: TLabel
+    Left = 192
+    Top = 137
+    Width = 78
+    Height = 19
+    Caption = 'First Name'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Roboto'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblLastName: TLabel
+    Left = 224
+    Top = 240
+    Width = 56
+    Height = 15
+    Caption = 'Last Name'
+  end
+  object lblPassword: TLabel
+    Left = 272
+    Top = 312
+    Width = 50
+    Height = 15
+    Caption = 'Password'
+  end
+  object edtName: TEdit
+    Left = 192
+    Top = 162
+    Width = 180
+    Height = 25
+    TabOrder = 0
+  end
+  object edtLastName: TEdit
+    Left = 216
+    Top = 272
+    Width = 121
+    Height = 23
+    TabOrder = 1
+  end
+  object edtPassword: TEdit
+    Left = 272
+    Top = 360
+    Width = 121
+    Height = 23
+    TabOrder = 2
+  end
+  object btbtnGeneratePass: TBitBtn
+    Left = 399
+    Top = 359
+    Width = 25
+    Height = 25
+    Caption = '&'
+    Kind = bkRetry
+    NumGlyphs = 2
+    TabOrder = 3
+    OnClick = btbtnGeneratePassClick
+  end
+  object btnSignUp: TButton
+    Left = 30
+    Top = 445
+    Width = 120
+    Height = 30
+    Caption = 'Sign Up'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -21
+    Font.Name = 'Roboto'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+    OnClick = btnSignUpClick
   end
 end

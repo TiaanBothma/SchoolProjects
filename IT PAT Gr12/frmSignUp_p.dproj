@@ -127,6 +127,11 @@
             <Form>frmFlylee</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="dmData_u.pas">
+            <Form>dmData</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
