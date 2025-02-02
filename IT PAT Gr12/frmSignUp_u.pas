@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
-  Vcl.Buttons;
+  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal;
 
 type
   TfrmFlylee = class(TForm)
@@ -24,13 +24,16 @@ type
     edtPassword: TEdit;
     btbtnGeneratePass: TBitBtn;
     btnSignUp: TButton;
+    dtpBirthDate: TDateTimePicker;
+    lblBirthDate: TLabel;
+    cbNotification: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure lblLogInMouseEnter(Sender: TObject);
     procedure lblLogInMouseLeave(Sender: TObject);
     //Custom Procedures
     procedure posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
     procedure btbtnGeneratePassClick(Sender: TObject);
-    function hashPassword() : string;
+    function hashPassword(spassword : string) : string;
     procedure btnSignUpClick(Sender: TObject);
     function isSignUpValidate() : boolean;
   private
@@ -96,22 +99,36 @@ begin
 end;
 
 procedure TfrmFlylee.btnSignUpClick(Sender: TObject);
+var
+
+  spassword : string;
+
 begin
 
-
-
-  with dmData do
+  if isSignUpValidate then
   begin
-    tblUsers.open;
-    while not tblUsers.Eof do
+    spassword := edtPassword.text;
+
+    with dmData do
     begin
+      tblUsers.open;
       tblUsers.last;
       tblUsers.Insert;
 
       tblUsers['name'] := edtName.text;
+      tblUsers['lastname'] := edtlastname.text;
+      tblUsers['isSubscribed'] := cbNotification.Checked;
+      tblUsers['birthDate'] := dtpBirthDate.date;
+      tblUsers['password'] := hashPassword(spassword);
 
       tblUsers.post;
     end;
+
+    MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee',TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
+  end
+  else
+  begin
+    MessageDlg('An error has occured with the Sign Up.' + #13 + #9 + 'Please Try Again', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbClose], 0);
   end;
 
 end;
@@ -144,42 +161,83 @@ begin
     top := edtPassword.top;
   end;
 
+  with lblBirthDate do
+  begin
+    font := lblName.font;
+    left := 40;
+    top := edtPassword.top + edtPassword.Height + 25;
+  end;
+
+  with dtpBirthDate do
+  begin
+    top := lblBirthDate.top + lblBirthDate.Height + 8;
+    left := 40;
+  end;
+
+  with cbNotification do
+  begin
+    left := btnSignUp.left + btnSignup.Width + 10;
+    top := btnSignUp.top + 5;
+  end;
+
 end;
 
-function TfrmFlylee.hashPassword(): string;
+function TfrmFlylee.hashPassword(spassword : string): string;
+var
+
+  salt: string;
+  md5: TIdHashMessageDigest5;
+
 begin
-  //Hash the password
-  //Use salt and sha256 and utf8
+  //n 'Salt' is n random string wat binne n password geplaas word sodat dit langer vat of moeiliker is om die password te 'crack'
+  salt := 'random-salt';
+
+  //MD5 hashing is een manier in Delphi om die salt en die password saam te hash
+  md5 := TIdHashMessageDigest5.Create;
+
+  //Concatenate die password en die salt
+  Result := md5.HashStringAsHex(spassword + salt);
+
+  //Gooi die md5 object uit die RAM uit
+  md5.Free;
 end;
 
 function TfrmFlylee.isSignUpValidate: boolean;
 var
 
-  arrVlags : array[1..5] of Boolean;
-  I: Integer;
+  arrVlags : array[1..4] of Boolean;
+  I, iUserAge: Integer;
 
 begin
-  for I := 1 to 5 do
+  for I := 1 to 4 do
   arrVlags[i] := false;
-
 
   //Check first name
   if pos(' ', edtName.Text) = 0
     then arrVlags[1] := true;
 
   //Check lastname
-
+  if pos(' ', edtlastname.Text) = 0
+    then arrVlags[2] := true;
 
   //Check password
+  if length(edtPassword.Text) >= 8
+    then arrVlags[3] := true
+  else arrVlags[3] := true; //!remove
+
+  //Check age
+  iuserage := yearsbetween(date, dtpBirthDate.date);
+  if iuserage >= 18
+    then arrVlags[4] := true;
+
 
   //check if user is valid
-  for I := 1 to 5 do
+  for I := 1 to 4 do
   begin
     if arrVlags[i] <> true
       then
       begin
         result := false;
-        exit;
       end;
   end;
 
@@ -203,3 +261,25 @@ begin
 end;
 
 end.
+
+{
+function TfrmFlylee.verifyPassword(storedHash, spassword: string): Boolean;
+var
+  salt: string;
+  md5: TIdHashMessageDigest5;
+  hashedInputPassword: string;
+begin
+  // Retrieve the salt (from the database or wherever you stored it)
+  salt := 'some-random-salt';  // Ensure you use the same salt that was used during hashing
+
+  md5 := TIdHashMessageDigest5.Create;
+
+  // Hash the input password with the same salt
+  hashedInputPassword := md5.HashStringAsHex(spassword + salt);
+
+  // Compare the hashes
+  Result := (storedHash = hashedInputPassword);
+
+  md5.Free;
+end;
+}

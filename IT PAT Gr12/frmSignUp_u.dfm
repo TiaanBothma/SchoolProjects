@@ -234,11 +234,18 @@ object frmFlylee: TfrmFlylee
     Height = 15
     Caption = 'Password'
   end
+  object lblBirthDate: TLabel
+    Left = 296
+    Top = 400
+    Width = 52
+    Height = 15
+    Caption = 'Birth Date'
+  end
   object edtName: TEdit
     Left = 192
     Top = 162
     Width = 180
-    Height = 25
+    Height = 23
     TabOrder = 0
   end
   object edtLastName: TEdit
@@ -275,10 +282,27 @@ object frmFlylee: TfrmFlylee
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -21
-    Font.Name = 'Roboto'
-    Font.Style = [fsBold]
+    Font.Name = 'Harlow Solid Italic'
+    Font.Style = [fsBold, fsItalic]
     ParentFont = False
     TabOrder = 4
     OnClick = btnSignUpClick
+  end
+  object dtpBirthDate: TDateTimePicker
+    Left = 264
+    Top = 440
+    Width = 186
+    Height = 23
+    Date = 45690.000000000000000000
+    Time = 0.729547303242725300
+    TabOrder = 5
+  end
+  object cbNotification: TCheckBox
+    Left = 528
+    Top = 368
+    Width = 185
+    Height = 17
+    Caption = 'Receive Weekly Flight Updates'
+    TabOrder = 6
   end
 end
