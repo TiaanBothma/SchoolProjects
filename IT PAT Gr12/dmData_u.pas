@@ -14,6 +14,7 @@ type
     { Private declarations }
   public
     { Public declarations }
+    iUserId : integer;
   end;
 
 var

@@ -217,6 +217,7 @@ object frmLogIn: TfrmLogIn
     Height = 25
     Caption = 'Log In'
     TabOrder = 0
+    OnClick = btnLogInClick
   end
   object edtName: TEdit
     Left = 144

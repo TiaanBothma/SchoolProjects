@@ -27,6 +27,7 @@ type
     procedure lblSignUpClick(Sender: TObject);
     procedure lblSignUpMouseEnter(Sender: TObject);
     procedure lblSignUpMouseLeave(Sender: TObject);
+    procedure btnLogInClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -40,7 +41,7 @@ implementation
 
 {$R *.dfm}
 
-uses frmSignUp_u;
+uses frmSignUp_u, dmData_u, frmFlylee_u;
 
 procedure TfrmLogIn.lblSignUpClick(Sender: TObject);
 begin
@@ -98,6 +99,10 @@ var
   hashedInputPassword: string;
 
 begin
+  {
+   Hash die password wat in die edit staan en kyk of dit ooreenstem met die storedHash
+  }
+
   // Retrieve the salt
   salt := 'random-salt';
 
@@ -110,6 +115,32 @@ begin
   Result := (storedHash = hashedInputPassword);
 
   md5.Free;
+end;
+
+procedure TfrmLogIn.btnLogInClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      //Check of the hashed password met die edit password ooreenstem
+      if (verifyPassword(tblUsers['password'], edtpassword.text)) and (tblUsers['name'] = edtName.text)
+        then begin
+          MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
+          frmFlylee.Show;
+          frmLogIN.hide;
+          //Allocate die user id aan die user sodat later kan opspoor wie die persoon is
+          iUserid := tblUsers['userId'];
+        end;
+
+
+      tblUsers.next;
+    end;
+
+  end;
 end;
 
 procedure TfrmLogIn.FormCreate(Sender: TObject);

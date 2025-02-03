@@ -8,6 +8,7 @@ uses
 
 type
   TfrmFlylee = class(TForm)
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -20,5 +21,10 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmFlylee.FormCreate(Sender: TObject);
+begin
+ //Form Create
+end;
 
 end.
