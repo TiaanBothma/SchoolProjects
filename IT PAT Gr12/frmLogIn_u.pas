@@ -4,10 +4,29 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, pngimage, IdHashMessageDigest, IdGlobal;
 
 type
   TfrmLogIn = class(TForm)
+    imgCorner: TImage;
+    imgPlane2: TImage;
+    imgPlane: TImage;
+    lblTitle: TLabel;
+    imgTitle: TImage;
+    btnLogIn: TButton;
+    lblAccount: TLabel;
+    lblSignUp: TLabel;
+    lblName: TLabel;
+    edtName: TEdit;
+    lblPassword: TLabel;
+    edtPassword: TEdit;
+    procedure FormCreate(Sender: TObject);
+    //My procedures
+    function verifyPassword(storedHash, spassword: string): Boolean;
+     procedure posLogInOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+    procedure lblSignUpClick(Sender: TObject);
+    procedure lblSignUpMouseEnter(Sender: TObject);
+    procedure lblSignUpMouseLeave(Sender: TObject);
   private
     { Private declarations }
   public
@@ -20,5 +39,156 @@ var
 implementation
 
 {$R *.dfm}
+
+uses frmSignUp_u;
+
+procedure TfrmLogIn.lblSignUpClick(Sender: TObject);
+begin
+  frmSignUp.Show;
+  frmLogIn.Hide;
+end;
+
+procedure TfrmLogIn.lblSignUpMouseEnter(Sender: TObject);
+begin
+  //Change font and color when hovered over
+  lblSignUp.font.color := frmSignUp.clPrimary;
+  lblSignUp.font.Style := [TFontStyle.fsUnderline, TFontStyle.fsBold];
+end;
+
+procedure TfrmLogIn.lblSignUpMouseLeave(Sender: TObject);
+begin
+  //Revert color and font when mouse leaves
+  lblSignUp.font.Color := clBlack;
+  lblSignUp.font.Style := [TFontStyle.fsBold];
+end;
+
+procedure TfrmLogIn.posLogInOptions(currLabel: TLabel; currEdit: TEdit;
+  ilbltop: integer);
+const
+
+  ispace = 8;
+  ileft = 40;
+
+begin
+  //Fix label position and size
+  with currLabel do
+  begin
+    Left := ileft;
+    top := ilbltop;
+    font := lblName.font;
+  end;
+
+
+  //Fix editbox position and size
+  with currEdit do
+  begin
+    height := 25;
+    width := 180;
+
+    Left := ileft;
+    top := currLabel.Top + currLabel.Height + ispace;
+  end;
+end;
+
+function TfrmLogIn.verifyPassword(storedHash, spassword: string): Boolean;
+var
+
+  salt: string;
+  md5: TIdHashMessageDigest5;
+  hashedInputPassword: string;
+
+begin
+  // Retrieve the salt
+  salt := 'random-salt';
+
+  md5 := TIdHashMessageDigest5.Create;
+
+  // Hash die password met die selfde salt as voorheen
+  hashedInputPassword := md5.HashStringAsHex(spassword + salt);
+
+  // Compare die hashes met mekaar
+  Result := (storedHash = hashedInputPassword);
+
+  md5.Free;
+end;
+
+procedure TfrmLogIn.FormCreate(Sender: TObject);
+begin
+  //Load Images
+  imgPlane.Picture.LoadFromFile('Assets/plane.png');
+  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
+  imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
+  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
+
+  //Load positions and size (copy frmSignUp)
+  with imgCorner do
+  begin
+    Height := frmSignUp.imgCorner.Height;
+    Width := frmSignUp.imgCorner.Width;
+    Top := frmSignUp.imgCorner.Top;
+    Left := frmSignUp.imgCorner.Left;
+  end;
+
+  with imgPlane do
+  begin
+    Height := frmSignUp.imgPlane.Height;
+    Width := frmSignUp.imgPlane.Width;
+    Top := frmSignUp.imgPlane.Top;
+    Left := frmSignUp.imgPlane.Left;
+  end;
+
+  with imgPlane2 do
+  begin
+    Height := frmSignUp.imgPlane2.Height;
+    Width := frmSignUp.imgPlane2.Width;
+    Top := frmSignUp.imgPlane2.Top;
+    Left := frmSignUp.imgPlane2.Left;
+  end;
+
+  with imgTitle do
+  begin
+    Height := frmSignUp.imgTitle.Height;
+    Width := frmSignUp.imgTitle.Width;
+    Top := frmSignUp.imgTitle.Top;
+    Left := frmSignUp.imgTitle.Left;
+  end;
+
+  with lblTitle do
+  begin
+    Font := frmSignup.lblTitle.font;
+    Height := frmSignUp.lblTitle.Height;
+    Width := frmSignUp.lblTitle.Width;
+    Top := frmSignUp.lblTitle.Top;
+    Left := frmSignUp.lblTitle.Left + 30;
+  end;
+
+  with btnLogIn do
+  begin
+    Font := frmSignup.btnSignUp.font;
+    Height := frmSignUp.btnSignUp.Height;
+    Width := frmSignUp.btnSignUp.Width;
+    Top := frmSignUp.btnSignUp.Top;
+    Left := frmSignUp.btnSignUp.Left;
+  end;
+
+  with lblAccount do
+  begin
+    Font := frmSignup.lblAccount.font;
+    Height := frmSignUp.lblAccount.Height;
+    Width := frmSignUp.lblAccount.Width;
+    Top := frmSignUp.lblAccount.Top;
+    Left := frmSignUp.lblAccount.Left;
+  end;
+
+  with lblSignUp do
+  begin
+    Font := frmSignup.lblLogIn.font;
+    Top := frmSignUp.lblLogIn.Top;
+    Left := frmSignUp.lblLogIn.Left - 20;
+  end;
+
+  posLogInOptions(lblName, edtName, 100);
+  posLogInOptions(lblPassword, edtPassword, 170);
+end;
 
 end.

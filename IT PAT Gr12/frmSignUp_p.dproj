@@ -124,7 +124,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="frmSignUp_u.pas">
-            <Form>frmFlylee</Form>
+            <Form>frmSignUp</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="dmData_u.pas">
@@ -134,6 +134,10 @@
         </DCCReference>
         <DCCReference Include="frmLogIn_u.pas">
             <Form>frmLogIn</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="frmFlylee_u.pas">
+            <Form>frmFlylee</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">

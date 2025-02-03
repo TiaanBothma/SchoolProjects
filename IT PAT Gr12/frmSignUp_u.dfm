@@ -1,4 +1,4 @@
-object frmFlylee: TfrmFlylee
+object frmSignUp: TfrmSignUp
   Left = 0
   Top = 0
   Caption = 'Flylee Sign Up'
@@ -179,7 +179,7 @@ object frmFlylee: TfrmFlylee
     Font.Style = [fsBold, fsItalic]
     ParentFont = False
   end
-  object lblAlready: TLabel
+  object lblAccount: TLabel
     Left = 506
     Top = 442
     Width = 220
@@ -204,6 +204,7 @@ object frmFlylee: TfrmFlylee
     Font.Name = 'Roboto Lt'
     Font.Style = [fsBold]
     ParentFont = False
+    OnClick = lblLogInClick
     OnMouseEnter = lblLogInMouseEnter
     OnMouseLeave = lblLogInMouseLeave
   end

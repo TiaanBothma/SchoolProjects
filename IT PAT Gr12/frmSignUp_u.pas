@@ -8,14 +8,14 @@ uses
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal;
 
 type
-  TfrmFlylee = class(TForm)
+  TfrmSignUp = class(TForm)
     imgCorner: TImage;
     imgTitle: TImage;
     imgPlane: TImage;
     imgPlane2: TImage;
     lblTitle: TLabel;
     edtName: TEdit;
-    lblAlready: TLabel;
+    lblAccount: TLabel;
     lblLogIn: TLabel;
     lblName: TLabel;
     lblLastName: TLabel;
@@ -36,6 +36,7 @@ type
     function hashPassword(spassword : string) : string;
     procedure btnSignUpClick(Sender: TObject);
     function isSignUpValidate() : boolean;
+    procedure lblLogInClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -44,15 +45,15 @@ type
   end;
 
 var
-  frmFlylee: TfrmFlylee;
+  frmSignUp: TfrmSignUp;
 
 implementation
 
 {$R *.dfm}
 
-uses dmData_u;
+uses dmData_u, frmLogIn_u;
 
-procedure TfrmFlylee.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+procedure TfrmSignUp.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
 const
 
   ispace = 8;
@@ -80,7 +81,7 @@ begin
 
 end;
 
-procedure TfrmFlylee.btbtnGeneratePassClick(Sender: TObject);
+procedure TfrmSignUp.btbtnGeneratePassClick(Sender: TObject);
 var
 
   spass, schars : string;
@@ -98,7 +99,7 @@ begin
 
 end;
 
-procedure TfrmFlylee.btnSignUpClick(Sender: TObject);
+procedure TfrmSignUp.btnSignUpClick(Sender: TObject);
 var
 
   spassword : string;
@@ -133,7 +134,7 @@ begin
 
 end;
 
-procedure TfrmFlylee.FormCreate(Sender: TObject);
+procedure TfrmSignUp.FormCreate(Sender: TObject);
 begin
   //Load Colors
   clPrimary := rgb(255,169,15); //Web Orange
@@ -182,7 +183,7 @@ begin
 
 end;
 
-function TfrmFlylee.hashPassword(spassword : string): string;
+function TfrmSignUp.hashPassword(spassword : string): string;
 var
 
   salt: string;
@@ -202,7 +203,7 @@ begin
   md5.Free;
 end;
 
-function TfrmFlylee.isSignUpValidate: boolean;
+function TfrmSignUp.isSignUpValidate: boolean;
 var
 
   arrVlags : array[1..4] of Boolean;
@@ -246,14 +247,20 @@ begin
 
 end;
 
-procedure TfrmFlylee.lblLogInMouseEnter(Sender: TObject);
+procedure TfrmSignUp.lblLogInClick(Sender: TObject);
+begin
+  frmLogin.show;
+  frmSignup.hide;
+end;
+
+procedure TfrmSignUp.lblLogInMouseEnter(Sender: TObject);
 begin
   //Change font and color when hovered over
   lblLogIn.font.color := clPrimary;
   lblLogIn.font.Style := [TFontStyle.fsUnderline, TFontStyle.fsBold];
 end;
 
-procedure TfrmFlylee.lblLogInMouseLeave(Sender: TObject);
+procedure TfrmSignUp.lblLogInMouseLeave(Sender: TObject);
 begin
   //Revert color and font when mouse leaves
   lblLogIn.font.Color := clBlack;
@@ -261,25 +268,3 @@ begin
 end;
 
 end.
-
-{
-function TfrmFlylee.verifyPassword(storedHash, spassword: string): Boolean;
-var
-  salt: string;
-  md5: TIdHashMessageDigest5;
-  hashedInputPassword: string;
-begin
-  // Retrieve the salt (from the database or wherever you stored it)
-  salt := 'some-random-salt';  // Ensure you use the same salt that was used during hashing
-
-  md5 := TIdHashMessageDigest5.Create;
-
-  // Hash the input password with the same salt
-  hashedInputPassword := md5.HashStringAsHex(spassword + salt);
-
-  // Compare the hashes
-  Result := (storedHash = hashedInputPassword);
-
-  md5.Free;
-end;
-}

@@ -1,9 +1,9 @@
 object frmLogIn: TfrmLogIn
   Left = 0
   Top = 0
-  Caption = 'Log In'
-  ClientHeight = 441
-  ClientWidth = 624
+  Caption = 'Flylee Log In'
+  ClientHeight = 490
+  ClientWidth = 828
   Color = clCream
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -137,5 +137,99 @@ object frmLogIn: TfrmLogIn
     000FE0000007E0000007C0000007C0000003C0000003C0000003C0000003C000
     0003C0000003E0000007E0000007E0000007F000000FF000000FF800001FFC00
     003FFE00007FFF0000FFFFC003FFFFF81FFFFFFFFFFF}
+  Position = poScreenCenter
+  OnCreate = FormCreate
   TextHeight = 15
+  object imgCorner: TImage
+    Left = 440
+    Top = 0
+    Width = 393
+    Height = 281
+    Stretch = True
+  end
+  object imgPlane2: TImage
+    Left = 584
+    Top = 176
+    Width = 105
+    Height = 105
+  end
+  object imgPlane: TImage
+    Left = 440
+    Top = 88
+    Width = 105
+    Height = 105
+  end
+  object lblTitle: TLabel
+    Left = 632
+    Top = 80
+    Width = 33
+    Height = 15
+    Caption = 'Log In'
+  end
+  object imgTitle: TImage
+    Left = 72
+    Top = 56
+    Width = 105
+    Height = 105
+    Stretch = True
+  end
+  object lblAccount: TLabel
+    Left = 664
+    Top = 456
+    Width = 124
+    Height = 15
+    Caption = 'Don'#39't have an account?'
+  end
+  object lblSignUp: TLabel
+    Left = 736
+    Top = 432
+    Width = 41
+    Height = 15
+    Caption = 'Sign Up'
+    OnClick = lblSignUpClick
+    OnMouseEnter = lblSignUpMouseEnter
+    OnMouseLeave = lblSignUpMouseLeave
+  end
+  object lblName: TLabel
+    Left = 152
+    Top = 224
+    Width = 42
+    Height = 19
+    Caption = 'Name'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -16
+    Font.Name = 'Roboto'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblPassword: TLabel
+    Left = 152
+    Top = 328
+    Width = 50
+    Height = 15
+    Caption = 'Password'
+  end
+  object btnLogIn: TButton
+    Left = 40
+    Top = 446
+    Width = 75
+    Height = 25
+    Caption = 'Log In'
+    TabOrder = 0
+  end
+  object edtName: TEdit
+    Left = 144
+    Top = 256
+    Width = 121
+    Height = 23
+    TabOrder = 1
+  end
+  object edtPassword: TEdit
+    Left = 152
+    Top = 352
+    Width = 121
+    Height = 23
+    TabOrder = 2
+  end
 end
