@@ -150,9 +150,8 @@ object frmSignUp: TfrmSignUp
   object imgTitle: TImage
     Left = 16
     Top = 16
-    Width = 121
-    Height = 49
-    Stretch = True
+    Width = 135
+    Height = 50
   end
   object imgPlane: TImage
     Left = 410

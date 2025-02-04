@@ -149,6 +149,12 @@ object frmFlylee: TfrmFlylee
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
+      object imgUnderline: TImage
+        Left = 224
+        Top = 168
+        Width = 385
+        Height = 12
+      end
       object imgCorner: TImage
         Left = 832
         Top = -7
@@ -174,6 +180,32 @@ object frmFlylee: TfrmFlylee
         Width = 650
         Height = 650
         Stretch = True
+      end
+      object lblTitle: TLabel
+        Left = 208
+        Top = 168
+        Width = 163
+        Height = 15
+        Caption = 'Lorem ipsum dna lorem ipsum'
+      end
+      object lblTopTitle: TLabel
+        Left = 224
+        Top = 128
+        Width = 33
+        Height = 14
+        Caption = 'Best'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -12
+        Font.Name = 'Bauhaus 93'
+        Font.Style = []
+        ParentFont = False
+      end
+      object imgTitle: TImage
+        Left = 100
+        Top = 20
+        Width = 135
+        Height = 50
       end
     end
   end
