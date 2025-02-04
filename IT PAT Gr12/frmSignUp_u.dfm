@@ -306,4 +306,13 @@ object frmSignUp: TfrmSignUp
     Caption = 'Receive Weekly Flight Updates'
     TabOrder = 6
   end
+  object Button1: TButton
+    Left = 426
+    Top = 298
+    Width = 103
+    Height = 45
+    Caption = 'home'
+    TabOrder = 7
+    OnClick = Button1Click
+  end
 end

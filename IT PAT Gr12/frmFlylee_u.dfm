@@ -3,7 +3,7 @@ object frmFlylee: TfrmFlylee
   Top = 0
   Caption = 'Flylee'
   ClientHeight = 810
-  ClientWidth = 1407
+  ClientWidth = 1427
   Color = clCream
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -140,4 +140,41 @@ object frmFlylee: TfrmFlylee
   Position = poScreenCenter
   OnCreate = FormCreate
   TextHeight = 15
+  object pcPages: TPageControl
+    Left = 0
+    Top = 0
+    Width = 1425
+    Height = 809
+    ActivePage = tsHome
+    TabOrder = 0
+    object tsHome: TTabSheet
+      Caption = 'Home'
+      object imgCorner: TImage
+        Left = 832
+        Top = -7
+        Width = 585
+        Height = 568
+        Stretch = True
+      end
+      object imgPlane: TImage
+        Left = 656
+        Top = 72
+        Width = 170
+        Height = 170
+      end
+      object imgPlane2: TImage
+        Left = 1112
+        Top = 144
+        Width = 170
+        Height = 170
+      end
+      object imgFlyGirl: TImage
+        Left = 584
+        Top = 27
+        Width = 650
+        Height = 650
+        Stretch = True
+      end
+    end
+  end
 end

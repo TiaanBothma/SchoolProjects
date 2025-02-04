@@ -27,6 +27,7 @@ type
     dtpBirthDate: TDateTimePicker;
     lblBirthDate: TLabel;
     cbNotification: TCheckBox;
+    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure lblLogInMouseEnter(Sender: TObject);
     procedure lblLogInMouseLeave(Sender: TObject);
@@ -37,6 +38,7 @@ type
     procedure btnSignUpClick(Sender: TObject);
     function isSignUpValidate() : boolean;
     procedure lblLogInClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,7 +53,7 @@ implementation
 
 {$R *.dfm}
 
-uses dmData_u, frmLogIn_u;
+uses dmData_u, frmLogIn_u, frmFlylee_u;
 
 procedure TfrmSignUp.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
 const
@@ -132,6 +134,13 @@ begin
     MessageDlg('An error has occured with the Sign Up.' + #13 + #9 + 'Please Try Again', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbClose], 0);
   end;
 
+end;
+
+procedure TfrmSignUp.Button1Click(Sender: TObject);
+begin
+  dmData.iUserId := 3;
+  frmSignUp.Hide;
+  frmFlylee.show;
 end;
 
 procedure TfrmSignUp.FormCreate(Sender: TObject);
