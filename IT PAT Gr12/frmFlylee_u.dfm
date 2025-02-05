@@ -150,8 +150,8 @@ object frmFlylee: TfrmFlylee
     object tsHome: TTabSheet
       Caption = 'Home'
       object imgUnderline: TImage
-        Left = 224
-        Top = 168
+        Left = 152
+        Top = 189
         Width = 385
         Height = 12
       end
@@ -191,7 +191,7 @@ object frmFlylee: TfrmFlylee
       object lblTopTitle: TLabel
         Left = 224
         Top = 128
-        Width = 33
+        Width = 22
         Height = 14
         Caption = 'Best'
         Font.Charset = ANSI_CHARSET
@@ -206,6 +206,29 @@ object frmFlylee: TfrmFlylee
         Top = 20
         Width = 135
         Height = 50
+      end
+      object lblAbout: TLabel
+        Left = 184
+        Top = 392
+        Width = 33
+        Height = 15
+        Caption = 'About'
+      end
+      object shpFindMore: TShape
+        Left = 88
+        Top = 464
+        Width = 129
+        Height = 65
+        Cursor = crHandPoint
+        Shape = stRoundRect
+      end
+      object shpPlay: TShape
+        Left = 296
+        Top = 464
+        Width = 65
+        Height = 65
+        Cursor = crHandPoint
+        Shape = stCircle
       end
     end
   end
