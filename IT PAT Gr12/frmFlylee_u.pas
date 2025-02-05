@@ -22,10 +22,14 @@ type
     lblAbout: TLabel;
     shpFindMore: TShape;
     shpPlay: TShape;
+    lblFindMore: TLabel;
+    imgPlay: TImage;
+    lblInfo: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure posScaleImages();
     procedure initVarsHomePage();
-
+    procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
+    procedure centerComponent(AControl, AParent: TControl);
   private
     { Private declarations }
   public
@@ -53,6 +57,7 @@ begin
  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
  imgUnderline.Picture.LoadFromFile('Assets/underline.png');
  imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
+ imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
 
  //positions and scales
  posScaleImages();
@@ -67,10 +72,8 @@ begin
   with lblTitle do
   begin
     Caption := 'Travel, enjoy' + #13 + 'and live a new' + #13 + 'experience now';
-    font.name := 'Roboto';
-    font.size := 60;
+    setlabelFont(lblTitle, 60, true);
     font.color := rgb(24,30,75);
-    font.style := [TFontStyle.fsBold];
     top := 170;
     left := 100;
   end;
@@ -88,8 +91,7 @@ begin
   with lblAbout do
   begin
     caption := 'We provide the best flights with ease so you don''t have to. We work' + #13 + 'with weather and shipping companies to predict the best flights.';
-    font.name := 'Roboto';
-    Font.size := 14;
+    setLabelFont(lblAbout, 14, false);
     font.color := rgb(24,30,75);
     top := 470;
     left := 100;
@@ -102,6 +104,41 @@ begin
     width := 170;
     left := 100;
     top := 540;
+    Pen.Style := psClear;
+  end;
+
+  with shpPlay do
+  begin
+    brush.color := frmSignUp.clSecondary;
+    width := 55;
+    height := 55;
+    top := 542;
+    left := shpFindMore.Left + shpFindMore.Width + 60;
+    Pen.Style := psClear;
+  end;
+
+  with lblFindMore do
+  begin
+    setLabelFont(lblFindMore, 14, true);
+    font.color := clWhite;
+    //Sentreer vertikaal
+    Top := shpFindMore.Top + (shpFindMore.Height - Height) div 2;
+    //Sentreer horisontaal
+    Left := shpFindMore.Left + (shpFindMore.Width - Width) div 2;
+  end;
+
+  with lblInfo do
+  begin
+    setLabelFont(lblInfo, 14, false);
+    top := shpPlay.Top + 15;
+    left := shpPlay.left + shpPlay.Width + 10;
+  end;
+
+  with imgPlay do
+  begin
+    height := 15;
+    width := 15;
+    centerComponent(imgPlay, shpPlay);
   end;
 end;
 
@@ -137,6 +174,37 @@ begin
     Height := 170;
     Top := 167;
     Left := 1112;
+  end;
+end;
+
+//Set die font van die label ingevoer
+procedure TfrmFlylee.setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
+begin
+  //Kyk of die label bestaan
+  if Assigned(currLabel) then
+    with currLabel.Font do
+    begin
+      //Stel die font
+      Name := 'Roboto';
+      Size := isize;
+      //Kies of dit bold moet wees of nie
+      if bBold then
+        Style := [TFontStyle.fsBold]
+      else
+        Style := [];
+    end;
+end;
+
+//Sentreer komponent bo op sy ouer
+procedure TfrmFlylee.centerComponent(AControl, AParent: TControl);
+begin
+  //Kyk of die komponente bestaan
+  if Assigned(AControl) and Assigned(AParent) then
+  begin
+    //Sentreer vertikaal
+    AControl.Left := AParent.Left + (AParent.Width - AControl.Width) div 2;
+    //Sentreer horisontaal
+    AControl.Top := AParent.Top + (AParent.Height - AControl.Height) div 2;
   end;
 end;
 

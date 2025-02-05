@@ -230,6 +230,27 @@ object frmFlylee: TfrmFlylee
         Cursor = crHandPoint
         Shape = stCircle
       end
+      object lblFindMore: TLabel
+        Left = 112
+        Top = 488
+        Width = 77
+        Height = 15
+        Caption = 'Find Out More'
+      end
+      object imgPlay: TImage
+        Left = 312
+        Top = 488
+        Width = 33
+        Height = 25
+        Stretch = True
+      end
+      object lblInfo: TLabel
+        Left = 384
+        Top = 496
+        Width = 49
+        Height = 15
+        Caption = 'View Info'
+      end
     end
   end
 end
