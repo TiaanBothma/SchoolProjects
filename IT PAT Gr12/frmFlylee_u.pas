@@ -25,11 +25,28 @@ type
     lblFindMore: TLabel;
     imgPlay: TImage;
     lblInfo: TLabel;
+    tsInfo: TTabSheet;
+    lblDestinations: TLabel;
+    lblHotels: TLabel;
+    lblFlights: TLabel;
+    lblBookings: TLabel;
     procedure FormCreate(Sender: TObject);
-    procedure posScaleImages();
+    procedure posHomePageImages();
     procedure initVarsHomePage();
     procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
     procedure centerComponent(AControl, AParent: TControl);
+    procedure createMenuBar();
+    procedure lblDestinationsMouseEnter(Sender: TObject);
+    procedure lblDestinationsMouseLeave(Sender: TObject);
+    procedure lblFlightsMouseEnter(Sender: TObject);
+    procedure lblFlightsMouseLeave(Sender: TObject);
+    procedure lblHotelsMouseEnter(Sender: TObject);
+    procedure lblHotelsMouseLeave(Sender: TObject);
+    procedure lblBookingsMouseEnter(Sender: TObject);
+    procedure lblBookingsMouseLeave(Sender: TObject);
+    procedure shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure lblFindMoreClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,15 +77,19 @@ begin
  imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
 
  //positions and scales
- posScaleImages();
-
+ posHomePageImages();
+ createMenuBar();
  imgUnderline.top := 245;
  imgUnderline.left := 320;
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
 begin
-  //Initialize home page variables and comps
+  {
+  ===========================================
+  Initialize en scale die home page variables
+  ===========================================
+  }
   with lblTitle do
   begin
     Caption := 'Travel, enjoy' + #13 + 'and live a new' + #13 + 'experience now';
@@ -142,8 +163,94 @@ begin
   end;
 end;
 
-procedure TfrmFlylee.posScaleImages();
+procedure TfrmFlylee.lblBookingsMouseEnter(Sender: TObject);
 begin
+  lblBookings.font.color := frmSignUp.clAccent;
+end;
+
+procedure TfrmFlylee.lblBookingsMouseLeave(Sender: TObject);
+begin
+  lblBookings.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.lblDestinationsMouseEnter(Sender: TObject);
+begin
+  lblDestinations.font.color := frmSignUp.clAccent;
+end;
+
+procedure TfrmFlylee.lblDestinationsMouseLeave(Sender: TObject);
+begin
+  lblDestinations.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.lblFindMoreClick(Sender: TObject);
+begin
+  pcPages.TabIndex := 1;
+end;
+
+procedure TfrmFlylee.lblFlightsMouseEnter(Sender: TObject);
+begin
+  lblFlights.font.color := frmSignUp.clAccent;
+end;
+
+procedure TfrmFlylee.lblFlightsMouseLeave(Sender: TObject);
+begin
+  lblFlights.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.lblHotelsMouseEnter(Sender: TObject);
+begin
+  lblHotels.font.color := frmSignUp.clAccent;
+end;
+
+procedure TfrmFlylee.lblHotelsMouseLeave(Sender: TObject);
+begin
+  lblHotels.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.createMenuBar();
+begin
+  {
+  ====================================================
+  Position die labels in die menu bar in die home page
+  ====================================================
+  }
+  with lblDestinations do
+  begin
+    setLabelFont(lblDestinations, 16, true);
+    left := 450;
+    top := 30;
+  end;
+
+  with lblHotels do
+  begin
+    setLabelFont(lblHotels, 16, true);
+    Left := lblDestinations.left + lblDestinations.Width + 60;
+    Top := 30;
+  end;
+
+  with lblFlights do
+  begin
+    setLabelFont(lblFlights, 16, true);
+    Left := lblHotels.left + lblHotels.Width + 60;
+    Top := 30;
+  end;
+
+  with lblBookings do
+  begin
+    setLabelFont(lblBookings, 16, true);
+    Left := lblFlights.left + lblFlights.Width + 60;
+    Top := 30;
+  end;
+end;
+
+procedure TfrmFlylee.posHomePageImages();
+begin
+  {
+   ==============================================
+   Position and scale the images in the home page
+   ==============================================
+  }
   with imgCorner do
   begin
     Width := 585;
@@ -177,9 +284,14 @@ begin
   end;
 end;
 
-//Set die font van die label ingevoer
 procedure TfrmFlylee.setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
 begin
+  {
+   ===================================
+   Set die font van die label ingevoer
+   ===================================
+  }
+
   //Kyk of die label bestaan
   if Assigned(currLabel) then
     with currLabel.Font do
@@ -195,9 +307,19 @@ begin
     end;
 end;
 
-//Sentreer komponent bo op sy ouer
+procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  pcPages.TabIndex := 1;
+end;
+
 procedure TfrmFlylee.centerComponent(AControl, AParent: TControl);
 begin
+  {
+   ================================
+   Sentreer komponent op op sy ouer
+   ================================
+  }
   //Kyk of die komponente bestaan
   if Assigned(AControl) and Assigned(AParent) then
   begin

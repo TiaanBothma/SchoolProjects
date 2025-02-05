@@ -221,6 +221,7 @@ object frmFlylee: TfrmFlylee
         Height = 65
         Cursor = crHandPoint
         Shape = stRoundRect
+        OnMouseDown = shpFindMoreMouseDown
       end
       object shpPlay: TShape
         Left = 296
@@ -236,6 +237,7 @@ object frmFlylee: TfrmFlylee
         Width = 77
         Height = 15
         Caption = 'Find Out More'
+        OnClick = lblFindMoreClick
       end
       object imgPlay: TImage
         Left = 312
@@ -251,6 +253,46 @@ object frmFlylee: TfrmFlylee
         Height = 15
         Caption = 'View Info'
       end
+      object lblDestinations: TLabel
+        Left = 168
+        Top = 96
+        Width = 65
+        Height = 15
+        Caption = 'Destinations'
+        OnMouseEnter = lblDestinationsMouseEnter
+        OnMouseLeave = lblDestinationsMouseLeave
+      end
+      object lblHotels: TLabel
+        Left = 248
+        Top = 96
+        Width = 34
+        Height = 15
+        Caption = 'Hotels'
+        OnMouseEnter = lblHotelsMouseEnter
+        OnMouseLeave = lblHotelsMouseLeave
+      end
+      object lblFlights: TLabel
+        Left = 304
+        Top = 96
+        Width = 35
+        Height = 15
+        Caption = 'Flights'
+        OnMouseEnter = lblFlightsMouseEnter
+        OnMouseLeave = lblFlightsMouseLeave
+      end
+      object lblBookings: TLabel
+        Left = 384
+        Top = 96
+        Width = 49
+        Height = 15
+        Caption = 'Bookings'
+        OnMouseEnter = lblBookingsMouseEnter
+        OnMouseLeave = lblBookingsMouseLeave
+      end
+    end
+    object tsInfo: TTabSheet
+      Caption = 'Info'
+      ImageIndex = 1
     end
   end
 end
