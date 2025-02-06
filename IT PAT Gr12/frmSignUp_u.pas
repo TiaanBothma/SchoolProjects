@@ -34,7 +34,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure lblLogInMouseEnter(Sender: TObject);
     procedure lblLogInMouseLeave(Sender: TObject);
-    procedure posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+    procedure posInputFields(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
     procedure btbtnGeneratePassClick(Sender: TObject);
     function hashPassword(spassword : string) : string;
     procedure btnSignUpClick(Sender: TObject);
@@ -69,9 +69,9 @@ begin
    ===================================
   }
 
-  posSignUpOptions(lblName, edtName, 100);
-  posSignUpOptions(lblLastName, edtLastName, 170);
-  posSignUpOptions(lblPassword, edtPassword, 240);
+  posInputFields(lblName, edtName, 150);
+  posInputFields(lblLastName, edtLastName, 220);
+  posInputFields(lblPassword, edtPassword, 290);
 
   with btbtnGeneratePass do
   begin
@@ -86,14 +86,14 @@ begin
   with lblBirthDate do
   begin
     font := lblName.font;
-    left := 40;
+    left := 55;
     top := edtPassword.top + edtPassword.Height + 25;
   end;
 
   with dtpBirthDate do
   begin
     top := lblBirthDate.top + lblBirthDate.Height + 8;
-    left := 40;
+    left := 55;
   end;
 
   with cbNotification do
@@ -104,10 +104,10 @@ begin
 
   with imgProfilePic do
   begin
-    width := 150;
-    height := 150;
-    top := lblLastName.top;
-    left := 300;
+    width := 60;
+    height := 60;
+    top := 75;
+    left := 55;
   end;
 
   with btnProfilePic do
@@ -115,20 +115,19 @@ begin
     font.name := 'Roboto';
     font.Size := 12;
     font.Style := [TFontStyle.fsBold];
-    width := 110;
-    height := 50;
-    //Sentreer die button bo op die image dan skyf hom net af
-    frmFlylee.centerComponent(btnProfilePic, imgProfilePic);
-    top := imgProfilePic.top + imgProfilePic.Height + 20;
+    width := 100;
+    height := 40;
+    left := imgProfilePic.left + imgProfilepic.Width + 20;
+    top := 80;
   end;
 
 end;
 
-procedure TfrmSignUp.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+procedure TfrmSignUp.posInputFields(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
 const
 
   ispace = 8;
-  ileft = 40;
+  ileft = 55;
 
 begin
   //Fix label position and size
@@ -163,11 +162,8 @@ begin
    =================================================================================
   }
 
-  //Maak seker `n image was gekies
-  if sfilename = ''
-    then Exit;
-
   Stream := TMemoryStream.Create;
+
   try
     Stream.LoadFromFile(sFileName);
     Stream.Position := 0;
@@ -215,7 +211,6 @@ begin
    =========================================================
   }
 
-
   if isSignUpValidate then
   begin
     spassword := edtPassword.text;
@@ -231,13 +226,8 @@ begin
       tblUsers['isSubscribed'] := cbNotification.Checked;
       tblUsers['birthDate'] := dtpBirthDate.date;
       tblUsers['password'] := hashPassword(spassword);
-
-      if sfilename <> '' then
-        begin
-          //!remove
-          showmessage('Saving pic to db');
-          SaveProfilePicToDB();
-        end;
+      //Save die profile pic
+      saveProfilePictoDB();
 
       tblUsers.post;
     end;
@@ -274,6 +264,8 @@ begin
   begin
     //Plaas die image in die image komponent
     imgProfilePic.Picture.LoadFromFile(dgOpenDialog.FileName);
+    //maak die file global
+    sfilename := dgOpenDialog.filename;
   end;
 end;
 
@@ -307,6 +299,12 @@ var
   md5: TIdHashMessageDigest5;
 
 begin
+  {
+   =============================================================
+   Encript die password voordat dit in die databasis gesave word
+   =============================================================
+  }
+
   //n 'Salt' is n random string wat binne n password geplaas word sodat dit langer vat of moeiliker is om die password te 'crack'
   salt := 'random-salt';
 
