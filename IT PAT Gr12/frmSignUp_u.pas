@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal;
+  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal, Data.DB, Data.Win.ADODB;
 
 type
   TfrmSignUp = class(TForm)
@@ -28,10 +28,12 @@ type
     lblBirthDate: TLabel;
     cbNotification: TCheckBox;
     Button1: TButton;
+    dgOpenDialog: TOpenDialog;
+    btnProfilePic: TButton;
+    imgProfilePic: TImage;
     procedure FormCreate(Sender: TObject);
     procedure lblLogInMouseEnter(Sender: TObject);
     procedure lblLogInMouseLeave(Sender: TObject);
-    //Custom Procedures
     procedure posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
     procedure btbtnGeneratePassClick(Sender: TObject);
     function hashPassword(spassword : string) : string;
@@ -39,8 +41,12 @@ type
     function isSignUpValidate() : boolean;
     procedure lblLogInClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure saveProfilePictoDB();
+    procedure btnProfilePicClick(Sender: TObject);
+    procedure posComponents();
   private
     { Private declarations }
+    sFileName : string; //path to profile pic
   public
     { Public declarations }
     clPrimary, clSecondary, clAccent : TColor;
@@ -55,108 +61,14 @@ implementation
 
 uses dmData_u, frmLogIn_u, frmFlylee_u;
 
-procedure TfrmSignUp.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
-const
-
-  ispace = 8;
-  ileft = 40;
-
+procedure TfrmSignUp.posComponents();
 begin
-  //Fix label position and size
-  with currLabel do
-  begin
-    Left := ileft;
-    top := ilbltop;
-    font := lblName.font;
-  end;
+  {
+   ===================================
+   Position the components on the form
+   ===================================
+  }
 
-
-  //Fix editbox position and size
-  with currEdit do
-  begin
-    height := 25;
-    width := 180;
-
-    Left := ileft;
-    top := currLabel.Top + currLabel.Height + ispace;
-  end;
-
-end;
-
-procedure TfrmSignUp.btbtnGeneratePassClick(Sender: TObject);
-var
-
-  spass, schars : string;
-  I: Integer;
-
-begin
-  schars := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgihjklmnopqrstuvwxyz1234567890!@$%^&*()[]{}';
-
-  for I := 1 to 8 do
-  begin
-    spass := spass + schars[random(length(schars)) + 1];
-  end;
-
-  edtPassword.text := spass;
-
-end;
-
-procedure TfrmSignUp.btnSignUpClick(Sender: TObject);
-var
-
-  spassword : string;
-
-begin
-
-  if isSignUpValidate then
-  begin
-    spassword := edtPassword.text;
-
-    with dmData do
-    begin
-      tblUsers.open;
-      tblUsers.last;
-      tblUsers.Insert;
-
-      tblUsers['name'] := edtName.text;
-      tblUsers['lastname'] := edtlastname.text;
-      tblUsers['isSubscribed'] := cbNotification.Checked;
-      tblUsers['birthDate'] := dtpBirthDate.date;
-      tblUsers['password'] := hashPassword(spassword);
-
-      tblUsers.post;
-    end;
-
-    MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee',TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
-  end
-  else
-  begin
-    MessageDlg('An error has occured with the Sign Up.' + #13 + #9 + 'Please Try Again', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbClose], 0);
-  end;
-
-end;
-
-procedure TfrmSignUp.Button1Click(Sender: TObject);
-begin
-  dmData.iUserId := 3;
-  frmSignUp.Hide;
-  frmFlylee.show;
-end;
-
-procedure TfrmSignUp.FormCreate(Sender: TObject);
-begin
-  //Load Colors
-  clPrimary := rgb(255,169,15); //Web Orange
-  clSecondary := rgb(223,105,81); //Burnt Sienna
-  clAccent := rgb(0,99,128); //Cerulean
-
-  //Load Images
-  imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
-  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
-  imgPlane.Picture.LoadFromFile('Assets/plane.png');
-  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
-
-  //Fix positions of components
   posSignUpOptions(lblName, edtName, 100);
   posSignUpOptions(lblLastName, edtLastName, 170);
   posSignUpOptions(lblPassword, edtPassword, 240);
@@ -190,6 +102,202 @@ begin
     top := btnSignUp.top + 5;
   end;
 
+  with imgProfilePic do
+  begin
+    width := 150;
+    height := 150;
+    top := lblLastName.top;
+    left := 300;
+  end;
+
+  with btnProfilePic do
+  begin
+    font.name := 'Roboto';
+    font.Size := 12;
+    font.Style := [TFontStyle.fsBold];
+    width := 110;
+    height := 50;
+    //Sentreer die button bo op die image dan skyf hom net af
+    frmFlylee.centerComponent(btnProfilePic, imgProfilePic);
+    top := imgProfilePic.top + imgProfilePic.Height + 20;
+  end;
+
+end;
+
+procedure TfrmSignUp.posSignUpOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+const
+
+  ispace = 8;
+  ileft = 40;
+
+begin
+  //Fix label position and size
+  with currLabel do
+  begin
+    Left := ileft;
+    top := ilbltop;
+    font := lblName.font;
+  end;
+
+
+  //Fix editbox position and size
+  with currEdit do
+  begin
+    height := 25;
+    width := 180;
+
+    Left := ileft;
+    top := currLabel.Top + currLabel.Height + ispace;
+  end;
+
+end;
+
+procedure TfrmSignUp.saveProfilePictoDB();
+var
+  Stream: TMemoryStream;
+  BlobField: TBlobField;
+begin
+  {
+   =================================================================================
+   Save die user se image wat hy upload, in access as n OLO Object vir n profile pic
+   =================================================================================
+  }
+
+  //Maak seker `n image was gekies
+  if sfilename = ''
+    then Exit;
+
+  Stream := TMemoryStream.Create;
+  try
+    Stream.LoadFromFile(sFileName);
+    Stream.Position := 0;
+
+    BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
+    BlobField.LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure TfrmSignUp.btbtnGeneratePassClick(Sender: TObject);
+var
+
+  spass, schars : string;
+  I: Integer;
+
+begin
+  {
+   ========================================
+   Genereer `n random password vir die user
+   ========================================
+  }
+
+  schars := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgihjklmnopqrstuvwxyz1234567890!@$%^&*()[]{}';
+
+  for I := 1 to 8 do
+  begin
+    spass := spass + schars[random(length(schars)) + 1];
+  end;
+
+  edtPassword.text := spass;
+
+end;
+
+procedure TfrmSignUp.btnSignUpClick(Sender: TObject);
+var
+
+  spassword : string;
+
+begin
+  {
+   =========================================================
+   Plaas die user se data in die databasis vir later gebruik
+   =========================================================
+  }
+
+
+  if isSignUpValidate then
+  begin
+    spassword := edtPassword.text;
+
+    with dmData do
+    begin
+      tblUsers.open;
+      tblUsers.last;
+      tblUsers.Insert;
+
+      tblUsers['name'] := edtName.text;
+      tblUsers['lastname'] := edtlastname.text;
+      tblUsers['isSubscribed'] := cbNotification.Checked;
+      tblUsers['birthDate'] := dtpBirthDate.date;
+      tblUsers['password'] := hashPassword(spassword);
+
+      if sfilename <> '' then
+        begin
+          //!remove
+          showmessage('Saving pic to db');
+          SaveProfilePicToDB();
+        end;
+
+      tblUsers.post;
+    end;
+
+    MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee',TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
+  end
+  else
+  begin
+    MessageDlg('An error has occured with the Sign Up.' + #13 + #9 + 'Please Try Again', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbClose], 0);
+  end;
+
+end;
+
+procedure TfrmSignUp.Button1Click(Sender: TObject);
+begin
+  dmData.iUserId := 3;
+  frmSignUp.Hide;
+  frmFlylee.show;
+end;
+
+procedure TfrmSignUp.btnProfilePicClick(Sender: TObject);
+begin
+  {
+   ==============================================
+   Maak 'File Explorer' oop en kies n profile pic
+   ==============================================
+  }
+
+  //Mag net PNG files tipes kies
+  dgOpenDialog.Filter := 'PNG Images|*.png';
+  dgOpenDialog.Title := 'Select a Profile Picture';
+
+  if dgOpenDialog.Execute then
+  begin
+    //Plaas die image in die image komponent
+    imgProfilePic.Picture.LoadFromFile(dgOpenDialog.FileName);
+  end;
+end;
+
+procedure TfrmSignUp.FormCreate(Sender: TObject);
+begin
+  {
+   ===========
+   Form Create
+   ===========
+  }
+
+  //Load Colors
+  clPrimary := rgb(255,169,15); //Web Orange
+  clSecondary := rgb(223,105,81); //Burnt Sienna
+  clAccent := rgb(0,99,128); //Cerulean
+
+  //Load Images
+  imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
+  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
+  imgPlane.Picture.LoadFromFile('Assets/plane.png');
+  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
+
+  //Fix positions of components
+  posComponents();
 end;
 
 function TfrmSignUp.hashPassword(spassword : string): string;

@@ -241,6 +241,13 @@ object frmSignUp: TfrmSignUp
     Height = 15
     Caption = 'Birth Date'
   end
+  object imgProfilePic: TImage
+    Left = 80
+    Top = 230
+    Width = 41
+    Height = 25
+    Stretch = True
+  end
   object edtName: TEdit
     Left = 192
     Top = 162
@@ -306,12 +313,26 @@ object frmSignUp: TfrmSignUp
     TabOrder = 6
   end
   object Button1: TButton
-    Left = 426
-    Top = 298
+    Left = 623
+    Top = 368
     Width = 103
     Height = 45
     Caption = 'home'
     TabOrder = 7
     OnClick = Button1Click
+  end
+  object btnProfilePic: TButton
+    Left = 64
+    Top = 261
+    Width = 129
+    Height = 44
+    Caption = 'Choose'#13#10'Profile Pic'
+    TabOrder = 8
+    WordWrap = True
+    OnClick = btnProfilePicClick
+  end
+  object dgOpenDialog: TOpenDialog
+    Left = 352
+    Top = 24
   end
 end
