@@ -138,6 +138,7 @@ object frmFlylee: TfrmFlylee
     0003C0000003E0000007E0000007E0000007F000000FF000000FF800001FFC00
     003FFE00007FFF0000FFFFC003FFFFF81FFFFFFFFFFF}
   Position = poScreenCenter
+  OnActivate = FormActivate
   OnCreate = FormCreate
   TextHeight = 15
   object pcPages: TPageControl
@@ -288,6 +289,13 @@ object frmFlylee: TfrmFlylee
         Caption = 'Bookings'
         OnMouseEnter = lblBookingsMouseEnter
         OnMouseLeave = lblBookingsMouseLeave
+      end
+      object imgProfile: TImage
+        Left = 439
+        Top = 27
+        Width = 105
+        Height = 105
+        Stretch = True
       end
     end
     object tsInfo: TTabSheet

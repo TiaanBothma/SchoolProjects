@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
   Vcl.StdCtrls, Vcl.Buttons;
 
 type
@@ -30,6 +30,7 @@ type
     lblHotels: TLabel;
     lblFlights: TLabel;
     lblBookings: TLabel;
+    imgProfile: TImage;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -47,8 +48,12 @@ type
     procedure shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure lblFindMoreClick(Sender: TObject);
+    procedure loadProfilePic();
+    procedure loadUserData();
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
+    arrUser : array[1..4] of string;
   public
     { Public declarations }
   end;
@@ -60,10 +65,28 @@ implementation
 
 {$R *.dfm}
 
-uses frmSignUp_u;
+uses frmSignUp_u, dmData_u;
+
+procedure TfrmFlylee.FormActivate(Sender: TObject);
+begin
+  {
+   ================
+   On Form Activate
+   ================
+  }
+
+  loadUserData();
+  loadProfilePic();
+end;
 
 procedure TfrmFlylee.FormCreate(Sender: TObject);
 begin
+  {
+   ===========
+   Form Create
+   ===========
+  }
+
  //inti variables
  initVarsHomePage();
 
@@ -81,6 +104,45 @@ begin
  createMenuBar();
  imgUnderline.top := 245;
  imgUnderline.left := 320;
+end;
+
+procedure TfrmFlylee.loadUserData();
+var
+
+  bfound : boolean;
+
+begin
+  {
+   ================================================================
+   Lees user se data vanaf databasis in n array vir vinniger opsoek
+   ================================================================
+  }
+
+  bfound := false;
+
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+    while (not tblUsers.Eof) and (bfound = false) do
+    begin
+      if tblUsers['Userid'] = iUserId then
+        begin
+          bfound := true;
+          arrUser[1] := tblUsers['name'];
+          arruser[2] := tblUsers['lastname'];
+          arrUser[3] := tblUsers['isSubscribed'];
+          arrUser[4] := tblUsers['birthDate'];
+        end;
+
+      tblUsers.next;
+    end;
+  end;
+
+  if bfound = false then
+    begin
+      Showmessage('A problem occurred with your user account.');
+    end;
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -206,6 +268,55 @@ end;
 procedure TfrmFlylee.lblHotelsMouseLeave(Sender: TObject);
 begin
   lblHotels.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.loadProfilePic();
+var
+
+  Stream: TMemoryStream;
+  BlobField: TBlobField;
+  bfound : boolean;
+
+begin
+  {
+   ==================================================================================
+   Laai die user se profiel prent van Access database en wys dit in 'n TImage
+   ==================================================================================
+  }
+  bfound := false;
+
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+    while (not tblUsers.Eof) and (bfound = false) do
+    begin
+      if tblUsers['userid'] = iUserId then
+      begin
+        bfound := true;
+        BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
+      end;
+
+      tblUsers.next;
+    end;
+  end;
+
+  // As daar geen prent is nie, gaan uit
+  if BlobField.IsNull then
+  begin
+    showmessage('image is nil');
+    imgProfile.Picture := nil;  // Maak skoon as daar geen prent is nie
+    Exit;
+  end;
+
+  Stream := TMemoryStream.Create;
+  try
+    BlobField.SaveToStream(Stream);
+    Stream.Position := 0;
+    imgProfile.Picture.LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
 end;
 
 procedure TfrmFlylee.createMenuBar();

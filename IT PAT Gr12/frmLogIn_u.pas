@@ -129,13 +129,12 @@ begin
       //Check of the hashed password met die edit password ooreenstem
       if (verifyPassword(tblUsers['password'], edtpassword.text)) and (tblUsers['name'] = edtName.text)
         then begin
+          //Allocate die user id aan die user sodat later kan opspoor wie die persoon is
+          iUserid := tblUsers['userId'];
           MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
           frmFlylee.Show;
           frmLogIN.hide;
-          //Allocate die user id aan die user sodat later kan opspoor wie die persoon is
-          iUserid := tblUsers['userId'];
         end;
-
 
       tblUsers.next;
     end;
