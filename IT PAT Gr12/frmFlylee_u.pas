@@ -52,6 +52,7 @@ type
     imgTitle, imgProfile : TImage;
   public
     { Public declarations }
+    clPrimary, clSecondary, clAccent, clTextColor : TColor;
   end;
 
 var
@@ -72,7 +73,7 @@ begin
   }
 
   loadUserData();
-  loadProfilePic();
+  createMenuBar();
 end;
 
 procedure TfrmFlylee.FormCreate(Sender: TObject);
@@ -83,6 +84,12 @@ begin
    ===========
   }
 
+  //Load Colors
+  clPrimary := rgb(255,169,15); //Web Orange
+  clSecondary := rgb(223,105,81); //Burnt Sienna
+  clAccent := rgb(0,99,128); //Cerulean
+  clTextColor := rgb(24,30,75); //Dark Moon Blue
+
  //inti variables
  initVarsHomePage();
 
@@ -92,12 +99,10 @@ begin
  imgPlane.Picture.LoadFromFile('Assets/plane.png');
  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
  imgUnderline.Picture.LoadFromFile('Assets/underline.png');
- imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
  imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
 
  //positions and scales
  posHomePageImages();
- createMenuBar();
  imgUnderline.top := 245;
  imgUnderline.left := 320;
 end;
@@ -152,7 +157,7 @@ begin
   begin
     Caption := 'Travel, enjoy' + #13 + 'and live a new' + #13 + 'experience now';
     setlabelFont(lblTitle, 60, true);
-    font.color := rgb(24,30,75);
+    font.color := clTextColor;
     top := 170;
     left := 100;
   end;
@@ -162,7 +167,7 @@ begin
     Caption := 'BEST DESTINATIONS AROUND THE WORLD';
     font.size := 16;
     font.Style := [TFontStyle.fsBold];
-    font.Color := frmSignUp.clSecondary;
+    font.Color := clSecondary;
     left := 100;
     top := 150;
   end;
@@ -171,14 +176,14 @@ begin
   begin
     caption := 'We provide the best flights with ease so you don''t have to. We work' + #13 + 'with weather and shipping companies to predict the best flights.';
     setLabelFont(lblAbout, 14, false);
-    font.color := rgb(24,30,75);
+    font.color := clTextColor;
     top := 470;
     left := 100;
   end;
 
   with shpFindMore do
   begin
-    brush.Color := frmSignUP.clPrimary;
+    brush.Color := clPrimary;
     height := 60;
     width := 170;
     left := 100;
@@ -188,7 +193,7 @@ begin
 
   with shpPlay do
   begin
-    brush.color := frmSignUp.clSecondary;
+    brush.color := clSecondary;
     width := 55;
     height := 55;
     top := 542;
@@ -215,15 +220,15 @@ begin
 
   with imgPlay do
   begin
-    height := 15;
-    width := 15;
+    height := 25;
+    width := 25;
     centerComponent(imgPlay, shpPlay);
   end;
 end;
 
 procedure TfrmFlylee.lblBookingsMouseEnter(Sender: TObject);
 begin
-  lblBookings.font.color := frmSignUp.clAccent;
+  lblBookings.font.color := clAccent;
 end;
 
 procedure TfrmFlylee.lblBookingsMouseLeave(Sender: TObject);
@@ -233,7 +238,7 @@ end;
 
 procedure TfrmFlylee.lblDestinationsMouseEnter(Sender: TObject);
 begin
-  lblDestinations.font.color := frmSignUp.clAccent;
+  lblDestinations.font.color := clAccent;
 end;
 
 procedure TfrmFlylee.lblDestinationsMouseLeave(Sender: TObject);
@@ -248,7 +253,7 @@ end;
 
 procedure TfrmFlylee.lblFlightsMouseEnter(Sender: TObject);
 begin
-  lblFlights.font.color := frmSignUp.clAccent;
+  lblFlights.font.color := clAccent;
 end;
 
 procedure TfrmFlylee.lblFlightsMouseLeave(Sender: TObject);
@@ -258,7 +263,7 @@ end;
 
 procedure TfrmFlylee.lblHotelsMouseEnter(Sender: TObject);
 begin
-  lblHotels.font.color := frmSignUp.clAccent;
+  lblHotels.font.color := clAccent;
 end;
 
 procedure TfrmFlylee.lblHotelsMouseLeave(Sender: TObject);
@@ -332,6 +337,9 @@ begin
     caption := 'Destinations';
     Left := 450;
     Top := 30;
+    { procedures }
+    OnMouseEnter := lblDestinationsMouseEnter;
+    OnMouseLeave := lblDestinationsMouseLeave;
   end;
 
   // Create lblHotels
@@ -343,6 +351,9 @@ begin
     caption := 'Hotels';
     Left := lblDestinations.Left + lblDestinations.Width + 60;
     Top := 30;
+    { procedures }
+    OnMouseEnter := lblHotelsMouseEnter;
+    OnMouseLeave := lblHotelsMouseLeave;
   end;
 
   // Create lblFlights
@@ -354,6 +365,9 @@ begin
     caption := 'Flights';
     Left := lblHotels.Left + lblHotels.Width + 60;
     Top := 30;
+    { procedures }
+    OnMouseEnter := lblFlightsMouseEnter;
+    OnMouseLeave := lblFlightsMouseLeave;
   end;
 
   // Create lblBookings
@@ -365,28 +379,49 @@ begin
     caption := 'Bookings';
     Left := lblFlights.Left + lblFlights.Width + 60;
     Top := 30;
+    { procedures }
+    OnMouseEnter := lblBookingsMouseEnter;
+    OnMouseLeave := lblBookingsMouseLeave;
   end;
 
   //Create image
   imgProfile := TImage.Create(tsHome);
   with imgProfile do
   begin
-
+    Parent := tsHome;
+    Stretch := true;
+    width := 45;
+    height := 45;
+    top := 20;
+    left := 1200;
   end;
 
   //Create label name
   lblUserName := TLabel.Create(tsHome);
   with lblUserName do
   begin
-
+    Parent := tsHome;
+    setLabelFont(lblUsername, 16, true);
+    font.color := clTextColor;
+    caption := arrUser[1];
+    top := 30;
+    left := imgProfile.left + imgProfile.Width + 10;
   end;
 
   //Create logo title
   imgTitle := TImage.Create(tsHome);
   with imgTitle do
   begin
-
+    Parent := tsHome;
+    Picture.LoadFromFile('Assets/logoTitle.png');
+    width := 135;
+    height := 50;
+    top := 30;
+    left := 40;
   end;
+
+  //Nadat die profile image gemaak is kan ons die image in sit
+  loadProfilePic();
 end;
 
 procedure TfrmFlylee.posHomePageImages();
@@ -465,6 +500,7 @@ begin
    Sentreer komponent op op sy ouer
    ================================
   }
+
   //Kyk of die komponente bestaan
   if Assigned(AControl) and Assigned(AParent) then
   begin

@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal, Data.DB, Data.Win.ADODB;
+  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal, Data.DB, Data.Win.ADODB,
+  System.Skia, Vcl.Skia;
 
 type
   TfrmSignUp = class(TForm)
@@ -49,7 +50,6 @@ type
     sFileName : string; //path to profile pic
   public
     { Public declarations }
-    clPrimary, clSecondary, clAccent : TColor;
   end;
 
 var
@@ -281,11 +281,6 @@ begin
    ===========
   }
 
-  //Load Colors
-  clPrimary := rgb(255,169,15); //Web Orange
-  clSecondary := rgb(223,105,81); //Burnt Sienna
-  clAccent := rgb(0,99,128); //Cerulean
-
   //Load Images
   imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');
   imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -380,7 +375,7 @@ end;
 procedure TfrmSignUp.lblLogInMouseEnter(Sender: TObject);
 begin
   //Change font and color when hovered over
-  lblLogIn.font.color := clPrimary;
+  lblLogIn.font.color := frmFlylee.clPrimary;
   lblLogIn.font.Style := [TFontStyle.fsUnderline, TFontStyle.fsBold];
 end;
 

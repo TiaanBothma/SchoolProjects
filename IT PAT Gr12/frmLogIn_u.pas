@@ -52,7 +52,7 @@ end;
 procedure TfrmLogIn.lblSignUpMouseEnter(Sender: TObject);
 begin
   //Change font and color when hovered over
-  lblSignUp.font.color := frmSignUp.clPrimary;
+  lblSignUp.font.color := frmFlylee.clPrimary;
   lblSignUp.font.Style := [TFontStyle.fsUnderline, TFontStyle.fsBold];
 end;
 
