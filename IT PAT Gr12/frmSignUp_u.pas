@@ -162,6 +162,10 @@ begin
    =================================================================================
   }
 
+ // Stel die standaard prent as sFileName leeg is
+  if sFileName = '' then
+    sFileName := 'Assets/logo.png';
+
   Stream := TMemoryStream.Create;
 
   try
@@ -243,7 +247,7 @@ end;
 
 procedure TfrmSignUp.Button1Click(Sender: TObject);
 begin
-  dmData.iUserId := 11;
+  dmData.iUserId := 13;
   frmSignUp.Hide;
   frmFlylee.show;
 end;
@@ -256,7 +260,7 @@ begin
    ==============================================
   }
 
-  //Mag net PNG files tipes kies
+  //Mag net PNG file tipes kies
   dgOpenDialog.Filter := 'PNG Images|*.png';
   dgOpenDialog.Title := 'Select a Profile Picture';
 
@@ -338,16 +342,21 @@ begin
 
   //Check password
   if length(edtPassword.Text) >= 8
-    then arrVlags[3] := true
-  else arrVlags[3] := true; //!remove
+    then arrVlags[3] := true;
 
   //Check age
   iuserage := yearsbetween(date, dtpBirthDate.date);
   if iuserage >= 18
     then arrVlags[4] := true;
 
+  //Check if anything is emtpy
+  if (edtName.text = '') or (edtLastName.text = '') or (edtPassword.text = '') then
+  begin
+    //Maak enige vlag false om sign up te keer
+    arrVlags[1] := false;
+  end;
 
-  //check if user is valid
+  //finaal check of user valid is
   for I := 1 to 4 do
   begin
     if arrVlags[i] <> true

@@ -18,7 +18,6 @@ type
     lblTitle: TLabel;
     lblTopTitle: TLabel;
     imgUnderline: TImage;
-    imgTitle: TImage;
     lblAbout: TLabel;
     shpFindMore: TShape;
     shpPlay: TShape;
@@ -26,11 +25,6 @@ type
     imgPlay: TImage;
     lblInfo: TLabel;
     tsInfo: TTabSheet;
-    lblDestinations: TLabel;
-    lblHotels: TLabel;
-    lblFlights: TLabel;
-    lblBookings: TLabel;
-    imgProfile: TImage;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -52,8 +46,10 @@ type
     procedure loadUserData();
     procedure FormActivate(Sender: TObject);
   private
-    { Private declarations }
     arrUser : array[1..4] of string;
+    { Menu Bar }
+    lblDestinations, lblBookings, lblHotels, lblFlights, lblUserName : TLabel;
+    imgTitle, imgProfile : TImage;
   public
     { Public declarations }
   end;
@@ -322,36 +318,74 @@ end;
 procedure TfrmFlylee.createMenuBar();
 begin
   {
-  ====================================================
-  Position die labels in die menu bar in die home page
-  ====================================================
+  ===============================================================
+  Create and Position die labels in die menu bar in die home page
+  ===============================================================
   }
+
+  // Create lblDestinations
+  lblDestinations := TLabel.Create(tsHome);
   with lblDestinations do
   begin
+    Parent := tsHome;
     setLabelFont(lblDestinations, 16, true);
-    left := 450;
-    top := 30;
+    caption := 'Destinations';
+    Left := 450;
+    Top := 30;
   end;
 
+  // Create lblHotels
+  lblHotels := TLabel.Create(tsHome);
   with lblHotels do
   begin
+    Parent := tsHome;
     setLabelFont(lblHotels, 16, true);
-    Left := lblDestinations.left + lblDestinations.Width + 60;
+    caption := 'Hotels';
+    Left := lblDestinations.Left + lblDestinations.Width + 60;
     Top := 30;
   end;
 
+  // Create lblFlights
+  lblFlights := TLabel.Create(tsHome);
   with lblFlights do
   begin
+    Parent := tsHome;
     setLabelFont(lblFlights, 16, true);
-    Left := lblHotels.left + lblHotels.Width + 60;
+    caption := 'Flights';
+    Left := lblHotels.Left + lblHotels.Width + 60;
     Top := 30;
   end;
 
+  // Create lblBookings
+  lblBookings := TLabel.Create(tsHome);
   with lblBookings do
   begin
+    Parent := tsHome;
     setLabelFont(lblBookings, 16, true);
-    Left := lblFlights.left + lblFlights.Width + 60;
+    caption := 'Bookings';
+    Left := lblFlights.Left + lblFlights.Width + 60;
     Top := 30;
+  end;
+
+  //Create image
+  imgProfile := TImage.Create(tsHome);
+  with imgProfile do
+  begin
+
+  end;
+
+  //Create label name
+  lblUserName := TLabel.Create(tsHome);
+  with lblUserName do
+  begin
+
+  end;
+
+  //Create logo title
+  imgTitle := TImage.Create(tsHome);
+  with imgTitle do
+  begin
+
   end;
 end;
 

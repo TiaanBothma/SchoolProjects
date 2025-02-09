@@ -202,12 +202,6 @@ object frmFlylee: TfrmFlylee
         Font.Style = []
         ParentFont = False
       end
-      object imgTitle: TImage
-        Left = 100
-        Top = 20
-        Width = 135
-        Height = 50
-      end
       object lblAbout: TLabel
         Left = 184
         Top = 392
@@ -253,49 +247,6 @@ object frmFlylee: TfrmFlylee
         Width = 49
         Height = 15
         Caption = 'View Info'
-      end
-      object lblDestinations: TLabel
-        Left = 168
-        Top = 96
-        Width = 65
-        Height = 15
-        Caption = 'Destinations'
-        OnMouseEnter = lblDestinationsMouseEnter
-        OnMouseLeave = lblDestinationsMouseLeave
-      end
-      object lblHotels: TLabel
-        Left = 248
-        Top = 96
-        Width = 34
-        Height = 15
-        Caption = 'Hotels'
-        OnMouseEnter = lblHotelsMouseEnter
-        OnMouseLeave = lblHotelsMouseLeave
-      end
-      object lblFlights: TLabel
-        Left = 304
-        Top = 96
-        Width = 35
-        Height = 15
-        Caption = 'Flights'
-        OnMouseEnter = lblFlightsMouseEnter
-        OnMouseLeave = lblFlightsMouseLeave
-      end
-      object lblBookings: TLabel
-        Left = 384
-        Top = 96
-        Width = 49
-        Height = 15
-        Caption = 'Bookings'
-        OnMouseEnter = lblBookingsMouseEnter
-        OnMouseLeave = lblBookingsMouseLeave
-      end
-      object imgProfile: TImage
-        Left = 439
-        Top = 27
-        Width = 105
-        Height = 105
-        Stretch = True
       end
     end
     object tsInfo: TTabSheet

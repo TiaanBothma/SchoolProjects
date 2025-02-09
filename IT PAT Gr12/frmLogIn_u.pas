@@ -23,7 +23,7 @@ type
     procedure FormCreate(Sender: TObject);
     //My procedures
     function verifyPassword(storedHash, spassword: string): Boolean;
-     procedure posLogInOptions(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
+     procedure posInputFields(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
     procedure lblSignUpClick(Sender: TObject);
     procedure lblSignUpMouseEnter(Sender: TObject);
     procedure lblSignUpMouseLeave(Sender: TObject);
@@ -63,7 +63,7 @@ begin
   lblSignUp.font.Style := [TFontStyle.fsBold];
 end;
 
-procedure TfrmLogIn.posLogInOptions(currLabel: TLabel; currEdit: TEdit;
+procedure TfrmLogIn.posInputFields(currLabel: TLabel; currEdit: TEdit;
   ilbltop: integer);
 const
 
@@ -217,8 +217,8 @@ begin
     Left := frmSignUp.lblLogIn.Left - 20;
   end;
 
-  posLogInOptions(lblName, edtName, 100);
-  posLogInOptions(lblPassword, edtPassword, 170);
+  posInputFields(lblName, edtName, 100);
+  posInputFields(lblPassword, edtPassword, 170);
 end;
 
 end.
