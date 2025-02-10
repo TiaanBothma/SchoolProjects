@@ -1,6 +1,7 @@
 object frmSignUp: TfrmSignUp
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Flylee Sign Up'
   ClientHeight = 490
   ClientWidth = 828

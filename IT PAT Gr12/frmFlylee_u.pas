@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
-  Vcl.StdCtrls, Vcl.Buttons;
+  Vcl.StdCtrls, Vcl.Buttons, uCreateComponents;
 
 type
   TfrmFlylee = class(TForm)
@@ -25,12 +25,16 @@ type
     imgPlay: TImage;
     lblInfo: TLabel;
     tsInfo: TTabSheet;
+    lblCategory: TLabel;
+    lblOffer: TLabel;
+    imgDecor: TImage;
+    sbInfo: TScrollBox;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
+    procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
     procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
     procedure centerComponent(AControl, AParent: TControl);
-    procedure createMenuBar();
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
     procedure lblFlightsMouseEnter(Sender: TObject);
@@ -43,16 +47,18 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure lblFindMoreClick(Sender: TObject);
     procedure loadProfilePic();
+    { stoor user se data in array vir minder read-writes }
     procedure loadUserData();
     procedure FormActivate(Sender: TObject);
+    procedure createCategory();
   private
     arrUser : array[1..4] of string;
+  public
+    { Verklaar die kleure sodat alle vorme kan gebruik }
+    clPrimary, clSecondary, clAccent, clTextColor : TColor;
     { Menu Bar }
     lblDestinations, lblBookings, lblHotels, lblFlights, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
-  public
-    { Public declarations }
-    clPrimary, clSecondary, clAccent, clTextColor : TColor;
   end;
 
 var
@@ -73,7 +79,8 @@ begin
   }
 
   loadUserData();
-  createMenuBar();
+  createMenuBar(tsHome, tsHome);
+  createMenuBar(sbInfo, sbInfo);
 end;
 
 procedure TfrmFlylee.FormCreate(Sender: TObject);
@@ -84,16 +91,16 @@ begin
    ===========
   }
 
-  //Load Colors
+  { Load Colors }
   clPrimary := rgb(255,169,15); //Web Orange
   clSecondary := rgb(223,105,81); //Burnt Sienna
   clAccent := rgb(0,99,128); //Cerulean
   clTextColor := rgb(24,30,75); //Dark Moon Blue
 
- //inti variables
- initVarsHomePage();
+ { inti variables }
 
- //LoadImages
+
+ { LoadImages }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
  imgFlyGirl.Picture.LoadFromFile('Assets/flyGirl.png');
  imgPlane.Picture.LoadFromFile('Assets/plane.png');
@@ -101,10 +108,10 @@ begin
  imgUnderline.Picture.LoadFromFile('Assets/underline.png');
  imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
 
- //positions and scales
+ { positions and scales }
  posHomePageImages();
- imgUnderline.top := 245;
- imgUnderline.left := 320;
+ initVarsHomePage();
+ createCategory();
 end;
 
 procedure TfrmFlylee.loadUserData();
@@ -320,109 +327,34 @@ begin
   end;
 end;
 
-procedure TfrmFlylee.createMenuBar();
+procedure TfrmFlylee.createCategory();
 begin
   {
-  ===============================================================
-  Create and Position die labels in die menu bar in die home page
-  ===============================================================
+   =========================================================
+   Position and create the category section in the Info Page
+   =========================================================
   }
 
-  // Create lblDestinations
-  lblDestinations := TLabel.Create(tsHome);
-  with lblDestinations do
+  with lblCategory do
   begin
-    Parent := tsHome;
-    setLabelFont(lblDestinations, 16, true);
-    caption := 'Destinations';
-    Left := 450;
-    Top := 30;
-    { procedures }
-    OnMouseEnter := lblDestinationsMouseEnter;
-    OnMouseLeave := lblDestinationsMouseLeave;
+    setLabelFont(lblCategory, 14, true);
+    font.Color := clTextColor;
+    caption := 'CATEGORY';
+    centerComponent(lblCategory, tsInfo);
+    top := 100;
   end;
 
-  // Create lblHotels
-  lblHotels := TLabel.Create(tsHome);
-  with lblHotels do
+  with lblOffer do
   begin
-    Parent := tsHome;
-    setLabelFont(lblHotels, 16, true);
-    caption := 'Hotels';
-    Left := lblDestinations.Left + lblDestinations.Width + 60;
-    Top := 30;
-    { procedures }
-    OnMouseEnter := lblHotelsMouseEnter;
-    OnMouseLeave := lblHotelsMouseLeave;
-  end;
-
-  // Create lblFlights
-  lblFlights := TLabel.Create(tsHome);
-  with lblFlights do
-  begin
-    Parent := tsHome;
-    setLabelFont(lblFlights, 16, true);
-    caption := 'Flights';
-    Left := lblHotels.Left + lblHotels.Width + 60;
-    Top := 30;
-    { procedures }
-    OnMouseEnter := lblFlightsMouseEnter;
-    OnMouseLeave := lblFlightsMouseLeave;
-  end;
-
-  // Create lblBookings
-  lblBookings := TLabel.Create(tsHome);
-  with lblBookings do
-  begin
-    Parent := tsHome;
-    setLabelFont(lblBookings, 16, true);
-    caption := 'Bookings';
-    Left := lblFlights.Left + lblFlights.Width + 60;
-    Top := 30;
-    { procedures }
-    OnMouseEnter := lblBookingsMouseEnter;
-    OnMouseLeave := lblBookingsMouseLeave;
-  end;
-
-  //Create image
-  imgProfile := TImage.Create(tsHome);
-  with imgProfile do
-  begin
-    Parent := tsHome;
-    Stretch := true;
-    width := 45;
-    height := 45;
-    top := 20;
-    left := 1200;
-  end;
-
-  //Create label name
-  lblUserName := TLabel.Create(tsHome);
-  with lblUserName do
-  begin
-    Parent := tsHome;
-    setLabelFont(lblUsername, 16, true);
+    setLabelFont(lblOffer, 40, true);
     font.color := clTextColor;
-    caption := arrUser[1];
-    top := 30;
-    left := imgProfile.left + imgProfile.Width + 10;
+    caption := 'We Offer Best Services';
+    centerComponent(lblOffer, tsInfo);
+    top := 125;
   end;
-
-  //Create logo title
-  imgTitle := TImage.Create(tsHome);
-  with imgTitle do
-  begin
-    Parent := tsHome;
-    Picture.LoadFromFile('Assets/logoTitle.png');
-    width := 135;
-    height := 50;
-    top := 30;
-    left := 40;
-  end;
-
-  //Nadat die profile image gemaak is kan ons die image in sit
-  loadProfilePic();
 end;
+
+
 
 procedure TfrmFlylee.posHomePageImages();
 begin
@@ -431,6 +363,9 @@ begin
    Position and scale the images in the home page
    ==============================================
   }
+  imgUnderline.top := 245;
+  imgUnderline.left := 320;
+
   with imgCorner do
   begin
     Width := 585;
@@ -509,6 +444,110 @@ begin
     //Sentreer horisontaal
     AControl.Top := AParent.Top + (AParent.Height - AControl.Height) div 2;
   end;
+end;
+
+procedure TfrmFlylee.createMenuBar(AOwner : TComponent; AParent : TWinControl);
+begin
+  {
+  ===============================================================
+  Create and Position die labels in die menu bar in die home page
+  ===============================================================
+  }
+
+  // Create lblDestinations
+  lblDestinations := TLabel.Create(AOwner);
+  with lblDestinations do
+  begin
+    Parent := AParent;
+    setLabelFont(lblDestinations, 16, true);
+    caption := 'Destinations';
+    Left := 450;
+    Top := 30;
+    { procedures }
+    OnMouseEnter := lblDestinationsMouseEnter;
+    OnMouseLeave := lblDestinationsMouseLeave;
+  end;
+
+  // Create lblHotels
+  lblHotels := TLabel.Create(AOwner);
+  with lblHotels do
+  begin
+    Parent := AParent;
+    setLabelFont(lblHotels, 16, true);
+    caption := 'Hotels';
+    Left := lblDestinations.Left + lblDestinations.Width + 60;
+    Top := 30;
+    { procedures }
+    OnMouseEnter := lblHotelsMouseEnter;
+    OnMouseLeave := lblHotelsMouseLeave;
+  end;
+
+  // Create lblFlights
+  lblFlights := TLabel.Create(AOwner);
+  with lblFlights do
+  begin
+    Parent := AParent;
+    setLabelFont(lblFlights, 16, true);
+    caption := 'Flights';
+    Left := lblHotels.Left + lblHotels.Width + 60;
+    Top := 30;
+    { procedures }
+    OnMouseEnter := lblFlightsMouseEnter;
+    OnMouseLeave := lblFlightsMouseLeave;
+  end;
+
+  // Create lblBookings
+  lblBookings := TLabel.Create(AOwner);
+  with lblBookings do
+  begin
+    Parent := AParent;
+    setLabelFont(lblBookings, 16, true);
+    caption := 'Bookings';
+    Left := lblFlights.Left + lblFlights.Width + 60;
+    Top := 30;
+    { procedures }
+    OnMouseEnter := lblBookingsMouseEnter;
+    OnMouseLeave := lblBookingsMouseLeave;
+  end;
+
+  //Create image
+  imgProfile := TImage.Create(AOwner);
+  with imgProfile do
+  begin
+    Parent := AParent;
+    Stretch := true;
+    width := 45;
+    height := 45;
+    top := 20;
+    left := 1200;
+  end;
+
+  //Create label name
+  lblUserName := TLabel.Create(AOwner);
+  with lblUserName do
+  begin
+    Parent := AParent;
+    setLabelFont(lblUsername, 16, true);
+    font.color := clTextColor;
+    caption := arrUser[1];
+    top := 30;
+    left := imgProfile.left + imgProfile.Width + 10;
+  end;
+
+  //Create logo title
+  imgTitle := TImage.Create(AOwner);
+  with imgTitle do
+  begin
+    Parent := AParent;
+    Picture.LoadFromFile('Assets/logoTitle.png');
+    width := 135;
+    height := 50;
+    top := 30;
+    left := 40;
+  end;
+
+  //Nadat die profile image gemaak is kan ons die image in sit
+  loadProfilePic();
 end;
 
 end.

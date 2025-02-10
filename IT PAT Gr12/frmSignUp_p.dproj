@@ -140,6 +140,7 @@
             <Form>frmFlylee</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="uCreateComponents.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsHome
+    ActivePage = tsInfo
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
@@ -252,6 +252,40 @@ object frmFlylee: TfrmFlylee
     object tsInfo: TTabSheet
       Caption = 'Info'
       ImageIndex = 1
+      object sbInfo: TScrollBox
+        Left = 0
+        Top = 0
+        Width = 1414
+        Height = 785
+        BevelEdges = []
+        BevelInner = bvNone
+        BevelOuter = bvNone
+        Color = clWhite
+        ParentBackground = True
+        ParentColor = False
+        TabOrder = 0
+        UseWheelForScrolling = True
+        object lblOffer: TLabel
+          Left = 664
+          Top = 96
+          Width = 34
+          Height = 15
+          Caption = 'Label2'
+        end
+        object lblCategory: TLabel
+          Left = 640
+          Top = 117
+          Width = 34
+          Height = 15
+          Caption = 'Label1'
+        end
+        object imgDecor: TImage
+          Left = 1264
+          Top = 27
+          Width = 105
+          Height = 105
+        end
+      end
     end
   end
 end

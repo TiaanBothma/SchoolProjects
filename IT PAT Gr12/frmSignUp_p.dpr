@@ -5,7 +5,8 @@ uses
   frmSignUp_u in 'frmSignUp_u.pas' {frmSignUp},
   dmData_u in 'dmData_u.pas' {dmData: TDataModule},
   frmLogIn_u in 'frmLogIn_u.pas' {frmLogIn},
-  frmFlylee_u in 'frmFlylee_u.pas' {frmFlylee};
+  frmFlylee_u in 'frmFlylee_u.pas' {frmFlylee},
+  uCreateComponents in 'uCreateComponents.pas';
 
 {$R *.res}
 
