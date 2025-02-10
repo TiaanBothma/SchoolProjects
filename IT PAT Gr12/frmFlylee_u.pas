@@ -5,7 +5,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
-  Vcl.StdCtrls, Vcl.Buttons, uCreateComponents;
+  Vcl.StdCtrls, Vcl.Buttons,
+  { Helper Files }
+  uUser, uFunc;
 
 type
   TfrmFlylee = class(TForm)
@@ -34,7 +36,6 @@ type
     procedure initVarsHomePage();
     procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
     procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
-    procedure centerComponent(AControl, AParent: TControl);
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
     procedure lblFlightsMouseEnter(Sender: TObject);
@@ -46,13 +47,14 @@ type
     procedure shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
     procedure lblFindMoreClick(Sender: TObject);
-    procedure loadProfilePic();
-    { stoor user se data in array vir minder read-writes }
-    procedure loadUserData();
     procedure FormActivate(Sender: TObject);
     procedure createCategory();
+
+   { Private Scope }
   private
     arrUser : array[1..4] of string;
+
+  { Public Scope }
   public
     { Verklaar die kleure sodat alle vorme kan gebruik }
     clPrimary, clSecondary, clAccent, clTextColor : TColor;
@@ -78,7 +80,7 @@ begin
    ================
   }
 
-  loadUserData();
+  loadUserData(arrUser);
   createMenuBar(tsHome, tsHome);
   createMenuBar(sbInfo, sbInfo);
 end;
@@ -112,45 +114,6 @@ begin
  posHomePageImages();
  initVarsHomePage();
  createCategory();
-end;
-
-procedure TfrmFlylee.loadUserData();
-var
-
-  bfound : boolean;
-
-begin
-  {
-   ================================================================
-   Lees user se data vanaf databasis in n array vir vinniger opsoek
-   ================================================================
-  }
-
-  bfound := false;
-
-  with dmData do
-  begin
-    tblUsers.open;
-    tblUsers.first;
-    while (not tblUsers.Eof) and (bfound = false) do
-    begin
-      if tblUsers['Userid'] = iUserId then
-        begin
-          bfound := true;
-          arrUser[1] := tblUsers['name'];
-          arruser[2] := tblUsers['lastname'];
-          arrUser[3] := tblUsers['isSubscribed'];
-          arrUser[4] := tblUsers['birthDate'];
-        end;
-
-      tblUsers.next;
-    end;
-  end;
-
-  if bfound = false then
-    begin
-      Showmessage('A problem occurred with your user account.');
-    end;
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -278,55 +241,6 @@ begin
   lblHotels.font.color := clBlack;
 end;
 
-procedure TfrmFlylee.loadProfilePic();
-var
-
-  Stream: TMemoryStream;
-  BlobField: TBlobField;
-  bfound : boolean;
-
-begin
-  {
-   ==================================================================================
-   Laai die user se profiel prent van Access database en wys dit in 'n TImage
-   ==================================================================================
-  }
-  bfound := false;
-
-  with dmData do
-  begin
-    tblUsers.open;
-    tblUsers.first;
-    while (not tblUsers.Eof) and (bfound = false) do
-    begin
-      if tblUsers['userid'] = iUserId then
-      begin
-        bfound := true;
-        BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
-      end;
-
-      tblUsers.next;
-    end;
-  end;
-
-  // As daar geen prent is nie, gaan uit
-  if BlobField.IsNull then
-  begin
-    showmessage('image is nil');
-    imgProfile.Picture := nil;  // Maak skoon as daar geen prent is nie
-    Exit;
-  end;
-
-  Stream := TMemoryStream.Create;
-  try
-    BlobField.SaveToStream(Stream);
-    Stream.Position := 0;
-    imgProfile.Picture.LoadFromStream(Stream);
-  finally
-    Stream.Free;
-  end;
-end;
-
 procedure TfrmFlylee.createCategory();
 begin
   {
@@ -426,24 +340,6 @@ procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
   pcPages.TabIndex := 1;
-end;
-
-procedure TfrmFlylee.centerComponent(AControl, AParent: TControl);
-begin
-  {
-   ================================
-   Sentreer komponent op op sy ouer
-   ================================
-  }
-
-  //Kyk of die komponente bestaan
-  if Assigned(AControl) and Assigned(AParent) then
-  begin
-    //Sentreer vertikaal
-    AControl.Left := AParent.Left + (AParent.Width - AControl.Width) div 2;
-    //Sentreer horisontaal
-    AControl.Top := AParent.Top + (AParent.Height - AControl.Height) div 2;
-  end;
 end;
 
 procedure TfrmFlylee.createMenuBar(AOwner : TComponent; AParent : TWinControl);
@@ -547,7 +443,7 @@ begin
   end;
 
   //Nadat die profile image gemaak is kan ons die image in sit
-  loadProfilePic();
+  loadProfilePic(imgProfile);
 end;
 
 end.

@@ -140,7 +140,8 @@
             <Form>frmFlylee</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="uCreateComponents.pas"/>
+        <DCCReference Include="uUser.pas"/>
+        <DCCReference Include="uFunc.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
