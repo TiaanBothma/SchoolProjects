@@ -8,11 +8,17 @@ uses
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
   System.Skia, Vcl.Skia, dmData_u, uFunc;
 
-procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; tsPage : TTabSheet);
+procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
+procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
 
 implementation
 
-procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle : string; tsPage : TTabSheet);
+procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+begin
+  //
+end;
+
+procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle : string; sbPage : TScrollBox);
 var
 
   iTop : integer;
@@ -24,10 +30,10 @@ begin
   iTop := 250;
 
   // Create the shape
-  shpService := TShape.Create(tsPage);
+  shpService := TShape.Create(sbPage);
   with shpService do
   begin
-    Parent := tsPage;
+    Parent := sbPage;
     Width := 300;
     Height := 300;
     Left := iLeft;
@@ -38,10 +44,10 @@ begin
   end;
 
   // Create the image
-  imgIcon := TImage.Create(tsPage);
+  imgIcon := TImage.Create(sbPage);
   with imgIcon do
   begin
-    Parent := tsPage;
+    Parent := sbPage;
     Width := 70;
     Height := 60;
     Stretch := True;
@@ -52,10 +58,10 @@ begin
   end;
 
   // Create the title label
-  lblTitle := TLabel.Create(tsPage);
+  lblTitle := TLabel.Create(sbPage);
   with lblTitle do
   begin
-    Parent := tsPage;
+    Parent := sbPage;
     setLabelFont(lblTitle, 16, true);
     Font.Color := rgb(30, 29, 76);
     Caption := sTitle;
@@ -64,10 +70,10 @@ begin
   end;
 
   // Create the subtitle label
-  lblSubtitle := TLabel.Create(tsPage);
+  lblSubtitle := TLabel.Create(sbPage);
   with lblSubtitle do
   begin
-    Parent := tsPage;
+    Parent := sbPage;
     setLabelFont(lblSubtitle, 12, false);
     Font.Color := rgb(94, 98, 130);
     Caption := sSubtitle;

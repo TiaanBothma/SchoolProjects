@@ -257,6 +257,7 @@ object frmFlylee: TfrmFlylee
         Top = 0
         Width = 1414
         Height = 785
+        VertScrollBar.Smooth = True
         BevelEdges = []
         BevelInner = bvNone
         BevelOuter = bvNone
@@ -284,6 +285,20 @@ object frmFlylee: TfrmFlylee
           Top = 27
           Width = 105
           Height = 105
+        end
+        object lblTopSelling: TLabel
+          Left = 664
+          Top = 376
+          Width = 58
+          Height = 15
+          Caption = 'Top Selling'
+        end
+        object lblTopDestinations: TLabel
+          Left = 624
+          Top = 504
+          Width = 88
+          Height = 15
+          Caption = 'Top Destinations'
         end
       end
     end

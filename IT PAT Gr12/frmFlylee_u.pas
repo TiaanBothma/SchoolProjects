@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
   Vcl.StdCtrls, Vcl.Buttons,
   { Helper Files }
-  uUser, uFunc, uComponents;
+  uDBCalls, uFunc, uComponents;
 
 type
   TfrmFlylee = class(TForm)
@@ -31,6 +31,8 @@ type
     lblOffer: TLabel;
     imgDecor: TImage;
     sbInfo: TScrollBox;
+    lblTopSelling: TLabel;
+    lblTopDestinations: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -247,12 +249,13 @@ begin
    =========================================================
   }
 
+  { Services }
   with lblCategory do
   begin
     setLabelFont(lblCategory, 14, true);
     font.Color := clTextColor;
     caption := 'CATEGORY';
-    centerComponent(lblCategory, tsInfo);
+    centerComponent(lblCategory, sbInfo);
     top := 100;
   end;
 
@@ -261,17 +264,35 @@ begin
     setLabelFont(lblOffer, 40, true);
     font.color := clTextColor;
     caption := 'We Offer Best Services';
-    centerComponent(lblOffer, tsInfo);
+    centerComponent(lblOffer, sbInfo);
     top := 125;
   end;
 
   //Create category info boxes for services
-  createInfoBox(40, 'Assets/weatherService.png', 'Calculated Weather', 'We offer only the best', tsInfo);
-  createInfoBox(390, 'Assets/flightService.png', 'Best Flights', 'We offer only theasdf best', tsInfo);
-  createInfoBox(740, 'Assets/eventService.png', 'Local Events', 'We offer only the beasdfst', tsInfo);
-  createInfoBox(1090, 'Assets/settingsService.png', 'Customization', 'We offer onasdfly the best', tsInfo);
+  createInfoBox(40, 'Assets/weatherService.png', 'Calculated Weather', 'We offer only the best', sbInfo);
+  createInfoBox(390, 'Assets/flightService.png', 'Best Flights', 'We offer only theasdf best', sbInfo);
+  createInfoBox(740, 'Assets/eventService.png', 'Local Events', 'We offer only the beasdfst', sbInfo);
+  createInfoBox(1090, 'Assets/settingsService.png', 'Customization', 'We offer onasdfly the best', sbInfo);
+
+  { Top Selling Flights }
+  with lblTopSelling do
+  begin
+    setLabelFont(lblTopSelling, 14, true);
+    font.color := clTextColor;
+    centerComponent(lblTopSelling, sbInfo);
+    top := 630;
+  end;
+
+  with lblTopDestinations do
+  begin
+    setLabelFont(lblTopDestinations, 40, true);
+    font.color := clTextColor;
+    centerComponent(lblTopDestinations, sbInfo);
+    top := 655;
+  end;
 
   //Create top selling destination boxes
+  createTopSellingBox(70, 'Assets/camera.jpeg', '', '10 Days trip', 50, sbInfo);
 end;
 
 procedure TfrmFlylee.posHomePageImages();

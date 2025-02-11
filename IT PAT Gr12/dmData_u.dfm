@@ -26,4 +26,17 @@ object dmData: TdmData
     Left = 168
     Top = 48
   end
+  object tblStats: TADOTable
+    Active = True
+    Connection = adoCon
+    CursorType = ctStatic
+    TableName = 'tblStats'
+    Left = 168
+    Top = 128
+  end
+  object dsStats: TDataSource
+    DataSet = tblStats
+    Left = 248
+    Top = 136
+  end
 end

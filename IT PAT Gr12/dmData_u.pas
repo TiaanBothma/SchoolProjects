@@ -10,6 +10,8 @@ type
     dsUsers: TDataSource;
     adoCon: TADOConnection;
     tblUsers: TADOTable;
+    tblStats: TADOTable;
+    dsStats: TDataSource;
   private
     { Private declarations }
   public
