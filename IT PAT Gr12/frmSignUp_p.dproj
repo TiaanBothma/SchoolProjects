@@ -142,6 +142,7 @@
         </DCCReference>
         <DCCReference Include="uUser.pas"/>
         <DCCReference Include="uFunc.pas"/>
+        <DCCReference Include="uComponents.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

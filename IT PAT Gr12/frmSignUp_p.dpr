@@ -7,7 +7,8 @@ uses
   frmLogIn_u in 'frmLogIn_u.pas' {frmLogIn},
   frmFlylee_u in 'frmFlylee_u.pas' {frmFlylee},
   uUser in 'uUser.pas',
-  uFunc in 'uFunc.pas';
+  uFunc in 'uFunc.pas',
+  uComponents in 'uComponents.pas';
 
 {$R *.res}
 

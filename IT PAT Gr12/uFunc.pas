@@ -10,6 +10,7 @@ uses
 
 { Declare procedures/functions }
 procedure centerComponent(AControl, AParent: TControl);
+procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
 
 implementation
 
@@ -29,6 +30,29 @@ begin
     //Sentreer horisontaal
     AControl.Top := AParent.Top + (AParent.Height - AControl.Height) div 2;
   end;
+end;
+
+procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
+begin
+  {
+   ===================================
+   Set die font van die label ingevoer
+   ===================================
+  }
+
+  //Kyk of die label bestaan
+  if Assigned(currLabel) then
+    with currLabel.Font do
+    begin
+      //Stel die font
+      Name := 'Roboto';
+      Size := isize;
+      //Kies of dit bold moet wees of nie
+      if bBold then
+        Style := [TFontStyle.fsBold]
+      else
+        Style := [];
+    end;
 end;
 
 end.

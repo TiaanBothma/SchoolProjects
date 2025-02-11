@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
   Vcl.StdCtrls, Vcl.Buttons,
   { Helper Files }
-  uUser, uFunc;
+  uUser, uFunc, uComponents;
 
 type
   TfrmFlylee = class(TForm)
@@ -35,7 +35,6 @@ type
     procedure posHomePageImages();
     procedure initVarsHomePage();
     procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
-    procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
     procedure lblFlightsMouseEnter(Sender: TObject);
@@ -48,8 +47,7 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure lblFindMoreClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure createCategory();
-
+    procedure createInfoPage();
    { Private Scope }
   private
     arrUser : array[1..4] of string;
@@ -113,7 +111,7 @@ begin
  { positions and scales }
  posHomePageImages();
  initVarsHomePage();
- createCategory();
+ createInfoPage();
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -241,7 +239,7 @@ begin
   lblHotels.font.color := clBlack;
 end;
 
-procedure TfrmFlylee.createCategory();
+procedure TfrmFlylee.createInfoPage();
 begin
   {
    =========================================================
@@ -266,9 +264,15 @@ begin
     centerComponent(lblOffer, tsInfo);
     top := 125;
   end;
+
+  //Create category info boxes for services
+  createInfoBox(40, 'Assets/weatherService.png', 'Calculated Weather', 'We offer only the best', tsInfo);
+  createInfoBox(390, 'Assets/flightService.png', 'Best Flights', 'We offer only theasdf best', tsInfo);
+  createInfoBox(740, 'Assets/eventService.png', 'Local Events', 'We offer only the beasdfst', tsInfo);
+  createInfoBox(1090, 'Assets/settingsService.png', 'Customization', 'We offer onasdfly the best', tsInfo);
+
+  //Create top selling destination boxes
 end;
-
-
 
 procedure TfrmFlylee.posHomePageImages();
 begin
@@ -311,29 +315,6 @@ begin
     Top := 167;
     Left := 1112;
   end;
-end;
-
-procedure TfrmFlylee.setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
-begin
-  {
-   ===================================
-   Set die font van die label ingevoer
-   ===================================
-  }
-
-  //Kyk of die label bestaan
-  if Assigned(currLabel) then
-    with currLabel.Font do
-    begin
-      //Stel die font
-      Name := 'Roboto';
-      Size := isize;
-      //Kies of dit bold moet wees of nie
-      if bBold then
-        Style := [TFontStyle.fsBold]
-      else
-        Style := [];
-    end;
 end;
 
 procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
