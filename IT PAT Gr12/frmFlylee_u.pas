@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, Data.DB, Data.Win.ADODB,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, jpeg, Data.DB, Data.Win.ADODB,
   Vcl.StdCtrls, Vcl.Buttons,
   { Helper Files }
   uDBCalls, uFunc, uComponents;
@@ -306,7 +306,6 @@ begin
   //1 tot 3 want ons soek net die top 3
   for I := 1 to 3 do
   begin
-    inc(ileft, 100);
     if i = 1 then
     begin
     sImagePath := 'Assets/balloons.jpeg'
@@ -314,7 +313,7 @@ begin
     end
       else if i = 2 then
       begin
-        sImagePath := 'Assets/camera.jpeg'
+        sImagePath := 'Assets/camera.jpg'
       end
         else
         begin
@@ -323,6 +322,7 @@ begin
 
 
     createTopSellingBox(ileft, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
+    inc(ileft, 430);
   end;
 
 end;

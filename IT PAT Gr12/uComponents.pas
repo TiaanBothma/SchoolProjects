@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, JPEG, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
   System.Skia, Vcl.Skia, dmData_u, uFunc;
 
@@ -14,8 +14,45 @@ procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; r
 implementation
 
 procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+const
+  itop = 800;
+var
+
+  imgLocation : TImage;
+  shpDesc : TShape;
+  lblTitle, lblDays, lblCost : TLabel;
+
 begin
-  //
+  {
+   ===============================
+   Maak die Top Destinations boxes
+   ===============================
+  }
+
+  imgLocation := TImage.Create(sbpage);
+  with imgLocation do
+  begin
+    parent := sbPage;
+    stretch := true;
+    width := 350;
+    height := 350;
+    Picture.LoadFromFile(simage);
+    top := itop;
+    left := ileft;
+  end;
+
+  shpDesc := TShape.Create(sbpage);
+  with shpDesc do
+  begin
+    parent := sbPage;
+    Pen.style := psClear;
+    Shape := stRoundRect;
+    Brush.Color := clWhite;
+    width := 352;
+    height := 170;
+    top := imgLocation.Top + imgLocation.Height - 40;
+    left := ileft;
+  end;
 end;
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle : string; sbPage : TScrollBox);
