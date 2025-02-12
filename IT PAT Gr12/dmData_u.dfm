@@ -39,4 +39,17 @@ object dmData: TdmData
     Left = 248
     Top = 136
   end
+  object tblFlights: TADOTable
+    Active = True
+    Connection = adoCon
+    CursorType = ctStatic
+    TableName = 'tblFlights'
+    Left = 168
+    Top = 208
+  end
+  object dsFlights: TDataSource
+    DataSet = tblFlights
+    Left = 248
+    Top = 216
+  end
 end

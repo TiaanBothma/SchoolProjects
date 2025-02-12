@@ -12,6 +12,8 @@ type
     tblUsers: TADOTable;
     tblStats: TADOTable;
     dsStats: TDataSource;
+    tblFlights: TADOTable;
+    dsFlights: TDataSource;
   private
     { Private declarations }
   public

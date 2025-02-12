@@ -16,8 +16,84 @@ procedure loadTopDestinations(var arrDestination : array of string; var arrDays 
 implementation
 
 procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
-begin
+var
 
+  icount : integer;
+  I, J: Integer;
+  arrPopularity : array[0..100] of real;
+  { lorries }
+  slorrie : string;
+  iLorrie : integer;
+  rlorrie : real;
+begin
+  {
+   ===================================================================
+   Lees die flights in die arrays in en dan sort dit asc by popularity
+   ===================================================================
+  }
+
+  icount := 0;
+
+  //Lees data in arrays
+  with dmData do
+  begin
+    tblFlights.open;
+    tblFLights.first;
+    while not tblFlights.Eof do
+    begin
+      arrDestination[icount] := tblFLights['to'];
+      arrDays[icount] := tblFlights['tripLength'];
+      arrCost[icount] := tblFlights['price'];
+      arrPopularity[icount] := 0;
+
+      tblStats.open;
+      tblStats.first;
+      while not tblStats.Eof do
+      begin
+        if tblStats['FlightID'] = tblFlights['FlightID']
+          then begin
+            arrPopularity[icount] := (tblStats['clicks'] + tblStats['bookings']) / 2;
+            break;
+          end;
+
+
+        tblStats.next;
+      end;
+
+      inc(icount);
+      tblFlights.next;
+    end;
+  end;
+
+  //Sorteer volgense popularity
+  //arrays begin by nul dus minus ons een ekstra
+  for I := 0 to icount - 2 do
+    for J := I + 1 to icount - 1 do
+    begin
+      if arrPopularity[i] < arrPopularity[j] then
+        begin
+          // Swap arrDestination
+          slorrie := arrDestination[I];
+          arrDestination[I] := arrDestination[J];
+          arrDestination[J] := slorrie;
+
+          // Swap arrDays
+          ilorrie := arrDays[I];
+          arrDays[I] := arrDays[J];
+          arrDays[J] := ilorrie;
+
+          // Swap arrCost
+          rlorrie := arrCost[I];
+          arrCost[I] := arrCost[J];
+          arrCost[J] := rlorrie;
+
+          // Swap arrPopularity
+          rlorrie := arrPopularity[I];
+          arrPopularity[I] := arrPopularity[J];
+          arrPopularity[J] := rlorrie;
+        end;
+
+    end;
 end;
 
 procedure loadUserData(var arrUser: array of string);

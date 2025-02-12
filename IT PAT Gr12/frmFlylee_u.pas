@@ -53,7 +53,6 @@ type
    { Private Scope }
   private
     arrUser : array[1..4] of string;
-
   { Public Scope }
   public
     { Verklaar die kleure sodat alle vorme kan gebruik }
@@ -242,6 +241,15 @@ begin
 end;
 
 procedure TfrmFlylee.createInfoPage();
+var
+
+  arrDestinations : array[0..100] of string;
+  arrDays : array[0..100] of integer;
+  arrCosts : array[0..100] of real;
+  I: Integer;
+  ileft : integer;
+  sImagePath : string;
+
 begin
   {
    =========================================================
@@ -292,7 +300,31 @@ begin
   end;
 
   //Create top selling destination boxes
-  createTopSellingBox(70, 'Assets/camera.jpeg', '', '10 Days trip', 50, sbInfo);
+  loadTopDestinations(arrDestinations, arrDays, arrCosts);
+  ileft := 70;
+
+  //1 tot 3 want ons soek net die top 3
+  for I := 1 to 3 do
+  begin
+    inc(ileft, 100);
+    if i = 1 then
+    begin
+    sImagePath := 'Assets/balloons.jpeg'
+
+    end
+      else if i = 2 then
+      begin
+        sImagePath := 'Assets/camera.jpeg'
+      end
+        else
+        begin
+          sImagePath := 'Assets/lights.jpeg';
+        end;
+
+
+    createTopSellingBox(ileft, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
+  end;
+
 end;
 
 procedure TfrmFlylee.posHomePageImages();
