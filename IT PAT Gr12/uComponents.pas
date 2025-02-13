@@ -49,9 +49,42 @@ begin
     Shape := stRoundRect;
     Brush.Color := clWhite;
     width := 352;
-    height := 170;
+    height := 120;
     top := imgLocation.Top + imgLocation.Height - 40;
     left := ileft;
+  end;
+
+  lblTitle := TLabel.Create(shpDesc);
+  with lblTitle do
+  begin
+    parent := sbpage;
+    setLabelFont(lblTitle, 16, true);
+    font.color := rgb(94, 98, 130);
+    caption := sTitle;
+    top := shpDesc.Top + 20;
+    left := shpDesc.Left + 20;
+  end;
+
+  lblDays := TLabel.Create(sbpage);
+  with lblDays do
+  begin
+    parent := sbpage;
+    setLabelFont(lblDays, 14, true);
+    font.color := rgb(94, 98, 130);
+    caption := sDays;
+    top := lblTitle.top + lblTitle.Height + 25;
+    left := shpDesc.Left + 20;
+  end;
+
+  lblCost := TLabel.Create(sbpage);
+  with lblCost do
+  begin
+    parent := sbpage;
+    setLabelFont(lblCost, 16, true);
+    font.color := rgb(94, 98, 130);
+    caption := floattostrf(rCost, ffCurrency, 8, 2);
+    top := shpDesc.Top + 20;
+    left := shpDesc.Left + shpDesc.Width - Width - 20;
   end;
 end;
 

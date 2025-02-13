@@ -322,7 +322,7 @@ begin
 
 
     createTopSellingBox(ileft, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
-    inc(ileft, 430);
+    inc(ileft, 440);
   end;
 
 end;
