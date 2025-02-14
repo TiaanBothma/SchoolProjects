@@ -250,6 +250,8 @@ var
   ileft : integer;
   sImagePath : string;
 
+  lblReviews, lblAboutSay : TLabel;
+
 begin
   {
    =========================================================
@@ -325,6 +327,31 @@ begin
     inc(ileft, 440);
   end;
 
+  { Create Review Section }
+  lblReviews := TLabel.Create(sbInfo);
+  with lblReviews do
+  begin
+    parent := sbInfo;
+    setLabelFont(lblReviews, 14, true);
+    font.color := rgb(94,98,130);
+    caption := 'Reviews';
+    top := 1350;
+    left := 100;
+  end;
+
+  lblAboutSay := Tlabel.Create(sbInfo);
+  with lblAboutSay do
+  begin
+    parent := sbInfo;
+    setLabelFont(lblAboutSay, 60, true);
+    font.color := clTextColor;
+    Alignment := taLeftJustify;
+    caption := 'What People Say' + #13 + 'About Us';
+    top := lblReviews.Top + lblReviews.Height + 10;
+    left := 100;
+  end;
+
+  createViewReviewBox(sbInfo);
 end;
 
 procedure TfrmFlylee.posHomePageImages();

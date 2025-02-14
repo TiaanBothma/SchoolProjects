@@ -6,11 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
-  System.Skia, Vcl.Skia, dmData_u;
+  System.Skia, Vcl.Skia, dmData_u, IdHashMessageDigest, IdGlobal;
 
 { Declare procedures/functions }
 procedure centerComponent(AControl, AParent: TControl);
 procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
+function hashPassword(spassword : string): string;
 
 implementation
 
@@ -53,6 +54,32 @@ begin
       else
         Style := [];
     end;
+end;
+
+function hashPassword(spassword : string): string;
+var
+
+  salt: string;
+  md5: TIdHashMessageDigest5;
+
+begin
+  {
+   =============================================================
+   Encript die password voordat dit in die databasis gesave word
+   =============================================================
+  }
+
+  //n 'Salt' is n random string wat binne n password geplaas word sodat dit langer vat of moeiliker is om die password te 'crack'
+  salt := 'random-salt';
+
+  //MD5 hashing is een manier in Delphi om die salt en die password saam te hash
+  md5 := TIdHashMessageDigest5.Create;
+
+  //Concatenate die password en die salt
+  Result := md5.HashStringAsHex(spassword + salt);
+
+  //Gooi die md5 object uit die RAM uit
+  md5.Free;
 end;
 
 

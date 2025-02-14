@@ -12,6 +12,7 @@ uses
 procedure loadUserData(var arrUser: array of string);
 procedure loadProfilePic(var imgProfile : TImage);
 procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
+procedure saveProfilePictoDB(var sfilename : string);
 
 implementation
 
@@ -181,6 +182,34 @@ begin
     BlobField.SaveToStream(Stream);
     Stream.Position := 0;
     imgProfile.Picture.LoadFromStream(Stream);
+  finally
+    Stream.Free;
+  end;
+end;
+
+procedure saveProfilePictoDB(var sfilename : string);
+var
+  Stream: TMemoryStream;
+  BlobField: TBlobField;
+begin
+  {
+   =================================================================================
+   Save die user se image wat hy upload, in access as n OLO Object vir n profile pic
+   =================================================================================
+  }
+
+ // Stel die standaard prent as sFileName leeg is
+  if sFileName = '' then
+    sFileName := 'Assets/logo.png';
+
+  Stream := TMemoryStream.Create;
+
+  try
+    Stream.LoadFromFile(sFileName);
+    Stream.Position := 0;
+
+    BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
+    BlobField.LoadFromStream(Stream);
   finally
     Stream.Free;
   end;

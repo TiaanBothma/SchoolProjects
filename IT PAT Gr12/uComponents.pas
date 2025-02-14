@@ -10,15 +10,47 @@ uses
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
 procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+procedure createViewReviewBox(sbPage : TScrollBox);
 
 implementation
+
+procedure createViewReviewBox(sbPage : TScrollBox);
+var
+
+  shpReview : TShape;
+  lblMessage : TLabel;
+  imgProfile : TImage;
+
+begin
+  {
+   ==========================================
+   Create the review box that people can view
+   ==========================================
+  }
+
+  //Gaan deur databasis van users, kyk of hulle reviews het, as hulle het wys die user se review, anders skip die user
+  //Wys die user se naam, van, profile pic, waarnatoe hy gegaan het en die message
+  //Maak ook die arrows vir scroll effect
+
+  shpReview := TShape.Create(sbPage);
+  with shpReview do
+  begin
+    parent := sbpage;
+    Pen.Style := psClear;
+    shape := stRoundRect;
+    width := 700;
+    Height := 250;
+    left := 500;
+    top := 1300;
+  end;
+end;
 
 procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
 const
   itop = 800;
 var
 
-  imgLocation : TImage;
+  imgLocation, imgIcon : TImage;
   shpDesc : TShape;
   lblTitle, lblDays, lblCost : TLabel;
 
@@ -65,6 +97,18 @@ begin
     left := shpDesc.Left + 20;
   end;
 
+  imgIcon := TImage.Create(sbpage);
+  with imgIcon do
+  begin
+    parent := sbPage;
+    Picture.LoadFromFile('Assets/locationIcon.png');
+    stretch := true;
+    height := 20;
+    width := 20;
+    left := shpDesc.Left + 20;
+    top := lblTitle.Top + lblTitle.Height + 25;
+  end;
+
   lblDays := TLabel.Create(sbpage);
   with lblDays do
   begin
@@ -73,7 +117,7 @@ begin
     font.color := rgb(94, 98, 130);
     caption := sDays;
     top := lblTitle.top + lblTitle.Height + 25;
-    left := shpDesc.Left + 20;
+    left := imgIcon.Left + imgIcon.Width + 10;
   end;
 
   lblCost := TLabel.Create(sbpage);

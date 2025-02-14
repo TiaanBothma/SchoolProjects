@@ -5,8 +5,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
-  Vcl.Buttons, Vcl.ComCtrls, DateUtils, IdHashMessageDigest, IdGlobal, Data.DB, Data.Win.ADODB,
-  System.Skia, Vcl.Skia;
+  Vcl.Buttons, Vcl.ComCtrls, System.Skia, Vcl.Skia, DateUtils,
+  { Helper Files }
+  uFunc, uDBCalls;
 
 type
   TfrmSignUp = class(TForm)
@@ -37,12 +38,10 @@ type
     procedure lblLogInMouseLeave(Sender: TObject);
     procedure posInputFields(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
     procedure btbtnGeneratePassClick(Sender: TObject);
-    function hashPassword(spassword : string) : string;
     procedure btnSignUpClick(Sender: TObject);
     function isSignUpValidate() : boolean;
     procedure lblLogInClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure saveProfilePictoDB();
     procedure btnProfilePicClick(Sender: TObject);
     procedure posComponents();
   private
@@ -151,34 +150,6 @@ begin
 
 end;
 
-procedure TfrmSignUp.saveProfilePictoDB();
-var
-  Stream: TMemoryStream;
-  BlobField: TBlobField;
-begin
-  {
-   =================================================================================
-   Save die user se image wat hy upload, in access as n OLO Object vir n profile pic
-   =================================================================================
-  }
-
- // Stel die standaard prent as sFileName leeg is
-  if sFileName = '' then
-    sFileName := 'Assets/logo.png';
-
-  Stream := TMemoryStream.Create;
-
-  try
-    Stream.LoadFromFile(sFileName);
-    Stream.Position := 0;
-
-    BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
-    BlobField.LoadFromStream(Stream);
-  finally
-    Stream.Free;
-  end;
-end;
-
 procedure TfrmSignUp.btbtnGeneratePassClick(Sender: TObject);
 var
 
@@ -231,7 +202,7 @@ begin
       tblUsers['birthDate'] := dtpBirthDate.date;
       tblUsers['password'] := hashPassword(spassword);
       //Save die profile pic
-      saveProfilePictoDB();
+      saveProfilePictoDB(sfilename);
 
       tblUsers.post;
     end;
@@ -289,32 +260,6 @@ begin
 
   //Fix positions of components
   posComponents();
-end;
-
-function TfrmSignUp.hashPassword(spassword : string): string;
-var
-
-  salt: string;
-  md5: TIdHashMessageDigest5;
-
-begin
-  {
-   =============================================================
-   Encript die password voordat dit in die databasis gesave word
-   =============================================================
-  }
-
-  //n 'Salt' is n random string wat binne n password geplaas word sodat dit langer vat of moeiliker is om die password te 'crack'
-  salt := 'random-salt';
-
-  //MD5 hashing is een manier in Delphi om die salt en die password saam te hash
-  md5 := TIdHashMessageDigest5.Create;
-
-  //Concatenate die password en die salt
-  Result := md5.HashStringAsHex(spassword + salt);
-
-  //Gooi die md5 object uit die RAM uit
-  md5.Free;
 end;
 
 function TfrmSignUp.isSignUpValidate: boolean;
