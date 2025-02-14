@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsHome
+    ActivePage = tsInfo
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'

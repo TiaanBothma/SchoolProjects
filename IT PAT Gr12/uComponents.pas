@@ -6,20 +6,22 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, JPEG, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
-  System.Skia, Vcl.Skia, dmData_u, uFunc;
+  System.Skia, Vcl.Skia, dmData_u, uFunc, uDBCalls;
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
 procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
-procedure createViewReviewBox(sbPage : TScrollBox);
+procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
+
 
 implementation
 
-procedure createViewReviewBox(sbPage : TScrollBox);
+procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 var
 
   shpReview : TShape;
-  lblMessage : TLabel;
+  lblMessage, lblUser, lblTo : TLabel;
   imgProfile : TImage;
+  imgArrowDown, imgArrowUp : TImage;
 
 begin
   {
@@ -38,10 +40,77 @@ begin
     parent := sbpage;
     Pen.Style := psClear;
     shape := stRoundRect;
-    width := 700;
-    Height := 250;
-    left := 500;
-    top := 1300;
+    width := 600;
+    Height := 180;
+    left := 660;
+    top := 1380;
+  end;
+
+  imgProfile := TImage.Create(sbPage);
+  with imgProfile do
+  begin
+    parent := sbPage;
+    Stretch := true;
+    width := 70;
+    height := 70;
+    loadProfilePic(imgProfile, 13);
+    Top := shpReview.Top - (imgProfile.Height div 2);
+    Left := shpReview.Left - (imgProfile.Width div 2);
+  end;
+
+  imgArrowUp := Timage.Create(sbPage);
+  with imgArrowUp do
+  begin
+    parent := sbPage;
+    Picture.LoadFromFile('Assets/arrowUp.png');
+    width := 35;
+    height := 35;
+    top := shpReview.top + 20;
+    left := shpReview.Left + shpReview.Width + 20;
+  end;
+
+  imgArrowDown := TImage.Create(sbpage);
+  with imgarrowdown do
+  begin
+    parent := sbPage;
+    Picture.LoadFromFile('Assets/arrowDown.png');
+    width := 35;
+    height := 35;
+    top := imgArrowUp.Top + imgArrowDown.Height + 30;
+    left := imgArrowUp.left;
+  end;
+
+  lblMessage := TLabel.Create(sbpage);
+  with lblMessage do
+  begin
+    parent := sbPage;
+    setLabelFont(lblMessage, 14, false);
+    font.Color := rgb(9,98,130);
+    caption := '"' + getUserReviews(iReviewCount)[0] + '"';
+    left := shpReview.Left + 30;
+    top := shpReview.top + 30;
+  end;
+
+  lblUser := TLabel.Create(sbPage);
+  with lblUser do
+  begin
+    parent := sbPage;
+    setLabelFont(lblUser, 16, true);
+    font.Color := rgb(9,98,130);
+    caption := getUserReviews(iReviewCount)[2];
+    left := shpReview.Left + 30;
+    top := shpReview.Top + shpReview.Height - height - 30;
+  end;
+
+  lblTo := TLabel.Create(sbpage);
+  with lblTo do
+  begin
+    parent := sbPage;
+    setLabelFont(lblTo, 12, true);
+    font.Color := rgb(9,98,130);
+    caption := 'Went to: ' + getUserReviews(iReviewCount)[1];
+    left := lblUser.Left;
+    top := lblUser.top + lblUser.Height - 2;
   end;
 end;
 
@@ -101,8 +170,8 @@ begin
   with imgIcon do
   begin
     parent := sbPage;
-    Picture.LoadFromFile('Assets/locationIcon.png');
     stretch := true;
+    Picture.LoadFromFile('Assets/locationIcon.png');
     height := 20;
     width := 20;
     left := shpDesc.Left + 20;

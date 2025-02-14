@@ -10,11 +10,69 @@ uses
 
 { Declare procedures/functions }
 procedure loadUserData(var arrUser: array of string);
-procedure loadProfilePic(var imgProfile : TImage);
+procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
 procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
 procedure saveProfilePictoDB(var sfilename : string);
+function getUserReviews(iFieldCount : integer) : TArray<String>;
 
 implementation
+
+function getUserReviews(iFieldCount : integer) : TArray<String>;
+var
+
+  bfound : boolean;
+  arrUserReview: TArray<String>;
+  imiddle : integer;
+  smessage : string;
+
+begin
+  {
+   ===================================
+   Kry die huidige user se review info
+   ===================================
+  }
+
+  //initialize die array en stel dit op 3 plekke
+  SetLength(arrUserReview, 3);
+
+  with dmData do
+  begin
+    tblReviews.open;
+    tblReviews.first;
+    while (not tblReviews.Eof) and (bfound = false) do
+    begin
+      if tblReviews['ID'] = ifieldcount then
+      begin
+        {  Add n #13 (break) in die middle van die message }
+        smessage := tblReviews['message'];
+        imiddle := length(smessage) div 2;
+        arrUserReview[0] := Copy(smessage, 1, imiddle) + #13 + Copy(smessage, imiddle + 1, length(smessage) - imiddle);
+
+        arruserReview[1] := tblReviews['to'];
+
+        //Kry die user se naam
+        tblUsers.open;
+        tblUsers.first;
+        while (not tblUsers.Eof) and (bfound = false) do
+        begin
+          if tblReviews['userid'] = tblUsers['userid']
+            then begin
+              arruserReview[2] := tblUsers['name'] + ' ' + tblUsers['lastname'];
+              bfound := true;
+            end;
+
+          tblUsers.next;
+        end;
+
+
+      end;
+
+      tblReviews.next;
+    end;
+  end;
+
+  result := arrUserReview;
+end;
 
 procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
 var
@@ -138,7 +196,7 @@ begin
     end;
 end;
 
-procedure loadProfilePic(var imgProfile : TImage);
+procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
 var
 
   Stream: TMemoryStream;
@@ -159,10 +217,10 @@ begin
     tblUsers.first;
     while (not tblUsers.Eof) and (bfound = false) do
     begin
-      if tblUsers['userid'] = iUserId then
+      if tblUsers['userid'] = iiduser then
       begin
         bfound := true;
-        BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
+        BlobField := tblUsers.FieldByName('profilePic') as TBlobField;
       end;
 
       tblUsers.next;

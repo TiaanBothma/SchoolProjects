@@ -52,4 +52,17 @@ object dmData: TdmData
     Left = 248
     Top = 216
   end
+  object tblReviews: TADOTable
+    Active = True
+    Connection = adoCon
+    CursorType = ctStatic
+    TableName = 'tblReviews'
+    Left = 168
+    Top = 296
+  end
+  object DataSource1: TDataSource
+    DataSet = tblReviews
+    Left = 240
+    Top = 304
+  end
 end

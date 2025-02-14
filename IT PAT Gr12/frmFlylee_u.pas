@@ -60,6 +60,8 @@ type
     { Menu Bar }
     lblDestinations, lblBookings, lblHotels, lblFlights, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
+    { View Review }
+    ireviewcount : integer;
   end;
 
 var
@@ -99,7 +101,7 @@ begin
   clTextColor := rgb(24,30,75); //Dark Moon Blue
 
  { inti variables }
-
+ ireviewcount := 1;
 
  { LoadImages }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -335,7 +337,7 @@ begin
     setLabelFont(lblReviews, 14, true);
     font.color := rgb(94,98,130);
     caption := 'Reviews';
-    top := 1350;
+    top := 1380;
     left := 100;
   end;
 
@@ -343,7 +345,7 @@ begin
   with lblAboutSay do
   begin
     parent := sbInfo;
-    setLabelFont(lblAboutSay, 60, true);
+    setLabelFont(lblAboutSay, 50, true);
     font.color := clTextColor;
     Alignment := taLeftJustify;
     caption := 'What People Say' + #13 + 'About Us';
@@ -351,7 +353,7 @@ begin
     left := 100;
   end;
 
-  createViewReviewBox(sbInfo);
+  createViewReviewBox(ireviewcount, sbInfo);
 end;
 
 procedure TfrmFlylee.posHomePageImages();
@@ -504,7 +506,7 @@ begin
   end;
 
   //Nadat die profile image gemaak is kan ons die image in sit
-  loadProfilePic(imgProfile);
+  loadProfilePic(imgProfile, dmData.iUserId);
 end;
 
 end.
