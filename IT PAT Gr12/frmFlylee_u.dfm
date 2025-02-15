@@ -300,6 +300,20 @@ object frmFlylee: TfrmFlylee
           Height = 15
           Caption = 'Top Destinations'
         end
+        object imgArrowUp: TImage
+          Left = 936
+          Top = 320
+          Width = 105
+          Height = 105
+          OnClick = imgArrowUpClick
+        end
+        object imgArrowDown: TImage
+          Left = 944
+          Top = 488
+          Width = 105
+          Height = 105
+          OnClick = imgArrowDownClick
+        end
       end
     end
   end

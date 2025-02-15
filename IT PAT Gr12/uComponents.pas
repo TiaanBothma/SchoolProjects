@@ -12,7 +12,6 @@ procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPa
 procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 
-
 implementation
 
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
@@ -21,7 +20,6 @@ var
   shpReview : TShape;
   lblMessage, lblUser, lblTo : TLabel;
   imgProfile : TImage;
-  imgArrowDown, imgArrowUp : TImage;
 
 begin
   {
@@ -43,7 +41,7 @@ begin
     width := 600;
     Height := 180;
     left := 660;
-    top := 1380;
+    top := 1380 - sbPage.VertScrollBar.Position;
   end;
 
   imgProfile := TImage.Create(sbPage);
@@ -56,28 +54,6 @@ begin
     loadProfilePic(imgProfile, 13);
     Top := shpReview.Top - (imgProfile.Height div 2);
     Left := shpReview.Left - (imgProfile.Width div 2);
-  end;
-
-  imgArrowUp := Timage.Create(sbPage);
-  with imgArrowUp do
-  begin
-    parent := sbPage;
-    Picture.LoadFromFile('Assets/arrowUp.png');
-    width := 35;
-    height := 35;
-    top := shpReview.top + 20;
-    left := shpReview.Left + shpReview.Width + 20;
-  end;
-
-  imgArrowDown := TImage.Create(sbpage);
-  with imgarrowdown do
-  begin
-    parent := sbPage;
-    Picture.LoadFromFile('Assets/arrowDown.png');
-    width := 35;
-    height := 35;
-    top := imgArrowUp.Top + imgArrowDown.Height + 30;
-    left := imgArrowUp.left;
   end;
 
   lblMessage := TLabel.Create(sbpage);

@@ -33,6 +33,8 @@ type
     sbInfo: TScrollBox;
     lblTopSelling: TLabel;
     lblTopDestinations: TLabel;
+    imgArrowUp: TImage;
+    imgArrowDown: TImage;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -50,6 +52,8 @@ type
     procedure lblFindMoreClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure createInfoPage();
+    procedure imgArrowUpClick(Sender: TObject);
+    procedure imgArrowDownClick(Sender: TObject);
    { Private Scope }
   private
     arrUser : array[1..4] of string;
@@ -61,7 +65,7 @@ type
     lblDestinations, lblBookings, lblHotels, lblFlights, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
     { View Review }
-    ireviewcount : integer;
+    ireviewcount, iMaxReviewCount : integer;
   end;
 
 var
@@ -102,6 +106,7 @@ begin
 
  { inti variables }
  ireviewcount := 1;
+ iMaxReviewCount := dmData.tblReviews.RecordCount;
 
  { LoadImages }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -242,6 +247,32 @@ begin
   lblHotels.font.color := clBlack;
 end;
 
+procedure TfrmFlylee.imgArrowDownClick(Sender: TObject);
+begin
+  //Kyk of die review bestaan en Decrease die ireviewcount
+  dec(ireviewcount);
+
+  // As ireviewcount kleiner as 1 is, stel dit na die maksimum ID
+  if ireviewcount < 1 then
+    ireviewcount := iMaxReviewCount;
+
+  //Maak die review boks oor met die nuwe review record
+  createViewReviewBox(ireviewcount, sbInfo);
+end;
+
+procedure TfrmFlylee.imgArrowUpClick(Sender: TObject);
+begin
+  //Kyk of die review bestaan en Increase die ireviewcount
+  inc(ireviewcount);
+
+  // As ireviewcount groter as die maksimum ID is, maak dit 1
+  if ireviewcount > iMaxReviewCount then
+    ireviewcount := 1;
+
+  //Maak die review boks oor met die nuwe review record
+  createViewReviewBox(ireviewcount, sbInfo);
+end;
+
 procedure TfrmFlylee.createInfoPage();
 var
 
@@ -351,6 +382,24 @@ begin
     caption := 'What People Say' + #13 + 'About Us';
     top := lblReviews.Top + lblReviews.Height + 10;
     left := 100;
+  end;
+
+  with imgArrowUp do
+  begin
+    Picture.LoadFromFile('Assets/arrowUp.png');
+    width := 35;
+    height := 35;
+    top := 1380 + 20;
+    left := 660 + 600 + 20;
+  end;
+
+  with imgarrowdown do
+  begin
+    Picture.LoadFromFile('Assets/arrowDown.png');
+    width := 35;
+    height := 35;
+    top := imgArrowUp.Top + imgArrowDown.Height + 30;
+    left := imgArrowUp.left;
   end;
 
   createViewReviewBox(ireviewcount, sbInfo);

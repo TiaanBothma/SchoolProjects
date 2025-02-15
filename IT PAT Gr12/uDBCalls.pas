@@ -15,6 +15,7 @@ procedure loadTopDestinations(var arrDestination : array of string; var arrDays 
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
 
+
 implementation
 
 function getUserReviews(iFieldCount : integer) : TArray<String>;
