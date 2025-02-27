@@ -35,6 +35,10 @@ type
     lblTopDestinations: TLabel;
     imgArrowUp: TImage;
     imgArrowDown: TImage;
+    tsDestinations: TTabSheet;
+    tsHotels: TTabSheet;
+    tsFlights: TTabSheet;
+    tsBookings: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -54,6 +58,10 @@ type
     procedure createInfoPage();
     procedure imgArrowUpClick(Sender: TObject);
     procedure imgArrowDownClick(Sender: TObject);
+    procedure lblDestinationsOnClick(Sender : TObject);
+    procedure lblHotelsOnClick(Sender : TObject);
+    procedure lblFlightsOnClick(Sender : TObject);
+    procedure lblBookingsOnClick(Sender : TObject);
    { Private Scope }
   private
     arrUser : array[1..4] of string;
@@ -84,7 +92,7 @@ begin
    On Form Activate
    ================
   }
-  pcPages.ActivePageIndex := 0;
+//  pcPages.ActivePageIndex := 0; //! remove uncomment
 
   loadUserData(arrUser);
   createMenuBar(tsHome, tsHome);
@@ -105,11 +113,11 @@ begin
   clAccent := rgb(0,99,128); //Cerulean
   clTextColor := rgb(24,30,75); //Dark Moon Blue
 
- { inti variables }
+ { init variables }
  ireviewcount := 1;
  iMaxReviewCount := dmData.tblReviews.RecordCount;
 
- { LoadImages }
+ { Load Images }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
  imgFlyGirl.Picture.LoadFromFile('Assets/flyGirl.png');
  imgPlane.Picture.LoadFromFile('Assets/plane.png');
@@ -182,10 +190,8 @@ begin
   begin
     setLabelFont(lblFindMore, 14, true);
     font.color := clWhite;
-    //Sentreer vertikaal
-    Top := shpFindMore.Top + (shpFindMore.Height - Height) div 2;
-    //Sentreer horisontaal
-    Left := shpFindMore.Left + (shpFindMore.Width - Width) div 2;
+    //Center horizontal and vertical
+    centerComponent(lblFindMore, shpFindMore);
   end;
 
   with lblInfo do
@@ -213,6 +219,11 @@ begin
   lblBookings.font.color := clBlack;
 end;
 
+procedure TfrmFlylee.lblBookingsOnClick(Sender: TObject);
+begin
+  pcPages.ActivePageIndex := 5;
+end;
+
 procedure TfrmFlylee.lblDestinationsMouseEnter(Sender: TObject);
 begin
   lblDestinations.font.color := clAccent;
@@ -221,6 +232,11 @@ end;
 procedure TfrmFlylee.lblDestinationsMouseLeave(Sender: TObject);
 begin
   lblDestinations.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.lblDestinationsOnClick(Sender : TObject);
+begin
+  pcPages.ActivePageIndex := 2;
 end;
 
 procedure TfrmFlylee.lblFindMoreClick(Sender: TObject);
@@ -238,6 +254,11 @@ begin
   lblFlights.font.color := clBlack;
 end;
 
+procedure TfrmFlylee.lblFlightsOnClick(Sender: TObject);
+begin
+  pcPages.ActivePageIndex := 4;
+end;
+
 procedure TfrmFlylee.lblHotelsMouseEnter(Sender: TObject);
 begin
   lblHotels.font.color := clAccent;
@@ -246,6 +267,11 @@ end;
 procedure TfrmFlylee.lblHotelsMouseLeave(Sender: TObject);
 begin
   lblHotels.font.color := clBlack;
+end;
+
+procedure TfrmFlylee.lblHotelsOnClick;
+begin
+  pcPages.ActivePageIndex := 3;
 end;
 
 procedure TfrmFlylee.imgArrowDownClick(Sender: TObject);
@@ -475,6 +501,7 @@ begin
     { procedures }
     OnMouseEnter := lblDestinationsMouseEnter;
     OnMouseLeave := lblDestinationsMouseLeave;
+    OnClick := lblDestinationsOnClick;
   end;
 
   // Create lblHotels
@@ -489,6 +516,7 @@ begin
     { procedures }
     OnMouseEnter := lblHotelsMouseEnter;
     OnMouseLeave := lblHotelsMouseLeave;
+    onClick := lblHotelsOnClick;
   end;
 
   // Create lblFlights
@@ -503,6 +531,7 @@ begin
     { procedures }
     OnMouseEnter := lblFlightsMouseEnter;
     OnMouseLeave := lblFlightsMouseLeave;
+    OnClick := lblFlightsOnClick;
   end;
 
   // Create lblBookings
@@ -517,6 +546,7 @@ begin
     { procedures }
     OnMouseEnter := lblBookingsMouseEnter;
     OnMouseLeave := lblBookingsMouseLeave;
+    OnClick := lblBookingsOnClick;
   end;
 
   //Create image

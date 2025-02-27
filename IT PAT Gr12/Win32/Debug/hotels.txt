@@ -1,0 +1,15 @@
+Grand Royal Hotel,2200,ZAF,New York,5,-1
+Oceanview Resort,2700,Australia,Sydney,4,-1
+Mountain Retreat,1500,Canada,Vancouver,3,-1
+Skyline Suites,3500,UK,London,5,-1
+Palm Beach Inn,1800,Spain,Barcelona,4,-1
+Golden Sands Hotel,2100,UAE,Dubai,5,-1
+Evergreen Lodge,1400,Switzerland,Zürich,3,-1
+Sunset Paradise,2100,Maldives,Malé,5,-1
+Royal Orchid,1850,India,Mumbai,4,-1
+Cityscape Hotel,3200,France,Paris,5,-1
+Serene Stay,1300,Thailand,Bangkok,3,-1
+Harbor Lights Resort,2500,Japan,Tokyo,4,-1
+Riverside Haven,1600,Germany,Berlin,4,-1
+Majestic Palace,2900,Italy,Rome,5,-1
+Blue Horizon Hotel,2600,Brazil,Rio de Janeiro,4,-1

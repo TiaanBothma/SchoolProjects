@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsInfo
+    ActivePage = tsHome
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
@@ -315,6 +315,22 @@ object frmFlylee: TfrmFlylee
           OnClick = imgArrowDownClick
         end
       end
+    end
+    object tsDestinations: TTabSheet
+      Caption = 'Destinations'
+      ImageIndex = 2
+    end
+    object tsHotels: TTabSheet
+      Caption = 'Hotels'
+      ImageIndex = 3
+    end
+    object tsFlights: TTabSheet
+      Caption = 'Flights'
+      ImageIndex = 4
+    end
+    object tsBookings: TTabSheet
+      Caption = 'Bookings'
+      ImageIndex = 5
     end
   end
 end
