@@ -84,6 +84,7 @@ begin
    On Form Activate
    ================
   }
+  pcPages.ActivePageIndex := 0;
 
   loadUserData(arrUser);
   createMenuBar(tsHome, tsHome);

@@ -34,7 +34,7 @@ begin
   }
 
   //initialize die array en stel dit op 3 plekke
-  SetLength(arrUserReview, 3);
+  SetLength(arrUserReview, 4);
 
   with dmData do
   begin
@@ -50,6 +50,7 @@ begin
         arrUserReview[0] := Copy(smessage, 1, imiddle) + #13 + Copy(smessage, imiddle + 1, length(smessage) - imiddle);
 
         arruserReview[1] := tblReviews['to'];
+        arruserReview[3] := tblReviews['reviewDate'];
 
         //Kry die user se naam
         tblUsers.open;
@@ -64,7 +65,6 @@ begin
 
           tblUsers.next;
         end;
-
 
       end;
 

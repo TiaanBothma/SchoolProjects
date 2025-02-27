@@ -60,9 +60,24 @@ object dmData: TdmData
     Left = 168
     Top = 296
   end
-  object DataSource1: TDataSource
+  object dsReviews: TDataSource
     DataSet = tblReviews
-    Left = 240
-    Top = 304
+    Left = 248
+    Top = 296
+  end
+  object qryData: TADOQuery
+    Active = True
+    Connection = adoCon
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'select * from tblFlights')
+    Left = 152
+    Top = 424
+  end
+  object dsQry: TDataSource
+    DataSet = qryData
+    Left = 224
+    Top = 424
   end
 end

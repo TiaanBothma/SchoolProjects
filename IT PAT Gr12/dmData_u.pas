@@ -15,7 +15,9 @@ type
     tblFlights: TADOTable;
     dsFlights: TDataSource;
     tblReviews: TADOTable;
-    DataSource1: TDataSource;
+    dsReviews: TDataSource;
+    qryData: TADOQuery;
+    dsQry: TDataSource;
   private
     { Private declarations }
   public

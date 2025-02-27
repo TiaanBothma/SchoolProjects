@@ -18,7 +18,7 @@ procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 var
 
   shpReview : TShape;
-  lblMessage, lblUser, lblTo : TLabel;
+  lblMessage, lblUser, lblTo, lblDate : TLabel;
   imgProfile : TImage;
 
 begin
@@ -27,10 +27,6 @@ begin
    Create the review box that people can view
    ==========================================
   }
-
-  //Gaan deur databasis van users, kyk of hulle reviews het, as hulle het wys die user se review, anders skip die user
-  //Wys die user se naam, van, profile pic, waarnatoe hy gegaan het en die message
-  //Maak ook die arrows vir scroll effect
 
   shpReview := TShape.Create(sbPage);
   with shpReview do
@@ -87,6 +83,17 @@ begin
     caption := 'Went to: ' + getUserReviews(iReviewCount)[1];
     left := lblUser.Left;
     top := lblUser.top + lblUser.Height - 2;
+  end;
+
+  lblDate := TLabel.Create(sbPage);
+  with lblDate do
+  begin
+    parent := sbPage;
+    setLabelFont(lblDate, 12, true);
+    font.Color := rgb(9,98,130);
+    caption := FormatDateTime('dd mmm yyyy', strtodate(getUserReviews(iReviewCount)[3]));
+    left := shpReview.Left + shpReview.Width - Width - 10;
+    top := shpReview.Top + 10;
   end;
 end;
 
