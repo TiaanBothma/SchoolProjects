@@ -11,12 +11,33 @@ uses
 { Declare procedures/functions }
 procedure loadUserData(var arrUser: array of string);
 procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
-procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of integer; var arrCost : array of real);
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
-
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of integer; var arrCost : array of real; var icount : integer);
 
 implementation
+
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of integer; var arrCost : array of real; var icount : integer);
+begin
+  icount := 0;
+
+  with dmData do
+  begin
+    tblFlights.open;
+    tblFlights.first;
+    while not tblFlights.eof do
+    begin
+      arrDestinations[icount] := tblFlights['to'];
+      arrHours[icount] := tblFlights['tripLength'];
+      arrCost[icount] := tblFlights['price'];
+
+      inc(icount);
+      tblFlights.Next;
+    end;
+  end;
+
+end;
 
 function getUserReviews(iFieldCount : integer) : TArray<String>;
 var
@@ -75,7 +96,7 @@ begin
   result := arrUserReview;
 end;
 
-procedure loadTopDestinations(var arrDestination : array of string; var arrDays : array of integer; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of integer; var arrCost : array of real);
 var
 
   icount : integer;
@@ -102,7 +123,7 @@ begin
     while not tblFlights.Eof do
     begin
       arrDestination[icount] := tblFLights['to'];
-      arrDays[icount] := tblFlights['tripLength'];
+      arrHours[icount] := tblFlights['tripLength'];
       arrCost[icount] := tblFlights['price'];
       arrPopularity[icount] := 0;
 
@@ -138,9 +159,9 @@ begin
           arrDestination[J] := slorrie;
 
           // Swap arrDays
-          ilorrie := arrDays[I];
-          arrDays[I] := arrDays[J];
-          arrDays[J] := ilorrie;
+          ilorrie := arrHours[I];
+          arrHours[I] := arrHours[J];
+          arrHours[J] := ilorrie;
 
           // Swap arrCost
           rlorrie := arrCost[I];

@@ -79,9 +79,6 @@ Coordinates=10,144,69,58
 [lblTopSelling]
 Coordinates=257,144,89,58
 
-[lblFilters]
-Coordinates=289,10,63,58
-
 [lblPriceRange]
 Coordinates=184,10,95,58
 
@@ -89,7 +86,7 @@ Coordinates=184,10,95,58
 Coordinates=362,10,85,58
 
 []
-Coordinates=641,212,97,36
+Coordinates=289,10,63,58
 
 [lblFilterBy]
 Coordinates=121,10,53,58

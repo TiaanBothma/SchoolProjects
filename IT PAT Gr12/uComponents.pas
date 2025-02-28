@@ -6,10 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, JPEG, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
-  System.Skia, Vcl.Skia, dmData_u, uFunc, uDBCalls;
+  System.Skia, Vcl.Skia, dmData_u,
+  { Helper Files }
+  uFunc, uDBCalls;
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
-procedure createTopSellingBox(iLeft, itop : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop : Integer; sImage, sTitle, sHours : string; rCost : real ; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 
 implementation
@@ -92,17 +94,17 @@ begin
     setLabelFont(lblDate, 12, true);
     font.Color := rgb(9,98,130);
     caption := FormatDateTime('dd mmm yyyy', strtodate(getUserReviews(iReviewCount)[3]));
-    left := shpReview.Left + shpReview.Width - Width - 10;
-    top := shpReview.Top + 10;
+    left := shpReview.Left + shpReview.Width - Width - 20;
+    top := shpReview.Top + 20;
   end;
 end;
 
-procedure createTopSellingBox(iLeft, itop : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop : Integer; sImage, sTitle, sHours : string; rCost : real ; sbPage : TScrollBox);
 var
 
   imgLocation, imgIcon : TImage;
   shpDesc : TShape;
-  lblTitle, lblDays, lblCost : TLabel;
+  lblTitle, lblHours, lblCost : TLabel;
 
 begin
   {
@@ -159,13 +161,13 @@ begin
     top := lblTitle.Top + lblTitle.Height + 25;
   end;
 
-  lblDays := TLabel.Create(sbpage);
-  with lblDays do
+  lblHours := TLabel.Create(sbpage);
+  with lblHours do
   begin
     parent := sbpage;
-    setLabelFont(lblDays, 14, true);
+    setLabelFont(lblHours, 14, true);
     font.color := rgb(94, 98, 130);
-    caption := sDays;
+    caption := sHours;
     top := lblTitle.top + lblTitle.Height + 25;
     left := imgIcon.Left + imgIcon.Width + 10;
   end;

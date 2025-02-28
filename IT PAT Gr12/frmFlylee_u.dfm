@@ -342,13 +342,6 @@ object frmFlylee: TfrmFlylee
           Height = 15
           Caption = 'Price Range'
         end
-        object lblFilters: TLabel
-          Left = 128
-          Top = 128
-          Width = 31
-          Height = 15
-          Caption = 'Filters'
-        end
         object lblFilterBy: TLabel
           Left = 112
           Top = 320
@@ -370,6 +363,13 @@ object frmFlylee: TfrmFlylee
           Height = 15
           Caption = 'Top Destinations'
         end
+        object lblAllDestinations: TLabel
+          Left = 488
+          Top = 496
+          Width = 82
+          Height = 15
+          Caption = 'All Destinations'
+        end
         object edtHighPrice: TEdit
           Left = 264
           Top = 240
@@ -377,6 +377,7 @@ object frmFlylee: TfrmFlylee
           Height = 23
           TabOrder = 0
           Text = 'High'
+          OnClick = edtHighPriceClick
         end
         object edtLowPrice: TEdit
           Left = 112
@@ -385,6 +386,7 @@ object frmFlylee: TfrmFlylee
           Height = 23
           TabOrder = 1
           Text = 'Low'
+          OnClick = edtLowPriceClick
         end
         object cbFilters: TComboBox
           Left = 216

@@ -64,9 +64,9 @@ var
 
 begin
   {
-   =============================================================
-   Encript die password voordat dit in die databasis gesave word
-   =============================================================
+   ==============================================================
+   Encript die password voordat dit in die databasis gestoor word
+   ==============================================================
   }
 
   //n 'Salt' is n random string wat binne n password geplaas word sodat dit langer vat of moeiliker is om die password te 'crack'

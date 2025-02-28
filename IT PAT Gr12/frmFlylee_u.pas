@@ -38,7 +38,6 @@ type
     tsDestinations: TTabSheet;
     tsHotels: TTabSheet;
     tsBookings: TTabSheet;
-    lblFilters: TLabel;
     lblPriceRange: TLabel;
     edtLowPrice: TEdit;
     edtHighPrice: TEdit;
@@ -48,6 +47,7 @@ type
     imgCornerIcons: TImage;
     sbDestinations: TScrollBox;
     lblTopDest: TLabel;
+    lblAllDestinations: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -70,6 +70,8 @@ type
     procedure lblFlightsOnClick(Sender : TObject);
     procedure lblBookingsOnClick(Sender : TObject);
     procedure createDestinationsPage();
+    procedure edtLowPriceClick(Sender: TObject);
+    procedure edtHighPriceClick(Sender: TObject);
    { Private Scope }
   private
     arrUser : array[1..4] of string;
@@ -303,10 +305,12 @@ procedure TfrmFlylee.createDestinationsPage();
 var
   { Top destinations }
   arrDestinations : array[0..100] of string;
-  arrDays : array[0..100] of integer;
+  arrHours : array[0..100] of integer;
   arrCosts : array[0..100] of real;
-  I, ileft : integer;
+  I, ileft, itop, icount : integer;
   simagepath : string;
+
+  { All Destinations }
 
 begin
   {
@@ -334,31 +338,22 @@ begin
     Picture.LoadFromFile('Assets/decor.png');
   end;
 
-  { Filter Side Panel }
-
-
-  with lblFilters do
-  begin
-    setLabelFont(lblFilters, 25, true);
-    font.color := clTextColor;
-    left := 20;
-    top := 10;
-  end;
+  { Filters }
 
   with lblPriceRange do
   begin
     setLabelFont(lblPriceRange, 18, true);
     font.color := clTextColor;
-    left := 20;
-    top := lblFilters.Top + lblFIlters.Height + 50;
+    left := 30;
+    top := 20;
   end;
 
   with edtlowPrice do
   begin
     width := 100;
     height := 20;
-    left := 30;
-    top := lblPriceRange.Top + lblPriceRange.Height + 30;
+    left := lblPriceRange.left + lblPriceRange.Width + 30;
+    top := 24;
   end;
 
   with edtHighPrice do
@@ -373,15 +368,15 @@ begin
   begin
     setLabelFont(lblFilterBy, 18, true);
     font.color := clTextColor;
-    left := 20;
-    top := edtLowPrice.Top + edtLowPrice.Height + 50;
+    left := 30;
+    top := lblPriceRange.Top + lblPriceRange.Height + 20;
   end;
 
   with cbFilters do
   begin
     width := 120;
     Height := 50;
-    Left := lblFilterBy.left + lblFilterBy.Width + 15;
+    Left := edtLowPrice.Left;
     Top := lblFilterBy.Top + 5;
     font.Name := 'Roboto';
     Font.Style := [TFontStyle.fsBold];
@@ -397,7 +392,7 @@ begin
   end;
 
   //Create top selling destination boxes
-  loadTopDestinations(arrDestinations, arrDays, arrCosts);
+  loadTopDestinations(arrDestinations, arrHours, arrCosts);
   ileft := 70;
 
   //1 tot 3 want ons soek net die top 3
@@ -417,18 +412,40 @@ begin
           sImagePath := 'Assets/lights.jpeg';
         end;
 
-
-    createTopSellingBox(ileft, 80, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbDestinations);
+    createDestinationBox(ileft, 125, sImagePath, arrDestinations[i-1], inttostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbDestinations);
     inc(ileft, 440);
   end;
 
+  { Show all Destinations }
+  with lblAllDestinations do
+  begin
+    setLabelFont(lblAllDestinations, 18, true);
+    font.color := clTextColor;
+    left := 30;
+    top := 580;
+  end;
+
+  loadAllDestinations(arrDestinations, arrHours, arrCosts, icount);
+  ileft := 70;
+  itop := 620;
+
+  for I := 0 to icount do
+  begin
+    createDestinationBox(ileft, itop, 'Assets/camera.jpg', arrDestinations[i], inttostr(arrHours[i]) + ' Hour Flight', arrCosts[i], sbDestinations);
+    inc(ileft, 440);
+    if i mod 3 = 0 then
+    begin
+      inc(itop, 400);
+      ileft := 70;
+    end;
+  end;
 end;
 
 procedure TfrmFlylee.createInfoPage();
 var
 
   arrDestinations : array[0..100] of string;
-  arrDays : array[0..100] of integer;
+  arrHours : array[0..100] of integer;
   arrCosts : array[0..100] of real;
   I: Integer;
   ileft : integer;
@@ -486,7 +503,7 @@ begin
   end;
 
   //Create top selling destination boxes
-  loadTopDestinations(arrDestinations, arrDays, arrCosts);
+  loadTopDestinations(arrDestinations, arrHours, arrCosts);
   ileft := 70;
 
   //1 tot 3 want ons soek net die top 3
@@ -507,7 +524,7 @@ begin
         end;
 
 
-    createTopSellingBox(ileft, 800, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
+    createDestinationBox(ileft, 800, sImagePath, arrDestinations[i-1], inttostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbInfo);
     inc(ileft, 440);
   end;
 
@@ -620,7 +637,7 @@ begin
     Parent := AParent;
     setLabelFont(lblDestinations, 16, true);
     caption := 'Destinations';
-    Left := 450;
+    Left := 490;
     Top := 30;
     { procedures }
     OnMouseEnter := lblDestinationsMouseEnter;
@@ -696,6 +713,16 @@ begin
 
   //Nadat die profile image gemaak is kan ons die image in sit
   loadProfilePic(imgProfile, dmData.iUserId);
+end;
+
+procedure TfrmFlylee.edtHighPriceClick(Sender: TObject);
+begin
+  edtHighPrice.text := '';
+end;
+
+procedure TfrmFlylee.edtLowPriceClick(Sender: TObject);
+begin
+  edtLowPrice.text := '';
 end;
 
 end.
