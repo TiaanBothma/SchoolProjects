@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsHome
+    ActivePage = tsDestinations
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
@@ -319,14 +319,90 @@ object frmFlylee: TfrmFlylee
     object tsDestinations: TTabSheet
       Caption = 'Destinations'
       ImageIndex = 2
+      object sbDestinations: TScrollBox
+        Left = 0
+        Top = 0
+        Width = 1417
+        Height = 777
+        HorzScrollBar.Increment = 1
+        VertScrollBar.Smooth = True
+        TabOrder = 0
+        UseWheelForScrolling = True
+        object imgCornerDecor: TImage
+          Left = 864
+          Top = 64
+          Width = 489
+          Height = 377
+          Stretch = True
+        end
+        object lblPriceRange: TLabel
+          Left = 120
+          Top = 192
+          Width = 62
+          Height = 15
+          Caption = 'Price Range'
+        end
+        object lblFilters: TLabel
+          Left = 128
+          Top = 128
+          Width = 31
+          Height = 15
+          Caption = 'Filters'
+        end
+        object lblFilterBy: TLabel
+          Left = 112
+          Top = 320
+          Width = 42
+          Height = 15
+          Caption = 'Filter By'
+        end
+        object imgCornerIcons: TImage
+          Left = 1128
+          Top = 128
+          Width = 137
+          Height = 121
+          Stretch = True
+        end
+        object lblTopDest: TLabel
+          Left = 712
+          Top = 104
+          Width = 88
+          Height = 15
+          Caption = 'Top Destinations'
+        end
+        object edtHighPrice: TEdit
+          Left = 264
+          Top = 240
+          Width = 121
+          Height = 23
+          TabOrder = 0
+          Text = 'High'
+        end
+        object edtLowPrice: TEdit
+          Left = 112
+          Top = 240
+          Width = 121
+          Height = 23
+          TabOrder = 1
+          Text = 'Low'
+        end
+        object cbFilters: TComboBox
+          Left = 216
+          Top = 320
+          Width = 145
+          Height = 23
+          TabOrder = 2
+          Text = 'Filters'
+          Items.Strings = (
+            'Price'
+            'Country'
+            'Trip Length')
+        end
+      end
     end
     object tsHotels: TTabSheet
       Caption = 'Hotels'
       ImageIndex = 3
-    end
-    object tsFlights: TTabSheet
-      Caption = 'Flights'
-      ImageIndex = 4
     end
     object tsBookings: TTabSheet
       Caption = 'Bookings'

@@ -37,16 +37,23 @@ type
     imgArrowDown: TImage;
     tsDestinations: TTabSheet;
     tsHotels: TTabSheet;
-    tsFlights: TTabSheet;
     tsBookings: TTabSheet;
+    lblFilters: TLabel;
+    lblPriceRange: TLabel;
+    edtLowPrice: TEdit;
+    edtHighPrice: TEdit;
+    cbFilters: TComboBox;
+    lblFilterBy: TLabel;
+    imgCornerDecor: TImage;
+    imgCornerIcons: TImage;
+    sbDestinations: TScrollBox;
+    lblTopDest: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
     procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
-    procedure lblFlightsMouseEnter(Sender: TObject);
-    procedure lblFlightsMouseLeave(Sender: TObject);
     procedure lblHotelsMouseEnter(Sender: TObject);
     procedure lblHotelsMouseLeave(Sender: TObject);
     procedure lblBookingsMouseEnter(Sender: TObject);
@@ -62,6 +69,7 @@ type
     procedure lblHotelsOnClick(Sender : TObject);
     procedure lblFlightsOnClick(Sender : TObject);
     procedure lblBookingsOnClick(Sender : TObject);
+    procedure createDestinationsPage();
    { Private Scope }
   private
     arrUser : array[1..4] of string;
@@ -70,7 +78,7 @@ type
     { Verklaar die kleure sodat alle vorme kan gebruik }
     clPrimary, clSecondary, clAccent, clTextColor : TColor;
     { Menu Bar }
-    lblDestinations, lblBookings, lblHotels, lblFlights, lblUserName : TLabel;
+    lblDestinations, lblBookings, lblHotels, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
     { View Review }
     ireviewcount, iMaxReviewCount : integer;
@@ -129,6 +137,7 @@ begin
  posHomePageImages();
  initVarsHomePage();
  createInfoPage();
+ createDestinationsPage();
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -221,7 +230,7 @@ end;
 
 procedure TfrmFlylee.lblBookingsOnClick(Sender: TObject);
 begin
-  pcPages.ActivePageIndex := 5;
+  pcPages.ActivePageIndex := 4;
 end;
 
 procedure TfrmFlylee.lblDestinationsMouseEnter(Sender: TObject);
@@ -242,16 +251,6 @@ end;
 procedure TfrmFlylee.lblFindMoreClick(Sender: TObject);
 begin
   pcPages.TabIndex := 1;
-end;
-
-procedure TfrmFlylee.lblFlightsMouseEnter(Sender: TObject);
-begin
-  lblFlights.font.color := clAccent;
-end;
-
-procedure TfrmFlylee.lblFlightsMouseLeave(Sender: TObject);
-begin
-  lblFlights.font.color := clBlack;
 end;
 
 procedure TfrmFlylee.lblFlightsOnClick(Sender: TObject);
@@ -298,6 +297,131 @@ begin
 
   //Maak die review boks oor met die nuwe review record
   createViewReviewBox(ireviewcount, sbInfo);
+end;
+
+procedure TfrmFlylee.createDestinationsPage();
+var
+  { Top destinations }
+  arrDestinations : array[0..100] of string;
+  arrDays : array[0..100] of integer;
+  arrCosts : array[0..100] of real;
+  I, ileft : integer;
+  simagepath : string;
+
+begin
+  {
+   ============================
+   Create the Destinations Page
+   ============================
+  }
+
+  { Images }
+  with imgCornerDecor do
+  begin
+    Width := imgCorner.Width;
+    Height := imgCorner.Height;
+    Top := sbDestinations.Top;
+    Left := sbDestinations.Width - Width - 21;
+    picture.LoadFromFile('Assets/cornerDecor.png');
+  end;
+
+  with imgCornerIcons do
+  begin
+    top := 50;
+    left := sbDestinations.Left + sbDestinations.Width - 230;
+    Width := 100;
+    Height := 100;
+    Picture.LoadFromFile('Assets/decor.png');
+  end;
+
+  { Filter Side Panel }
+
+
+  with lblFilters do
+  begin
+    setLabelFont(lblFilters, 25, true);
+    font.color := clTextColor;
+    left := 20;
+    top := 10;
+  end;
+
+  with lblPriceRange do
+  begin
+    setLabelFont(lblPriceRange, 18, true);
+    font.color := clTextColor;
+    left := 20;
+    top := lblFilters.Top + lblFIlters.Height + 50;
+  end;
+
+  with edtlowPrice do
+  begin
+    width := 100;
+    height := 20;
+    left := 30;
+    top := lblPriceRange.Top + lblPriceRange.Height + 30;
+  end;
+
+  with edtHighPrice do
+  begin
+    width := 100;
+    Height := 20;
+    Left := edtLowPrice.Left + edtLowPrice.Width + 7;
+    Top := edtLowPrice.Top;
+  end;
+
+  with lblFilterBy do
+  begin
+    setLabelFont(lblFilterBy, 18, true);
+    font.color := clTextColor;
+    left := 20;
+    top := edtLowPrice.Top + edtLowPrice.Height + 50;
+  end;
+
+  with cbFilters do
+  begin
+    width := 120;
+    Height := 50;
+    Left := lblFilterBy.left + lblFilterBy.Width + 15;
+    Top := lblFilterBy.Top + 5;
+    font.Name := 'Roboto';
+    Font.Style := [TFontStyle.fsBold];
+  end;
+
+  { Top Destinations }
+  with lblTopDest do
+  begin
+    setLabelFont(lblTopDest, 32, true);
+    font.color := clTextColor;
+    centerComponent(lblTopDest, sbDestinations);
+    top := 40;
+  end;
+
+  //Create top selling destination boxes
+  loadTopDestinations(arrDestinations, arrDays, arrCosts);
+  ileft := 70;
+
+  //1 tot 3 want ons soek net die top 3
+  for I := 1 to 3 do
+  begin
+    if i = 1 then
+    begin
+    sImagePath := 'Assets/balloons.jpeg'
+
+    end
+      else if i = 2 then
+      begin
+        sImagePath := 'Assets/camera.jpg'
+      end
+        else
+        begin
+          sImagePath := 'Assets/lights.jpeg';
+        end;
+
+
+    createTopSellingBox(ileft, 80, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbDestinations);
+    inc(ileft, 440);
+  end;
+
 end;
 
 procedure TfrmFlylee.createInfoPage();
@@ -383,7 +507,7 @@ begin
         end;
 
 
-    createTopSellingBox(ileft, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
+    createTopSellingBox(ileft, 800, sImagePath, arrDestinations[i-1], inttostr(arrDays[i-1]) + ' Days Trip' , arrCosts[i-1], sbInfo);
     inc(ileft, 440);
   end;
 
@@ -519,21 +643,6 @@ begin
     onClick := lblHotelsOnClick;
   end;
 
-  // Create lblFlights
-  lblFlights := TLabel.Create(AOwner);
-  with lblFlights do
-  begin
-    Parent := AParent;
-    setLabelFont(lblFlights, 16, true);
-    caption := 'Flights';
-    Left := lblHotels.Left + lblHotels.Width + 60;
-    Top := 30;
-    { procedures }
-    OnMouseEnter := lblFlightsMouseEnter;
-    OnMouseLeave := lblFlightsMouseLeave;
-    OnClick := lblFlightsOnClick;
-  end;
-
   // Create lblBookings
   lblBookings := TLabel.Create(AOwner);
   with lblBookings do
@@ -541,7 +650,7 @@ begin
     Parent := AParent;
     setLabelFont(lblBookings, 16, true);
     caption := 'Bookings';
-    Left := lblFlights.Left + lblFlights.Width + 60;
+    Left := lblHotels.Left + lblHotels.Width + 60;
     Top := 30;
     { procedures }
     OnMouseEnter := lblBookingsMouseEnter;

@@ -9,7 +9,7 @@ uses
   System.Skia, Vcl.Skia, dmData_u, uFunc, uDBCalls;
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
-procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
+procedure createTopSellingBox(iLeft, itop : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 
 implementation
@@ -97,9 +97,7 @@ begin
   end;
 end;
 
-procedure createTopSellingBox(iLeft : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
-const
-  itop = 800;
+procedure createTopSellingBox(iLeft, itop : Integer; sImage, sTitle, sDays : string; rCost : real ; sbPage : TScrollBox);
 var
 
   imgLocation, imgIcon : TImage;
