@@ -11,14 +11,14 @@ uses
 { Declare procedures/functions }
 procedure loadUserData(var arrUser: array of string);
 procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
-procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of integer; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of integer; var arrCost : array of real; var icount : integer);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCost : array of real; var icount : integer);
 
 implementation
 
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of integer; var arrCost : array of real; var icount : integer);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCost : array of real; var icount : integer);
 begin
   icount := 0;
 
@@ -96,7 +96,7 @@ begin
   result := arrUserReview;
 end;
 
-procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of integer; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
 var
 
   icount : integer;
@@ -104,7 +104,6 @@ var
   arrPopularity : array[0..100] of real;
   { lorries }
   slorrie : string;
-  iLorrie : integer;
   rlorrie : real;
 begin
   {
@@ -159,9 +158,9 @@ begin
           arrDestination[J] := slorrie;
 
           // Swap arrDays
-          ilorrie := arrHours[I];
+          rlorrie := arrHours[I];
           arrHours[I] := arrHours[J];
-          arrHours[J] := ilorrie;
+          arrHours[J] := rlorrie;
 
           // Swap arrCost
           rlorrie := arrCost[I];

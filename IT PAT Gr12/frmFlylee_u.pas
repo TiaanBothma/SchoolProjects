@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, jpeg, Data.DB, Data.Win.ADODB,
-  Vcl.StdCtrls, Vcl.Buttons,
+  Vcl.StdCtrls, Vcl.Buttons, Math,
   { Helper Files }
   uDBCalls, uFunc, uComponents;
 
@@ -305,10 +305,10 @@ procedure TfrmFlylee.createDestinationsPage();
 var
   { Top destinations }
   arrDestinations : array[0..100] of string;
-  arrHours : array[0..100] of integer;
+  arrHours : array[0..100] of real;
   arrCosts : array[0..100] of real;
   I, ileft, itop, icount : integer;
-  simagepath : string;
+  irandom, iprevrandom : integer;
 
   { All Destinations }
 
@@ -398,21 +398,7 @@ begin
   //1 tot 3 want ons soek net die top 3
   for I := 1 to 3 do
   begin
-    if i = 1 then
-    begin
-    sImagePath := 'Assets/balloons.jpeg'
-
-    end
-      else if i = 2 then
-      begin
-        sImagePath := 'Assets/camera.jpg'
-      end
-        else
-        begin
-          sImagePath := 'Assets/lights.jpeg';
-        end;
-
-    createDestinationBox(ileft, 125, sImagePath, arrDestinations[i-1], inttostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbDestinations);
+    createDestinationBox(ileft, 125, 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbDestinations);
     inc(ileft, 440);
   end;
 
@@ -422,20 +408,28 @@ begin
     setLabelFont(lblAllDestinations, 18, true);
     font.color := clTextColor;
     left := 30;
-    top := 580;
+    top := 600;
   end;
 
+  //Place filters here
   loadAllDestinations(arrDestinations, arrHours, arrCosts, icount);
   ileft := 70;
-  itop := 620;
+  itop := 650;
+  iprevrandom := -1;
 
-  for I := 0 to icount do
+  for I := 0 to icount - 1 do
   begin
-    createDestinationBox(ileft, itop, 'Assets/camera.jpg', arrDestinations[i], inttostr(arrHours[i]) + ' Hour Flight', arrCosts[i], sbDestinations);
+    //Kry random image maar dit kan nie repeteer nie
+    repeat
+      irandom := randomrange(1, 11);
+    until irandom <> iprevRandom;
+    iprevRandom := irandom;
+
+    createDestinationBox(ileft, itop, 'Assets/Travel/' + inttostr(irandom) + '.jpg', arrDestinations[i], floattostr(arrHours[i]) + ' Hour Flight', arrCosts[i], sbDestinations);
     inc(ileft, 440);
-    if i mod 3 = 0 then
+    if ((i + 1) mod 3 = 0) and (i <> 0) then
     begin
-      inc(itop, 400);
+      inc(itop, 450);
       ileft := 70;
     end;
   end;
@@ -445,11 +439,10 @@ procedure TfrmFlylee.createInfoPage();
 var
 
   arrDestinations : array[0..100] of string;
-  arrHours : array[0..100] of integer;
+  arrHours : array[0..100] of real;
   arrCosts : array[0..100] of real;
   I: Integer;
   ileft : integer;
-  sImagePath : string;
 
   lblReviews, lblAboutSay : TLabel;
 
@@ -509,22 +502,7 @@ begin
   //1 tot 3 want ons soek net die top 3
   for I := 1 to 3 do
   begin
-    if i = 1 then
-    begin
-    sImagePath := 'Assets/balloons.jpeg'
-
-    end
-      else if i = 2 then
-      begin
-        sImagePath := 'Assets/camera.jpg'
-      end
-        else
-        begin
-          sImagePath := 'Assets/lights.jpeg';
-        end;
-
-
-    createDestinationBox(ileft, 800, sImagePath, arrDestinations[i-1], inttostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbInfo);
+    createDestinationBox(ileft, 800, 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbInfo);
     inc(ileft, 440);
   end;
 
