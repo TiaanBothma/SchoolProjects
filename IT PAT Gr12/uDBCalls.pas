@@ -14,11 +14,17 @@ procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
 procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCost : array of real; var icount : integer);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
 
 implementation
 
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCost : array of real; var icount : integer);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
+var
+
+  I, J : integer;
+  rlorrie : real;
+  slorrie : string;
+
 begin
   icount := 0;
 
@@ -30,13 +36,42 @@ begin
     begin
       arrDestinations[icount] := tblFlights['to'];
       arrHours[icount] := tblFlights['tripLength'];
-      arrCost[icount] := tblFlights['price'];
+      arrCosts[icount] := tblFlights['price'];
 
       inc(icount);
       tblFlights.Next;
     end;
   end;
 
+  if sfilterby = 'Price' then
+  begin
+    for I := 0 to icount - 2 do
+    for J := I + 1 to icount - 1 do
+    begin
+      if arrCosts[i] < arrCosts[j] then
+      begin
+        rlorrie := arrCosts[i];
+        arrCosts[i] := arrCosts[j];
+        arrCosts[j] := rlorrie;
+
+        rlorrie := arrHours[i];
+        arrHours[i] := arrHours[j];
+        arrHours[j] := rlorrie;
+
+        slorrie := arrDestinations[i];
+        arrDestinations[i] := arrDestinations[j];
+        arrDestinations[j] := slorrie;
+      end;
+    end;
+  end
+  else if sfilterby = 'Country' then
+  begin
+
+  end
+  else if sfilterby = 'Trip Length' then
+  begin
+
+  end;
 end;
 
 function getUserReviews(iFieldCount : integer) : TArray<String>;

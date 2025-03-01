@@ -12,8 +12,26 @@ uses
 procedure centerComponent(AControl, AParent: TControl);
 procedure setLabelFont(currLabel : TLabel; isize: integer; bBold: boolean);
 function hashPassword(spassword : string): string;
+procedure clearScrollBox(sbpage: TScrollBox);
 
 implementation
+
+procedure clearScrollBox(sbpage: TScrollBox);
+var
+  i: Integer;
+begin
+  {
+   ================================================
+   Gaan deur die scroll box en remove alle children
+   ================================================
+  }
+
+  for i := sbpage.ControlCount - 1 downto 0 do
+  begin
+    sbpage.Controls[i].Free;
+  end;
+end;
+
 
 procedure centerComponent(AControl, AParent: TControl);
 begin

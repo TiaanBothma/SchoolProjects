@@ -38,16 +38,7 @@ type
     tsDestinations: TTabSheet;
     tsHotels: TTabSheet;
     tsBookings: TTabSheet;
-    lblPriceRange: TLabel;
-    edtLowPrice: TEdit;
-    edtHighPrice: TEdit;
-    cbFilters: TComboBox;
-    lblFilterBy: TLabel;
-    imgCornerDecor: TImage;
-    imgCornerIcons: TImage;
     sbDestinations: TScrollBox;
-    lblTopDest: TLabel;
-    lblAllDestinations: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -70,13 +61,19 @@ type
     procedure lblFlightsOnClick(Sender : TObject);
     procedure lblBookingsOnClick(Sender : TObject);
     procedure createDestinationsPage();
-    procedure edtLowPriceClick(Sender: TObject);
-    procedure edtHighPriceClick(Sender: TObject);
-   { Private Scope }
+    procedure edtLowPriceClick(var edtLowPrice : TEdit; Sender: TObject);
+    procedure edtHighPriceClick(var edtHighPrice : TEdit; Sender: TObject);
+    procedure cbFiltersOnChange(Sender: TObject);
+
   private
+  { Private Scope }
     arrUser : array[1..4] of string;
-  { Public Scope }
+    { All Destinations }
+    cbFilters : TComboBox;
+    sFilterDestinations : string;
+    rLowPrice, rHighPrice : real;
   public
+  { Public Scope }
     { Verklaar die kleure sodat alle vorme kan gebruik }
     clPrimary, clSecondary, clAccent, clTextColor : TColor;
     { Menu Bar }
@@ -301,16 +298,23 @@ begin
   createViewReviewBox(ireviewcount, sbInfo);
 end;
 
+procedure TfrmFlylee.cbFiltersOnChange(Sender: TObject);
+begin
+  sFilterDestinations := cbFilters.text;
+  clearScrollBox(sbDestinations);
+  createDestinationsPage();
+end;
+
 procedure TfrmFlylee.createDestinationsPage();
 var
-  { Top destinations }
+  imgCornerDecor, imgCornerIcons : TImage;
+  lblPriceRange, lblFilterBy, lblTopDest, lblAllDestinations : TLabel;
+  edtLowPrice, edtHighPrice : TEdit;
   arrDestinations : array[0..100] of string;
   arrHours : array[0..100] of real;
   arrCosts : array[0..100] of real;
   I, ileft, itop, icount : integer;
   irandom, iprevrandom : integer;
-
-  { All Destinations }
 
 begin
   {
@@ -320,8 +324,10 @@ begin
   }
 
   { Images }
+  imgCornerDecor := TImage.Create(sbDestinations);
   with imgCornerDecor do
   begin
+    parent := sbDestinations;
     Width := imgCorner.Width;
     Height := imgCorner.Height;
     Top := sbDestinations.Top;
@@ -329,8 +335,10 @@ begin
     picture.LoadFromFile('Assets/cornerDecor.png');
   end;
 
+  imgCornerIcons := TImage.Create(sbDestinations);
   with imgCornerIcons do
   begin
+    parent := sbDestinations;
     top := 50;
     left := sbDestinations.Left + sbDestinations.Width - 230;
     Width := 100;
@@ -339,54 +347,72 @@ begin
   end;
 
   { Filters }
-
+  lblPriceRange := TLabel.Create(sbDestinations);
   with lblPriceRange do
   begin
+    parent := sbDestinations;
     setLabelFont(lblPriceRange, 18, true);
     font.color := clTextColor;
+    caption := 'Price Range';
     left := 30;
     top := 20;
   end;
 
+  edtlowPrice := TEdit.Create(sbDestinations);
   with edtlowPrice do
   begin
+    parent := sbDestinations;
     width := 100;
     height := 20;
     left := lblPriceRange.left + lblPriceRange.Width + 30;
     top := 24;
+    caption := 'Low Price';
   end;
 
+  edtHighPrice := TEdit.Create(sbDestinations);
   with edtHighPrice do
   begin
+    parent := sbDestinations;
     width := 100;
     Height := 20;
     Left := edtLowPrice.Left + edtLowPrice.Width + 7;
     Top := edtLowPrice.Top;
+    Caption := 'High Price';
   end;
 
+  lblFilterBy := TLabel.Create(sbDestinations);
   with lblFilterBy do
   begin
+    parent := sbDestinations;
     setLabelFont(lblFilterBy, 18, true);
     font.color := clTextColor;
     left := 30;
     top := lblPriceRange.Top + lblPriceRange.Height + 20;
+    caption := 'Filter By';
   end;
 
+  cbFilters := TComboBox.Create(sbDestinations);
   with cbFilters do
   begin
+    parent := sbDestinations;
     width := 120;
     Height := 50;
     Left := edtLowPrice.Left;
     Top := lblFilterBy.Top + 5;
     font.Name := 'Roboto';
     Font.Style := [TFontStyle.fsBold];
+    items.Text := 'Price' + #13 + 'Country' + #13 + 'Trip Length';
+    OnClick := cbFiltersOnChange;
   end;
 
   { Top Destinations }
+  lblTopDest := TLabel.Create(sbDestinations);
   with lblTopDest do
   begin
+    parent := sbDestinations;
     setLabelFont(lblTopDest, 32, true);
     font.color := clTextColor;
+    caption := 'Top Destinations';
     centerComponent(lblTopDest, sbDestinations);
     top := 40;
   end;
@@ -403,16 +429,18 @@ begin
   end;
 
   { Show all Destinations }
+  lblAllDestinations := TLabel.Create(sbDestinations);
   with lblAllDestinations do
   begin
+    parent := sbDestinations;
     setLabelFont(lblAllDestinations, 18, true);
     font.color := clTextColor;
+    caption := 'All Destinations';
     left := 30;
     top := 600;
   end;
 
-  //Place filters here
-  loadAllDestinations(arrDestinations, arrHours, arrCosts, icount);
+  loadAllDestinations(arrDestinations, arrHours, arrCosts, icount, sFilterDestinations, rlowprice, rhighprice);
   ileft := 70;
   itop := 650;
   iprevrandom := -1;
@@ -693,12 +721,12 @@ begin
   loadProfilePic(imgProfile, dmData.iUserId);
 end;
 
-procedure TfrmFlylee.edtHighPriceClick(Sender: TObject);
+procedure TfrmFlylee.edtHighPriceClick(var edtHighPrice : TEdit; Sender: TObject);
 begin
   edtHighPrice.text := '';
 end;
 
-procedure TfrmFlylee.edtLowPriceClick(Sender: TObject);
+procedure TfrmFlylee.edtLowPriceClick(var edtLowPrice : TEdit; Sender: TObject);
 begin
   edtLowPrice.text := '';
 end;
