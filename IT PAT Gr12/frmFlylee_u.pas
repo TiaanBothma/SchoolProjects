@@ -39,6 +39,11 @@ type
     tsHotels: TTabSheet;
     tsBookings: TTabSheet;
     sbDestinations: TScrollBox;
+    lblCompare: TLabel;
+    imgAboveLeft: TImage;
+    imgAboveRight: TImage;
+    imgBelowLeft: TImage;
+    imgBelowRight: TImage;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -65,6 +70,7 @@ type
     procedure edtHighPriceClick(Sender: TObject);
     procedure cbFiltersOnChange(Sender: TObject);
     procedure btnApplyFiltersOnClick(Sender: TObject);
+    procedure createHotelPage();
   private
   { Private Scope }
     arrUser : array[1..4] of string;
@@ -74,6 +80,8 @@ type
     btnApplyFilters : TButton;
     sFilterDestinations : string;
     rLowPrice, rHighPrice : real;
+    { Hotels }
+    tfile : textfile;
   public
   { Public Scope }
     { Verklaar die kleure sodat alle vorme kan gebruik }
@@ -195,6 +203,7 @@ begin
  initVarsHomePage();
  createInfoPage();
  createDestinationsPage();
+ createHotelPage();
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -508,6 +517,77 @@ begin
       ileft := 70;
     end;
   end;
+end;
+
+procedure TfrmFlylee.createHotelPage();
+const
+  icount = 14;
+var
+
+  arrNames : array[0..14] of string;
+  arrCosts : array[0..14] of real;
+  shotelname, slocation : string;
+
+begin
+  {
+   ======================
+   Maak die Hotels bladsy
+   ======================
+  }
+
+  with lblCompare do
+  begin
+    setLabelFont(lblCompare, 25, true);
+    font.Color := clTextColor;
+    left := 20;
+    top := 20;
+  end;
+
+  { Init Images }
+  with imgAboveLeft do
+  begin
+    width := 50;
+    Height := 50;
+    picture.LoadFromFile('Assets/arrowLeft.png');
+    left := 70;
+    top := 170;
+  end;
+
+  with imgAboveRight do
+  begin
+    width := 50;
+    Height := 50;
+    picture.LoadFromFile('Assets/arrowRight.png');
+    left := 1260;
+    top := 170;
+  end;
+
+  with imgBelowLeft do
+  begin
+    width := 50;
+    Height := 50;
+    picture.LoadFromFile('Assets/arrowLeft.png');
+    left := 70;
+    top := 600;
+  end;
+
+  with imgBelowRight do
+  begin
+    width := 50;
+    Height := 50;
+    picture.LoadFromFile('Assets/arrowRight.png');
+    left := 1260;
+    top := 600;
+  end;
+
+  { Maak die hotel boks met die info }
+  getHotelInfo(arrNames, arrCosts, tfile);
+  //Unconcatenate die stringe
+  shotelname := copy(arrNames[0], 1, pos(',', arrNames[0]) - 1);
+  slocation := copy(arrNames[0], pos(',', arrNames[0]) + 1);
+  insert(',', slocation, pos(' ', slocation));
+  //Maak die boks met die inligting
+  createHotelBox(1, shotelname, slocation, arrCosts[0], true, tsHotels);
 end;
 
 procedure TfrmFlylee.createInfoPage();

@@ -13,8 +13,94 @@ uses
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
 procedure createDestinationBox(iLeft, itop : Integer; sImage, sTitle, sHours : string; rCost : real ; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
+procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
 
 implementation
+
+procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
+var
+
+  imgHotel, imgLocation : TImage;
+  lblPricePN, lblHotelName, lblLocation : TLabel;
+  shpHotel : TShape;
+
+begin
+  {
+   =========================
+   Create the Hotel view box
+   =========================
+  }
+
+  imgHotel := TImage.Create(tspage);
+  with imgHotel do
+  begin
+    parent := tspage;
+    stretch := true;
+    picture.LoadFromFile('Assets/Hotels/' + inttostr(iimage) + '.jpg');
+    width := 850;
+    height := 350;
+    left := 260;
+    if isBelow then top := 55 else top := 300;
+  end;
+
+  shpHotel := TShape.Create(tspage);
+  with shpHotel do
+  begin
+    parent := tspage;
+    pen.Style := psClear;
+    shape := stRoundRect;
+    brush.Color := clWhite;
+    width := imgHotel.width + 2;
+    height := 130;
+    left := imgHotel.left;
+    top := imgHotel.top + imgHotel.Height - Height + 20;
+  end;
+
+  lblHotelName := TLabel.Create(tspage);
+  with lblHotelName do
+  begin
+    parent := tspage;
+    setLabelFont(lblHotelname, 18, true);
+    font.color := rgb(94, 98, 130);
+    caption := shotelname;
+    left := shpHotel.left + 20;
+    top := shpHotel.Top + 20;
+  end;
+
+  imgLocation := TImage.Create(tspage);
+  with imgLocation do
+  begin
+    parent := tspage;
+    stretch := true;
+    picture.LoadFromFile('Assets/locationIcon.png');
+    height := 30;
+    width := 30;
+    left := shpHotel.left + 20;
+    top := lblHotelName.Top + lblHotelName.Height + 20;
+  end;
+
+  lblLocation := TLabel.Create(tspage);
+  with lblLocation do
+  begin
+    parent := tspage;
+    setLabelFont(lblLocation, 16, true);
+    font.color := rgb(94, 98, 130);
+    caption := slocation;
+    left := imgLocation.left + imgLocation.Width + 20;
+    top := imgLocation.Top + 5;
+  end;
+
+  lblPricePN := TLabel.Create(tsPage);
+  with lblPricePN do
+  begin
+    parent := tsPage;
+    setlabelfont(lblPricePN, 16, true);
+    font.color := rgb(94, 98, 130);
+    caption := floattostrf(rhotelprice, ffCurrency, 8, 2);
+    left := shpHotel.Left + shpHotel.Width - Width - 20;
+    top := lblHotelName.top;
+  end;
+end;
 
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 var

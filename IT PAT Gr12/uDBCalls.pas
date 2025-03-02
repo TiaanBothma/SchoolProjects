@@ -15,8 +15,46 @@ procedure loadTopDestinations(var arrDestination : array of string; var arrHours
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
 procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
+procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of real; var tfile : textfile);
 
 implementation
+
+procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of real; var tfile : textfile);
+var
+
+  sline : string;
+  icount : integer;
+
+begin
+  {
+   ===========================
+   Fil die arrays met die info
+   ===========================
+  }
+
+  icount := 0;
+  if fileexists('hotels.txt') then
+  begin
+    assignfile(tfile, 'hotels.txt');
+  end;
+
+  reset(tfile);
+
+  while not eof(tfile) do
+  begin
+    readln(tfile, sline);
+
+    arrNames[icount] := copy(sline, 1, pos(',', sline) - 1);
+    delete(sline, 1, pos(',', sline));
+    arrCosts[icount] := strtofloat(copy(sline, 1, pos(',', sline) - 1));
+    delete(sline, 1, pos(',', sline));
+    arrNames[icount] := arrNames[icount] + ',' + copy(sline, 1, pos(',', sline) - 1);
+
+    inc(icount);
+  end;
+
+  closefile(tfile);
+end;
 
 procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
 var

@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsDestinations
+    ActivePage = tsHotels
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
@@ -333,6 +333,37 @@ object frmFlylee: TfrmFlylee
     object tsHotels: TTabSheet
       Caption = 'Hotels'
       ImageIndex = 3
+      object lblCompare: TLabel
+        Left = 24
+        Top = 24
+        Width = 86
+        Height = 15
+        Caption = 'Compare Hotels'
+      end
+      object imgAboveLeft: TImage
+        Left = 72
+        Top = 152
+        Width = 105
+        Height = 105
+      end
+      object imgAboveRight: TImage
+        Left = 1264
+        Top = 112
+        Width = 105
+        Height = 105
+      end
+      object imgBelowLeft: TImage
+        Left = 104
+        Top = 584
+        Width = 105
+        Height = 105
+      end
+      object imgBelowRight: TImage
+        Left = 1208
+        Top = 552
+        Width = 105
+        Height = 105
+      end
     end
     object tsBookings: TTabSheet
       Caption = 'Bookings'
