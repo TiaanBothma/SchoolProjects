@@ -66,12 +66,48 @@ begin
   end
   else if sfilterby = 'Country' then
   begin
+    for I := 0 to icount - 2 do
+    for J := I + 1 to icount - 1 do
+    begin
+      if arrDestinations[i] > arrDestinations[j] then
+      begin
+        slorrie := arrDestinations[i];
+        arrDestinations[i] := arrDestinations[j];
+        arrDestinations[j] := slorrie;
+
+        rlorrie := arrCosts[i];
+        arrCosts[i] := arrCosts[j];
+        arrCosts[j] := rlorrie;
+
+        rlorrie := arrHours[i];
+        arrHours[i] := arrHours[j];
+        arrHours[j] := rlorrie;
+      end;
+    end;
 
   end
-  else if sfilterby = 'Trip Length' then
+  else
   begin
+    for I := 0 to icount - 2 do
+    for J := I + 1 to icount - 1 do
+    begin
+     if arrHours[i] < arrHours[j] then
+      begin
+        rlorrie := arrHours[i];
+        arrHours[i] := arrHours[j];
+        arrHours[j] := rlorrie;
 
+        slorrie := arrDestinations[i];
+        arrDestinations[i] := arrDestinations[j];
+        arrDestinations[j] := slorrie;
+
+        rlorrie := arrCosts[i];
+        arrCosts[i] := arrCosts[j];
+        arrCosts[j] := rlorrie;
+      end;
+    end;
   end;
+
 end;
 
 function getUserReviews(iFieldCount : integer) : TArray<String>;

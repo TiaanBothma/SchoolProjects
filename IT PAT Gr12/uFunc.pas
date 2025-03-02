@@ -21,14 +21,15 @@ var
   i: Integer;
 begin
   {
-   ================================================
-   Gaan deur die scroll box en remove alle children
-   ================================================
+   ==================================================
+   Gaan deur die scroll box en remove nogige children
+   ==================================================
   }
 
   for i := sbpage.ControlCount - 1 downto 0 do
   begin
-    sbpage.Controls[i].Free;
+    if not (sbpage.Controls[i] is TComboBox) and not (sbpage.Controls[i] is TEdit) then
+      sbpage.Controls[i].Free;
   end;
 end;
 
