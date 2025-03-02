@@ -28,7 +28,7 @@ begin
 
   for i := sbpage.ControlCount - 1 downto 0 do
   begin
-    if not (sbpage.Controls[i] is TComboBox) and not (sbpage.Controls[i] is TEdit) then
+    if not (sbpage.Controls[i] is TComboBox) and not (sbpage.Controls[i] is TEdit) and not (sbpage.Controls[i] is TButton) then
       sbpage.Controls[i].Free;
   end;
 end;

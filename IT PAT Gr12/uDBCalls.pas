@@ -28,18 +28,41 @@ var
 begin
   icount := 0;
 
-  with dmData do
+  if (rlowprice = -1) or (rhighprice = -1) then
   begin
-    tblFlights.open;
-    tblFlights.first;
-    while not tblFlights.eof do
+    with dmData do
     begin
-      arrDestinations[icount] := tblFlights['to'];
-      arrHours[icount] := tblFlights['tripLength'];
-      arrCosts[icount] := tblFlights['price'];
+      tblFlights.open;
+      tblFlights.first;
+      while not tblFlights.eof do
+      begin
+        arrDestinations[icount] := tblFlights['to'];
+        arrHours[icount] := tblFlights['tripLength'];
+        arrCosts[icount] := tblFlights['price'];
 
-      inc(icount);
-      tblFlights.Next;
+        inc(icount);
+        tblFlights.Next;
+      end;
+    end;
+  end
+  else begin
+    with dmData do
+    begin
+      tblFlights.open;
+      tblFlights.first;
+      while not tblFlights.eof do
+      begin
+        if (tblFlights['price'] >= rlowprice) and (tblFlights['price'] <= rhighprice) then
+        begin
+          arrDestinations[icount] := tblFlights['to'];
+          arrHours[icount] := tblFlights['tripLength'];
+          arrCosts[icount] := tblFlights['price'];
+
+          inc(icount);
+        end;
+
+        tblFlights.Next;
+      end;
     end;
   end;
 

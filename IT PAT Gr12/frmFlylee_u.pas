@@ -64,12 +64,14 @@ type
     procedure edtLowPriceClick(Sender: TObject);
     procedure edtHighPriceClick(Sender: TObject);
     procedure cbFiltersOnChange(Sender: TObject);
+    procedure btnApplyFiltersOnClick(Sender: TObject);
   private
   { Private Scope }
     arrUser : array[1..4] of string;
     { All Destinations }
     cbFilters : TComboBox;
     edtHighPrice, edtLowPrice : TEdit;
+    btnApplyFilters : TButton;
     sFilterDestinations : string;
     rLowPrice, rHighPrice : real;
   public
@@ -123,6 +125,8 @@ begin
  { init variables }
  ireviewcount := 1;
  iMaxReviewCount := dmData.tblReviews.RecordCount;
+ rlowprice := -1;
+ rHighPrice := -1;
 
  { Load Images }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -170,6 +174,20 @@ begin
     text := 'Choose Filter';
     items.Text := 'Price' + #13 + 'Country' + #13 + 'Trip Length';
     OnClick := cbFiltersOnChange;
+  end;
+
+  btnApplyFilters := TButton.Create(sbDestinations);
+  with btnApplyFilters do
+  begin
+    parent := sbDestinations;
+    width := 50;
+    height := edtHighPrice.Height;
+    top := edtHighPrice.top;
+    left := edtHighPrice.Left + edtHighPrice.Width + 7;
+    font.name := 'Roboto';
+    font.Style := [TFontStyle.fsBold];
+    caption := 'Apply';
+    OnClick := btnApplyFiltersOnClick;
   end;
 
  { positions and scales }
@@ -336,6 +354,31 @@ begin
 
   //Maak die review boks oor met die nuwe review record
   createViewReviewBox(ireviewcount, sbInfo);
+end;
+
+procedure TfrmFlylee.btnApplyFiltersOnClick(Sender: TObject);
+var
+
+  ikode : integer;
+
+begin
+  { Apply die filters vir die prys range }
+  if (edtHighPrice.text <> '') or (edtLowPrice.text <> '') then
+  begin
+    val(edtLowPrice.text, rLowPrice, ikode);
+    if ikode <> 0 then exit;
+
+    try
+      rHighPrice := strtofloat(edtHighPrice.text);
+    except
+      MessageDLG('Please select a price', TMsgDlgType.mtError, [TMsgDlgBtn.mbOK], 0);
+    end;
+
+    { Apply die filters }
+    clearScrollBox(sbDestinations);
+    createDestinationsPage();
+  end;
+
 end;
 
 procedure TfrmFlylee.cbFiltersOnChange(Sender: TObject);
