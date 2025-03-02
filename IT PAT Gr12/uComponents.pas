@@ -38,9 +38,9 @@ begin
     stretch := true;
     picture.LoadFromFile('Assets/Hotels/' + inttostr(iimage) + '.jpg');
     width := 850;
-    height := 350;
+    height := 320;
     left := 260;
-    if isBelow then top := 55 else top := 300;
+    if isBelow then top := 55 else top := 420;
   end;
 
   shpHotel := TShape.Create(tspage);
@@ -51,7 +51,7 @@ begin
     shape := stRoundRect;
     brush.Color := clWhite;
     width := imgHotel.width + 2;
-    height := 130;
+    height := 120;
     left := imgHotel.left;
     top := imgHotel.top + imgHotel.Height - Height + 20;
   end;

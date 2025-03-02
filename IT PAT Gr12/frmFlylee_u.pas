@@ -70,7 +70,11 @@ type
     procedure edtHighPriceClick(Sender: TObject);
     procedure cbFiltersOnChange(Sender: TObject);
     procedure btnApplyFiltersOnClick(Sender: TObject);
-    procedure createHotelPage();
+    procedure createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
+    procedure imgAboveRightClick(Sender: TObject);
+    procedure imgAboveLeftClick(Sender: TObject);
+    procedure imgBelowRightClick(Sender: TObject);
+    procedure imgBelowLeftClick(Sender: TObject);
   private
   { Private Scope }
     arrUser : array[1..4] of string;
@@ -82,6 +86,7 @@ type
     rLowPrice, rHighPrice : real;
     { Hotels }
     tfile : textfile;
+    ihotel, ihotel2, imaxhotel, ihotelimage, ihotelimage2 : integer;
   public
   { Public Scope }
     { Verklaar die kleure sodat alle vorme kan gebruik }
@@ -92,6 +97,9 @@ type
     { View Review }
     ireviewcount, iMaxReviewCount : integer;
   end;
+
+  const
+  imaxhotelimage = 12;
 
 var
   frmFlylee: TfrmFlylee;
@@ -135,6 +143,12 @@ begin
  iMaxReviewCount := dmData.tblReviews.RecordCount;
  rlowprice := -1;
  rHighPrice := -1;
+
+ ihotel := 0;
+ ihotel2 := 1;
+ imaxhotel := 14;
+ ihotelimage := 1;
+ ihotelimage2 := 2;
 
  { Load Images }
  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -203,7 +217,7 @@ begin
  initVarsHomePage();
  createInfoPage();
  createDestinationsPage();
- createHotelPage();
+ createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
 end;
 
 procedure TfrmFlylee.initVarsHomePage();
@@ -339,6 +353,32 @@ begin
   pcPages.ActivePageIndex := 3;
 end;
 
+procedure TfrmFlylee.imgAboveLeftClick(Sender: TObject);
+begin
+  dec(ihotel);
+  if ihotel < 1
+    then ihotel := imaxhotel;
+
+  dec(ihotelimage);
+  if ihotelimage < 1
+    then ihotelimage := imaxhotelimage;
+
+  createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
+end;
+
+procedure TfrmFlylee.imgAboveRightClick(Sender: TObject);
+begin
+  inc(ihotel);
+  if ihotel > imaxhotel
+    then ihotel := 1;
+
+  inc(ihotelimage);
+  if ihotelimage > imaxhotelimage
+    then ihotelimage := 1;
+
+  createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
+end;
+
 procedure TfrmFlylee.imgArrowDownClick(Sender: TObject);
 begin
   //Kyk of die review bestaan en Decrease die ireviewcount
@@ -363,6 +403,32 @@ begin
 
   //Maak die review boks oor met die nuwe review record
   createViewReviewBox(ireviewcount, sbInfo);
+end;
+
+procedure TfrmFlylee.imgBelowLeftClick(Sender: TObject);
+begin
+  dec(ihotel2);
+  if ihotel2 < 1
+    then ihotel2 := imaxhotel;
+
+  dec(ihotelimage2);
+  if ihotelimage2 < 1
+    then ihotelimage2 := imaxhotelimage;
+
+  createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
+end;
+
+procedure TfrmFlylee.imgBelowRightClick(Sender: TObject);
+begin
+  inc(ihotel2);
+  if ihotel2 > imaxhotel
+    then ihotel2 := 1;
+
+  inc(ihotelimage2);
+  if ihotelimage2 > imaxhotelimage
+    then ihotelimage2 := 1;
+
+  createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
 end;
 
 procedure TfrmFlylee.btnApplyFiltersOnClick(Sender: TObject);
@@ -519,9 +585,7 @@ begin
   end;
 end;
 
-procedure TfrmFlylee.createHotelPage();
-const
-  icount = 14;
+procedure TfrmFlylee.createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
 var
 
   arrNames : array[0..14] of string;
@@ -583,11 +647,19 @@ begin
   { Maak die hotel boks met die info }
   getHotelInfo(arrNames, arrCosts, tfile);
   //Unconcatenate die stringe
-  shotelname := copy(arrNames[0], 1, pos(',', arrNames[0]) - 1);
-  slocation := copy(arrNames[0], pos(',', arrNames[0]) + 1);
+  shotelname := copy(arrNames[icounthotel], 1, pos(',', arrNames[icounthotel]) - 1);
+  slocation := copy(arrNames[icounthotel], pos(',', arrNames[icounthotel]) + 1);
   insert(',', slocation, pos(' ', slocation));
   //Maak die boks met die inligting
-  createHotelBox(1, shotelname, slocation, arrCosts[0], true, tsHotels);
+  createHotelBox(iimage1, shotelname, slocation, arrCosts[icounthotel], true, tsHotels);
+
+  { Maak die tweede hotel box }
+  //Unconcatenate die stringe
+  shotelname := copy(arrNames[icounthotel2], 1, pos(',', arrNames[icounthotel2]) - 1);
+  slocation := copy(arrNames[icounthotel2], pos(',', arrNames[icounthotel2]) + 1);
+  insert(',', slocation, pos(' ', slocation));
+  //Maak die boks met die inligting
+  createHotelBox(iimage2, shotelname, slocation, arrCosts[icounthotel2], false, tsHotels);
 end;
 
 procedure TfrmFlylee.createInfoPage();

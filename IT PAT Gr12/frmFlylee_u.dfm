@@ -345,24 +345,28 @@ object frmFlylee: TfrmFlylee
         Top = 152
         Width = 105
         Height = 105
+        OnClick = imgAboveLeftClick
       end
       object imgAboveRight: TImage
         Left = 1264
         Top = 112
         Width = 105
         Height = 105
+        OnClick = imgAboveRightClick
       end
       object imgBelowLeft: TImage
         Left = 104
         Top = 584
         Width = 105
         Height = 105
+        OnClick = imgBelowLeftClick
       end
       object imgBelowRight: TImage
         Left = 1208
         Top = 552
         Width = 105
         Height = 105
+        OnClick = imgBelowRightClick
       end
     end
     object tsBookings: TTabSheet
