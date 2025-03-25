@@ -7,7 +7,9 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ComCtrls, Vcl.Tabs, Vcl.ExtCtrls, pngimage, jpeg, Data.DB, Data.Win.ADODB,
   Vcl.StdCtrls, Vcl.Buttons, Math,
   { Helper Files }
-  uDBCalls, uFunc, uComponents;
+  uDBCalls, uFunc, uComponents,
+  { Object }
+  clsAdvertiser_u;
 
 type
   TfrmFlylee = class(TForm)
@@ -44,6 +46,8 @@ type
     imgAboveRight: TImage;
     imgBelowLeft: TImage;
     imgBelowRight: TImage;
+    imgHotelCorner: TImage;
+    imgHotelDecor: TImage;
     procedure FormCreate(Sender: TObject);
     procedure posHomePageImages();
     procedure initVarsHomePage();
@@ -87,6 +91,8 @@ type
     { Hotels }
     tfile : textfile;
     ihotel, ihotel2, imaxhotel, ihotelimage, ihotelimage2 : integer;
+    { Object }
+    objAdvertiser : TAdvertiser;
   public
   { Public Scope }
     { Verklaar die kleure sodat alle vorme kan gebruik }
@@ -138,25 +144,25 @@ begin
   clAccent := rgb(0,99,128); //Cerulean
   clTextColor := rgb(24,30,75); //Dark Moon Blue
 
- { init variables }
- ireviewcount := 1;
- iMaxReviewCount := dmData.tblReviews.RecordCount;
- rlowprice := -1;
- rHighPrice := -1;
+   { init variables }
+  ireviewcount := 1;
+  iMaxReviewCount := dmData.tblReviews.RecordCount;
+  rlowprice := -1;
+  rHighPrice := -1;
 
- ihotel := 0;
- ihotel2 := 1;
- imaxhotel := 14;
- ihotelimage := 1;
- ihotelimage2 := 2;
+  ihotel := 0;
+  ihotel2 := 1;
+  imaxhotel := 14;
+  ihotelimage := 1;
+  ihotelimage2 := 2;
 
- { Load Images }
- imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
- imgFlyGirl.Picture.LoadFromFile('Assets/flyGirl.png');
- imgPlane.Picture.LoadFromFile('Assets/plane.png');
- imgPlane2.Picture.LoadFromFile('Assets/plane.png');
- imgUnderline.Picture.LoadFromFile('Assets/underline.png');
- imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
+   { Load Images }
+  imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
+  imgFlyGirl.Picture.LoadFromFile('Assets/flyGirl.png');
+  imgPlane.Picture.LoadFromFile('Assets/plane.png');
+  imgPlane2.Picture.LoadFromFile('Assets/plane.png');
+  imgUnderline.Picture.LoadFromFile('Assets/underline.png');
+  imgPlay.Picture.LoadFromFile('Assets/playIcon.png');
 
   //Destination Page
   edtlowPrice := TEdit.Create(sbDestinations);
@@ -608,6 +614,24 @@ begin
   end;
 
   { Init Images }
+  with imgHotelCorner do
+  begin
+    Width := imgCorner.Width;
+    Height := imgCorner.Height;
+    Top := tsHotels.top - 30;
+    Left := tsHotels.Width - Width + 5;
+    picture.LoadFromFile('Assets/cornerDecor.png');
+  end;
+
+  with imgHotelDecor do
+  begin
+    top := 50;
+    left := tsHotels.Left + tsHotels.Width - 230;
+    Width := 100;
+    Height := 100;
+    Picture.LoadFromFile('Assets/decor.png');
+  end;
+
   with imgAboveLeft do
   begin
     width := 50;

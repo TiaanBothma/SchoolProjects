@@ -143,6 +143,7 @@
         <DCCReference Include="uDBCalls.pas"/>
         <DCCReference Include="uFunc.pas"/>
         <DCCReference Include="uComponents.pas"/>
+        <DCCReference Include="clsAdvertiser_u.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -333,6 +333,20 @@ object frmFlylee: TfrmFlylee
     object tsHotels: TTabSheet
       Caption = 'Hotels'
       ImageIndex = 3
+      object imgHotelCorner: TImage
+        Left = 1008
+        Top = 112
+        Width = 105
+        Height = 105
+        Stretch = True
+      end
+      object imgHotelDecor: TImage
+        Left = 1040
+        Top = 144
+        Width = 49
+        Height = 41
+        Stretch = True
+      end
       object lblCompare: TLabel
         Left = 24
         Top = 24
@@ -347,13 +361,6 @@ object frmFlylee: TfrmFlylee
         Height = 105
         OnClick = imgAboveLeftClick
       end
-      object imgAboveRight: TImage
-        Left = 1264
-        Top = 112
-        Width = 105
-        Height = 105
-        OnClick = imgAboveRightClick
-      end
       object imgBelowLeft: TImage
         Left = 104
         Top = 584
@@ -367,6 +374,13 @@ object frmFlylee: TfrmFlylee
         Width = 105
         Height = 105
         OnClick = imgBelowRightClick
+      end
+      object imgAboveRight: TImage
+        Left = 1264
+        Top = 112
+        Width = 105
+        Height = 105
+        OnClick = imgAboveRightClick
       end
     end
     object tsBookings: TTabSheet

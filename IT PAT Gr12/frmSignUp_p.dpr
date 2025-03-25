@@ -8,7 +8,8 @@ uses
   frmFlylee_u in 'frmFlylee_u.pas' {frmFlylee},
   uDBCalls in 'uDBCalls.pas',
   uFunc in 'uFunc.pas',
-  uComponents in 'uComponents.pas';
+  uComponents in 'uComponents.pas',
+  clsAdvertiser_u in 'clsAdvertiser_u.pas';
 
 {$R *.res}
 
