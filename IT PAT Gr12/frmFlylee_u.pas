@@ -79,6 +79,10 @@ type
     procedure cbFiltersOnChange(Sender: TObject);
     procedure btnApplyFiltersOnClick(Sender: TObject);
 
+    { Menu Bar }
+    procedure ProfileOnClick(Sender: TObject);
+    procedure lbProfileSettingsOnClick(Sender: TObject);
+
     { Hotel Page Buttons }
     procedure imgAboveRightClick(Sender: TObject);
     procedure imgAboveLeftClick(Sender: TObject);
@@ -122,6 +126,7 @@ type
     { Menu Bar }
     lblDestinations, lblBookings, lblHotels, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
+    lbProfileSettings : TListBox;
     { View Review }
     ireviewcount, iMaxReviewCount : integer;
   end;
@@ -382,6 +387,27 @@ end;
 procedure TfrmFlylee.lblHotelsOnClick;
 begin
   pcPages.ActivePageIndex := 3;
+end;
+
+procedure TfrmFlylee.lbProfileSettingsOnClick(Sender: TObject);
+var
+
+  sname : string;
+
+begin
+
+  case lbProfileSettings.ItemIndex of
+    0: begin
+      sname := inputbox('Name','What should your new name be?'+#13+'(Keep in mind: Your name will change after restarting the program)','');
+      objUser.setName(sname);
+    end;
+    1: objUser.setIsSubscribed(true);
+    2: pcPages.ActivePage := tsBookings;
+   // 3: ! Remove
+  end;
+
+  //Verwyder die listbox weer
+  lbProfileSettings.Visible := false;
 end;
 
 procedure TfrmFlylee.imgAboveLeftClick(Sender: TObject);
@@ -957,6 +983,11 @@ begin
   end;
 end;
 
+procedure TfrmFlylee.ProfileOnClick(Sender: TObject);
+begin
+  lbProfileSettings.Visible := true;
+end;
+
 procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
   Shift: TShiftState; X, Y: Integer);
 begin
@@ -1026,6 +1057,26 @@ begin
     height := 45;
     top := 20;
     left := 1200;
+    onClick := Profileonclick;
+  end;
+
+    //Create user settigs                                             1
+  lbProfileSettings := TListBox.Create(AOwner);
+  with lbProfileSettings do
+  begin
+    Parent := AParent;
+    visible := false;
+    top := 45;
+    Left := 1230;
+    Width := 135;
+    Height := 85;
+    Font.Name := 'Roboto';
+    font.size := 11;
+    items.Add('Change User Name');
+    items.Add('Subscribe to Weekly Updates');
+    items.Add('View My Bookings');
+    items.Add('Go to Admin Page');
+    OnClick := lbProfileSettingsOnClick;
   end;
 
   //Create label name
@@ -1038,6 +1089,7 @@ begin
     caption := objUser.getName;
     top := 30;
     left := imgProfile.left + imgProfile.Width + 10;
+    onClick := Profileonclick;
   end;
 
   //Create logo title

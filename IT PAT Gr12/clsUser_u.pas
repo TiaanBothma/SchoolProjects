@@ -3,7 +3,7 @@ unit clsUser_u;
 interface
 
 uses
-  System.SysUtils, System.DateUtils;
+  System.SysUtils, System.DateUtils, dmData_u;
 
 type
   TUser = class(TObject)
@@ -33,7 +33,6 @@ type
     { Mutators }
     procedure setName(sName: string);
     procedure setLastName(sLastName: string);
-    procedure setAge(dtBirthDate: TDateTime);
     procedure setIsSubscribed(bIsSubscribed: Boolean);
     procedure setIsAdmin(bIsAdmin: Boolean);
     procedure setTotalSpent(rAmount: Real);
@@ -94,36 +93,152 @@ end;
 procedure TUser.setName(sName: string);
 begin
   fName := sName;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['name'] := sname;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 procedure TUser.setLastName(sLastName: string);
 begin
   fLastName := sLastName;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['lastName'] := slastname;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
-procedure TUser.setAge(dtBirthDate: TDateTime);
-begin
-  calculateAge(dtBirthDate);
-end;
 
 procedure TUser.setIsSubscribed(bIsSubscribed: Boolean);
 begin
   fIsSubscribed := bIsSubscribed;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['isSubscribed'] := bIsSubscribed;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 procedure TUser.setIsAdmin(bIsAdmin: Boolean);
 begin
   fIsAdmin := bIsAdmin;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['isAdmin'] := bisAdmin;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 procedure TUser.setTotalSpent(rAmount: Real);
 begin
   fTotalSpent := rAmount;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['totalSpent'] := rAmount;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 procedure TUser.setBookingID(iBookingID: Integer);
 begin
   fBookingID := iBookingID;
+
+  //Verander ook dan in die databasis
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['Userid'] = iuserid
+        then begin
+          tblUsers.edit;
+          tblUsers['FlightId'] := iBookingid;
+          tblusers.post;
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 procedure TUser.calculateAge(dtBirthDate : TDateTime);
