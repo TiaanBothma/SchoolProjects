@@ -9,7 +9,8 @@ uses
   uDBCalls in 'uDBCalls.pas',
   uFunc in 'uFunc.pas',
   uComponents in 'uComponents.pas',
-  clsAdvertiser_u in 'clsAdvertiser_u.pas';
+  clsAdvertiser_u in 'clsAdvertiser_u.pas',
+  clsUser_u in 'clsUser_u.pas';
 
 {$R *.res}
 

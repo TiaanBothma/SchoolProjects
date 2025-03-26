@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsHotels
+    ActivePage = tsBookings
     TabOrder = 0
     object tsHome: TTabSheet
       Caption = 'Home'
@@ -386,6 +386,68 @@ object frmFlylee: TfrmFlylee
     object tsBookings: TTabSheet
       Caption = 'Bookings'
       ImageIndex = 5
+      object sbBookings: TScrollBox
+        Left = 0
+        Top = 0
+        Width = 1417
+        Height = 776
+        HorzScrollBar.Visible = False
+        TabOrder = 0
+        object lblBookingsTitle: TLabel
+          Left = 40
+          Top = 40
+          Width = 69
+          Height = 15
+          Caption = 'My Bookings'
+        end
+        object imgBookingCorner: TImage
+          Left = 824
+          Top = 136
+          Width = 105
+          Height = 105
+        end
+        object imgBookingDecor: TImage
+          Left = 848
+          Top = 160
+          Width = 65
+          Height = 57
+        end
+        object redtBooking: TRichEdit
+          Left = 960
+          Top = 192
+          Width = 185
+          Height = 89
+          BevelInner = bvLowered
+          BevelOuter = bvRaised
+          BevelKind = bkTile
+          BorderWidth = 10
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          ParentFont = False
+          TabOrder = 0
+        end
+        object btnGetBooking: TButton
+          Left = 968
+          Top = 120
+          Width = 185
+          Height = 49
+          Caption = 'Get Booking Invoice'
+          TabOrder = 1
+          OnClick = btnGetBookingClick
+        end
+        object btnSaveInvoice: TButton
+          Left = 968
+          Top = 320
+          Width = 185
+          Height = 49
+          Caption = 'Save Invoice'
+          TabOrder = 2
+          OnClick = btnSaveInvoiceClick
+        end
+      end
     end
   end
 end

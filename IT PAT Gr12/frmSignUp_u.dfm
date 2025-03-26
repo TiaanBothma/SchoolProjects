@@ -282,8 +282,8 @@ object frmSignUp: TfrmSignUp
     OnClick = btbtnGeneratePassClick
   end
   object btnSignUp: TButton
-    Left = 30
-    Top = 445
+    Left = 16
+    Top = 452
     Width = 120
     Height = 30
     Caption = 'Sign Up'

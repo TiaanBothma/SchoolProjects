@@ -131,6 +131,10 @@ begin
         then begin
           //Allocate die user id aan die user sodat later kan opspoor wie die persoon is
           iUserid := tblUsers['userId'];
+
+          { User Object }
+          frmFlylee.objUser.create(TblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent'], -1);
+
           MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
           frmFlylee.Show;
           frmLogIN.hide;

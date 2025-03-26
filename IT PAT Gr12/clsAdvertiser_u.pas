@@ -15,6 +15,7 @@ uses
       fFlightDuration : real;
       fTotalCost : real;
 
+
     public
       { Constructor }
       constructor Create(sName, sAdSize : string; iFlightID : integer; rFlightDuration : real); overload;

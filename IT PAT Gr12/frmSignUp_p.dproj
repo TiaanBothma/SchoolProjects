@@ -144,6 +144,7 @@
         <DCCReference Include="uFunc.pas"/>
         <DCCReference Include="uComponents.pas"/>
         <DCCReference Include="clsAdvertiser_u.pas"/>
+        <DCCReference Include="clsUser_u.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -1127,6 +1128,7 @@
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
+            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>

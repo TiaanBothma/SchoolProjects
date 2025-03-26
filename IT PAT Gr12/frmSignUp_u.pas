@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, System.Skia, Vcl.Skia, DateUtils,
   { Helper Files }
-  uFunc, uDBCalls;
+  uFunc, uDBCalls, clsUser_u;
 
 type
   TfrmSignUp = class(TForm)
@@ -219,6 +219,18 @@ end;
 procedure TfrmSignUp.Button1Click(Sender: TObject);
 begin
   dmData.iUserId := 13;
+
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+      if tblUsers['userid'] = 13
+        then
+frmFlylee.objUser := Tuser.create(tblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent'], tblUsers['Flightid']);
+
+  end;
+
   frmSignUp.Hide;
   frmFlylee.show;
 end;

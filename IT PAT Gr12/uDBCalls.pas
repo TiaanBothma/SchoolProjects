@@ -9,15 +9,112 @@ uses
   System.Skia, Vcl.Skia, dmData_u;
 
 { Declare procedures/functions }
-procedure loadUserData(var arrUser: array of string);
 procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
 procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
 procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
 procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of real; var tfile : textfile);
+procedure getBooking(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
+procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
 
 implementation
+
+procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
+var
+
+  sDestination, sFrom, sDate: string;
+  rHours, rCost: real;
+
+begin
+  redtInvoice.Clear;
+  redtInvoice.font.Name := 'Roboto';
+  redtInvoice.font.Size := 12;
+
+  redtInvoice.Lines.Add('------------------------------------');
+  redtInvoice.SelAttributes.size := 16;
+  redtInvoice.SelAttributes.Style := [TFontStyle.fsBold];
+  redtInvoice.Lines.Add('            ' + sname+ '`s'  + ' Invoice           ');
+  redtInvoice.Lines.Add('------------------------------------' + #13);
+
+  with dmData do
+  begin
+    tblFlights.Open;
+    tblFlights.First;
+
+    while not tblFlights.Eof do
+    begin
+      if tblFlights['FlightId'] = iBookingID then
+      begin
+        // Fetch flight details based on booking ID
+        sFrom := tblFlights['from'];
+        sDestination := tblFlights['to'];
+        sDate := DateToStr(tblFlights['date']);
+        rHours := tblFlights['tripLength'];
+        rCost := tblFlights['price'];
+
+        redtInvoice.Lines.Add('Name: ' + sname + ' ' + slastname);
+        redtInvoice.Lines.Add('Age: ' + sage);
+        redtInvoice.Lines.Add('------------------------------------');
+
+        redtInvoice.Lines.Add('Flight ID: ' + #9 + IntToStr(iBookingID));
+        redtInvoice.Lines.Add('From: ' + #9 + sFrom);
+        redtInvoice.Lines.Add('To: ' + #9 + sDestination);
+        redtInvoice.Lines.Add('Date: ' + #9 + formatdatetime('dd mmmm yyyy', strtodate(sDate)));
+        redtInvoice.Lines.Add('Trip Length: ' + #9 + FloatToStr(rHours) + ' hours');
+        redtInvoice.Lines.Add('Price: ' + #9 + FormatFloat('0.00', rCost) + ' ZAR');
+        redtInvoice.Lines.Add('------------------------------------');
+
+        redtInvoice.SelAttributes.Style := [TFontStyle.fsBold];
+        redtInvoice.Lines.Add('Total Cost: ' + FormatFloat('0.00', rCost) + ' ZAR');
+
+        Break;
+      end;
+      tblFlights.Next;
+    end;
+  end;
+
+  redtInvoice.Lines.Add('------------------------------------');
+  redtInvoice.SelAttributes.Style := [TFontStyle.fsBold];
+  redtInvoice.SelAttributes.Size := 16;
+  redtInvoice.Lines.Add('Thank you for booking with us!');
+end;
+
+procedure getBooking(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
+begin
+
+  with dmData do
+  begin
+    tblUsers.Open;
+    tblUsers.First;
+
+    while not tblUsers.Eof do
+    begin
+      if tblUsers['userID'] = iUserId
+      then begin
+        tblFlights.Open;
+        tblFlights.First;
+
+        while not tblFlights.Eof do
+        begin
+          if tblFlights['FlightId'] = tblUsers['FlightId']
+          then begin
+            iBookingID := tblFlights['FlightId'];
+            sDestination := tblFlights['to'];
+            rHours := tblFlights['tripLength'];
+            rCost := tblFlights['price'];
+            Break;
+          end;
+          tblFlights.Next;
+        end;
+        Break; //Stop if the correct user is found
+      end;
+      tblUsers.Next;
+    end;
+  end;
+
+
+end;
 
 procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of real; var tfile : textfile);
 var
@@ -305,47 +402,6 @@ begin
           arrPopularity[J] := rlorrie;
         end;
 
-    end;
-end;
-
-procedure loadUserData(var arrUser: array of string);
-
-var
-
-  bfound : boolean;
-
-begin
-  {
-   ================================================================
-   Lees user se data vanaf databasis in n array vir vinniger opsoek
-   ================================================================
-  }
-
-  bfound := false;
-
-  with dmData do
-  begin
-    tblUsers.open;
-    tblUsers.first;
-    while (not tblUsers.Eof) and (bfound = false) do
-    begin
-      if tblUsers['Userid'] = iUserId then
-        begin
-          bfound := true;
-          arrUser[0] := tblUsers['name'];
-          arrUser[1] := tblUsers['lastname'];
-          arrUser[2] := tblUsers['isSubscribed'];
-          arrUser[3] := tblUsers['birthDate'];
-        end;
-
-      tblUsers.next;
-    end;
-  end;
-
-  if bfound = false then
-    begin
-      Showmessage('A problem occurred with your user account.');
-      exit;
     end;
 end;
 

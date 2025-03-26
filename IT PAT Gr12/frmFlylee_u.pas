@@ -9,7 +9,7 @@ uses
   { Helper Files }
   uDBCalls, uFunc, uComponents,
   { Object }
-  clsAdvertiser_u;
+  clsAdvertiser_u, clsUser_u;
 
 type
   TfrmFlylee = class(TForm)
@@ -48,9 +48,14 @@ type
     imgBelowRight: TImage;
     imgHotelCorner: TImage;
     imgHotelDecor: TImage;
+    lblBookingsTitle: TLabel;
+    imgBookingCorner: TImage;
+    imgBookingDecor: TImage;
+    sbBookings: TScrollBox;
+    redtBooking: TRichEdit;
+    btnGetBooking: TButton;
+    btnSaveInvoice: TButton;
     procedure FormCreate(Sender: TObject);
-    procedure posHomePageImages();
-    procedure initVarsHomePage();
     procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
@@ -62,7 +67,6 @@ type
       Shift: TShiftState; X, Y: Integer);
     procedure lblFindMoreClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure createInfoPage();
     procedure imgArrowUpClick(Sender: TObject);
     procedure imgArrowDownClick(Sender: TObject);
     procedure lblDestinationsOnClick(Sender : TObject);
@@ -74,27 +78,45 @@ type
     procedure edtHighPriceClick(Sender: TObject);
     procedure cbFiltersOnChange(Sender: TObject);
     procedure btnApplyFiltersOnClick(Sender: TObject);
-    procedure createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
+
+    { Hotel Page Buttons }
     procedure imgAboveRightClick(Sender: TObject);
     procedure imgAboveLeftClick(Sender: TObject);
     procedure imgBelowRightClick(Sender: TObject);
     procedure imgBelowLeftClick(Sender: TObject);
+
+    { Create Pages }
+    procedure createBookingsPage();
+    procedure createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
+    procedure createInfoPage();
+    procedure posHomePageImages();
+    procedure initVarsHomePage();
+    procedure btnGetBookingClick(Sender: TObject);
+    procedure btnSaveInvoiceClick(Sender: TObject);
+
   private
   { Private Scope }
-    arrUser : array[1..4] of string;
     { All Destinations }
     cbFilters : TComboBox;
     edtHighPrice, edtLowPrice : TEdit;
     btnApplyFilters : TButton;
     sFilterDestinations : string;
     rLowPrice, rHighPrice : real;
+
     { Hotels }
     tfile : textfile;
     ihotel, ihotel2, imaxhotel, ihotelimage, ihotelimage2 : integer;
+
     { Object }
     objAdvertiser : TAdvertiser;
+
+    { Booking }
+    iBookingID : integer;
+
   public
   { Public Scope }
+    objUser : TUser;
+
     { Verklaar die kleure sodat alle vorme kan gebruik }
     clPrimary, clSecondary, clAccent, clTextColor : TColor;
     { Menu Bar }
@@ -123,11 +145,11 @@ begin
    On Form Activate
    ================
   }
-//  pcPages.ActivePageIndex := 0; //! remove uncomment
+//  pcPages.ActivePageIndex := 0; //! remove uncoment remove
 
-  loadUserData(arrUser);
   createMenuBar(tsHome, tsHome);
   createMenuBar(sbInfo, sbInfo);
+  createBookingsPage();
 end;
 
 procedure TfrmFlylee.FormCreate(Sender: TObject);
@@ -155,6 +177,9 @@ begin
   imaxhotel := 14;
   ihotelimage := 1;
   ihotelimage2 := 2;
+
+  redtBooking.Paragraph.TabCount := 1;
+  redtBooking.Paragraph.Tab[0] := 70;
 
    { Load Images }
   imgCorner.Picture.LoadFromFile('Assets/cornerDecor.png');
@@ -462,11 +487,98 @@ begin
 
 end;
 
+procedure TfrmFlylee.btnGetBookingClick(Sender: TObject);
+var
+  sline : string;
+begin
+  {
+   =============================
+   Create user's Booking Invoice
+   =============================
+  }
+
+  generateUserInvoice(objUser.getBookingID, redtBooking, objUser.getName, objUser.getLastName, inttostr(objUser.getAge));
+
+end;
+
+procedure TfrmFlylee.btnSaveInvoiceClick(Sender: TObject);
+begin
+  redtBooking.Lines.SaveToFile('Invoice.rtf');
+  Messagedlg('Your Invoice has been saved to your computer.', TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
+end;
+
 procedure TfrmFlylee.cbFiltersOnChange(Sender: TObject);
 begin
   sFilterDestinations := cbFilters.text;
   clearScrollBox(sbDestinations);
   createDestinationsPage();
+end;
+
+procedure TfrmFlylee.createBookingsPage();
+var
+
+  sDestination : string;
+  rCost, rHours : real;
+
+begin
+  {
+   ====================
+   Create Bookings Page
+   ====================
+  }
+
+  with lblBookingsTitle do
+  begin
+    setLabelFont(lblBookingsTitle, 26, True);
+    font.color := clTextColor;
+    left := 40;
+  end;
+
+  with imgBookingCorner do
+  begin
+    Width := imgCorner.Width;
+    Height := imgCorner.Height;
+    Top := tsHotels.top - 30;
+    Left := tsHotels.Width - Width + 5;
+    picture.LoadFromFile('Assets/cornerDecor.png');
+  end;
+
+  with imgBookingDecor do
+  begin
+    top := 50;
+    left := tsHotels.Left + tsHotels.Width - 230;
+    Width := 100;
+    Height := 100;
+    Picture.LoadFromFile('Assets/decor.png');
+  end;
+
+  with redtBooking do
+  begin
+    top := 150;
+    left := 700;
+    height := 400;
+    width := 400;
+    ReadOnly := true;
+  end;
+
+  with btnGetBooking do
+  begin
+    font.name := 'Roboto';
+    font.Size := 14;
+    centerComponent(btnGetBooking, redtBooking);
+    top := redtBooking.top - Height - 15;
+  end;
+
+  with btnSaveInvoice do
+  begin
+    font.name := 'Roboto';
+    font.Size := 14;
+    centerComponent(btnSaveInvoice, redtBooking);
+    top := redtBooking.top + redtBooking.Height + 15;
+  end;
+
+  getBooking(sDestination, rHours, rCost, iBookingID);
+  createDestinationBox(40, 100, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, sbBookings);
 end;
 
 procedure TfrmFlylee.createDestinationsPage();
@@ -923,7 +1035,7 @@ begin
     Parent := AParent;
     setLabelFont(lblUsername, 16, true);
     font.color := clTextColor;
-    caption := arrUser[1];
+    caption := objUser.getName;
     top := 30;
     left := imgProfile.left + imgProfile.Width + 10;
   end;
