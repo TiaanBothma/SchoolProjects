@@ -72,12 +72,12 @@ object dmData: TdmData
     Parameters = <>
     SQL.Strings = (
       'select * from tblFlights')
-    Left = 152
+    Left = 168
     Top = 424
   end
   object dsQry: TDataSource
     DataSet = qryData
-    Left = 224
+    Left = 240
     Top = 424
   end
 end

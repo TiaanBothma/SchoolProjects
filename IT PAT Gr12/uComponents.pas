@@ -6,12 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, JPEG, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
-  System.Skia, Vcl.Skia, dmData_u,
+  System.Skia, Vcl.Skia,
   { Helper Files }
-  uFunc, uDBCalls;
+  uFunc, uDBCalls, dmData_u, clsUser_u;
 
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
-procedure createDestinationBox(iLeft, itop : Integer; sImage, sTitle, sHours : string; rCost : real ; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var user: TUser; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
 
@@ -185,7 +185,7 @@ begin
   end;
 end;
 
-procedure createDestinationBox(iLeft, itop : Integer; sImage, sTitle, sHours : string; rCost : real ; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var user: TUser; sbPage : TScrollBox);
 var
 
   imgLocation, imgIcon : TImage;
@@ -194,9 +194,9 @@ var
 
 begin
   {
-   ===============================
-   Maak die Top Destinations boxes
-   ===============================
+   ========================
+   Maak die Destination box
+   ========================
   }
 
   imgLocation := TImage.Create(sbpage);
@@ -209,6 +209,8 @@ begin
     Picture.LoadFromFile(simage);
     top := itop;
     left := ileft;
+    Tag := FlightID;
+    OnClick := user.destinationOnClick;
   end;
 
   shpDesc := TShape.Create(sbpage);

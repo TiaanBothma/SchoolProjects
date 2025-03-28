@@ -33,6 +33,7 @@ type
     dgOpenDialog: TOpenDialog;
     btnProfilePic: TButton;
     imgProfilePic: TImage;
+    Button2: TButton;
     procedure FormCreate(Sender: TObject);
     procedure lblLogInMouseEnter(Sender: TObject);
     procedure lblLogInMouseLeave(Sender: TObject);
@@ -44,6 +45,7 @@ type
     procedure Button1Click(Sender: TObject);
     procedure btnProfilePicClick(Sender: TObject);
     procedure posComponents();
+    procedure Button2Click(Sender: TObject);
   private
     { Private declarations }
     sFileName : string; //path to profile pic
@@ -58,7 +60,7 @@ implementation
 
 {$R *.dfm}
 
-uses dmData_u, frmLogIn_u, frmFlylee_u;
+uses dmData_u, frmLogIn_u, frmFlylee_u, frmAdmin_u;
 
 procedure TfrmSignUp.posComponents();
 begin
@@ -205,6 +207,9 @@ begin
       saveProfilePictoDB(sfilename);
 
       tblUsers.post;
+
+      //Save die user locally
+      frmFlylee.objUser := TUser.Create(edtname.text, edtlastname.text, dtpBirthDate.date, cbNotification.Checked, false, 0);
     end;
 
     MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee',TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
@@ -227,12 +232,41 @@ begin
 
       if tblUsers['userid'] = 13
         then
-frmFlylee.objUser := Tuser.create(tblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent'], tblUsers['Flightid']);
-
+        frmFlylee.objUser := Tuser.create(
+          tblUsers['Name'],
+          tblUsers['LastName'],
+          tblUsers['birthDate'],
+          tblUsers['isSubscribed'],
+          tblUsers['isAdmin'],
+          tblusers['totalSpent']);
   end;
 
   frmSignUp.Hide;
   frmFlylee.show;
+end;
+
+procedure TfrmSignUp.Button2Click(Sender: TObject);
+begin
+    dmData.iUserId := 13;
+
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+      if tblUsers['userid'] = 13
+        then
+        frmFlylee.objUser := Tuser.create(
+          tblUsers['Name'],
+          tblUsers['LastName'],
+          tblUsers['birthDate'],
+          tblUsers['isSubscribed'],
+          tblUsers['isAdmin'],
+          tblusers['totalSpent']);
+  end;
+
+  frmAdmin.show;
+  frmSignUp.Hide;
 end;
 
 procedure TfrmSignUp.btnProfilePicClick(Sender: TObject);

@@ -332,6 +332,15 @@ object frmSignUp: TfrmSignUp
     WordWrap = True
     OnClick = btnProfilePicClick
   end
+  object Button2: TButton
+    Left = 488
+    Top = 359
+    Width = 92
+    Height = 53
+    Caption = 'Button2'
+    TabOrder = 9
+    OnClick = Button2Click
+  end
   object dgOpenDialog: TOpenDialog
     Left = 352
     Top = 24

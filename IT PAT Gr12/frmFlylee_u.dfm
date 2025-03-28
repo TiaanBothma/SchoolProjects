@@ -148,6 +148,7 @@ object frmFlylee: TfrmFlylee
     Height = 809
     ActivePage = tsBookings
     TabOrder = 0
+    OnChange = pcPagesChange
     object tsHome: TTabSheet
       Caption = 'Home'
       object imgUnderline: TImage

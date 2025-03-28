@@ -145,6 +145,10 @@
         <DCCReference Include="uComponents.pas"/>
         <DCCReference Include="clsAdvertiser_u.pas"/>
         <DCCReference Include="clsUser_u.pas"/>
+        <DCCReference Include="frmAdmin_u.pas">
+            <Form>frmAdmin</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

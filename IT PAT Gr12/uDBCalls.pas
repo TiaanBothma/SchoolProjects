@@ -10,15 +10,43 @@ uses
 
 { Declare procedures/functions }
 procedure loadProfilePic(var imgProfile : TImage; iiduser : integer);
-procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real ; var arrIDs : array of integer);
 procedure saveProfilePictoDB(var sfilename : string);
 function getUserReviews(iFieldCount : integer) : TArray<String>;
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var arrIDs : array of integer; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
 procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of real; var tfile : textfile);
-procedure getBooking(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
+procedure getBookingDetails(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
 procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
+procedure updateStatsTable();
 
 implementation
+
+procedure updateStatsTable();
+begin
+  with dmData do
+  begin
+    tblStats.open;
+    tblStats.first;
+
+    tblFLights.open;
+    tblFlights.first;
+
+    while not tblFlights.Eof do
+    begin
+
+      if tblFlights['FlightID'] = tblStats['Flightid']
+        then begin
+          tblStats.edit;
+          tblStats['Revenue'] := tblStats['Bookings'] * tblFlights['Price'];
+          tblStats.post;
+        end;
+
+      tblFlights.next;
+    end;
+    tblStats.next;
+  end;
+
+end;
 
 procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
 var
@@ -80,7 +108,7 @@ begin
   redtInvoice.Lines.Add('Thank you for booking with us!');
 end;
 
-procedure getBooking(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
+procedure getBookingDetails(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
 begin
 
   with dmData do
@@ -99,7 +127,7 @@ begin
         begin
           if tblFlights['FlightId'] = tblUsers['FlightId']
           then begin
-            iBookingID := tblFlights['FlightId'];
+            iBookingID := tblUsers['FlightId'];
             sDestination := tblFlights['to'];
             rHours := tblFlights['tripLength'];
             rCost := tblFlights['price'];
@@ -153,13 +181,12 @@ begin
   closefile(tfile);
 end;
 
-procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
+procedure loadAllDestinations(var arrDestinations : array of string; var arrHours : array of real; var arrCosts : array of real; var arrIDs : array of integer; var icount : integer; sfilterby : string; rlowprice, rhighprice : real);
 var
-
   I, J : integer;
   rlorrie : real;
   slorrie : string;
-
+  ilorrie : integer;
 begin
   icount := 0;
 
@@ -174,6 +201,7 @@ begin
         arrDestinations[icount] := tblFlights['to'];
         arrHours[icount] := tblFlights['tripLength'];
         arrCosts[icount] := tblFlights['price'];
+        arrIDs[icount] := tblFlights['FlightID'];
 
         inc(icount);
         tblFlights.Next;
@@ -192,6 +220,7 @@ begin
           arrDestinations[icount] := tblFlights['to'];
           arrHours[icount] := tblFlights['tripLength'];
           arrCosts[icount] := tblFlights['price'];
+          arrIDs[icount] := tblFlights['FlightID'];
 
           inc(icount);
         end;
@@ -219,6 +248,10 @@ begin
         slorrie := arrDestinations[i];
         arrDestinations[i] := arrDestinations[j];
         arrDestinations[j] := slorrie;
+
+        ilorrie := arrIDs[i];
+        arrIDs[i] := arrIDs[j];
+        arrIDs[j] := ilorrie;
       end;
     end;
   end
@@ -240,9 +273,12 @@ begin
         rlorrie := arrHours[i];
         arrHours[i] := arrHours[j];
         arrHours[j] := rlorrie;
+
+        ilorrie := arrIDs[i];
+        arrIDs[i] := arrIDs[j];
+        arrIDs[j] := ilorrie;
       end;
     end;
-
   end
   else
   begin
@@ -262,10 +298,13 @@ begin
         rlorrie := arrCosts[i];
         arrCosts[i] := arrCosts[j];
         arrCosts[j] := rlorrie;
+
+        ilorrie := arrIDs[i];
+        arrIDs[i] := arrIDs[j];
+        arrIDs[j] := ilorrie;
       end;
     end;
   end;
-
 end;
 
 function getUserReviews(iFieldCount : integer) : TArray<String>;
@@ -325,7 +364,7 @@ begin
   result := arrUserReview;
 end;
 
-procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real);
+procedure loadTopDestinations(var arrDestination : array of string; var arrHours : array of real; var arrCost : array of real ; var arrIDs : array of integer);
 var
 
   icount : integer;
@@ -334,6 +373,7 @@ var
   { lorries }
   slorrie : string;
   rlorrie : real;
+  ilorrie : integer;
 begin
   {
    ===================================================================
@@ -347,25 +387,24 @@ begin
   with dmData do
   begin
     tblFlights.open;
-    tblFLights.first;
+    tblFlights.first;
     while not tblFlights.Eof do
     begin
-      arrDestination[icount] := tblFLights['to'];
+      arrDestination[icount] := tblFlights['to'];
       arrHours[icount] := tblFlights['tripLength'];
       arrCost[icount] := tblFlights['price'];
+      arrIDs[icount] := tblFlights['FlightID'];
       arrPopularity[icount] := 0;
 
       tblStats.open;
       tblStats.first;
       while not tblStats.Eof do
       begin
-        if tblStats['FlightID'] = tblFlights['FlightID']
-          then begin
-            arrPopularity[icount] := (tblStats['clicks'] + tblStats['bookings']) / 2;
-            break;
-          end;
-
-
+        if tblStats['FlightID'] = tblFlights['FlightID'] then
+        begin
+          arrPopularity[icount] := (tblStats['clicks'] + tblStats['bookings']) / 2;
+          break;
+        end;
         tblStats.next;
       end;
 
@@ -380,28 +419,32 @@ begin
     for J := I + 1 to icount - 1 do
     begin
       if arrPopularity[i] < arrPopularity[j] then
-        begin
-          // Swap arrDestination
-          slorrie := arrDestination[I];
-          arrDestination[I] := arrDestination[J];
-          arrDestination[J] := slorrie;
+      begin
+        // Swap arrDestination
+        slorrie := arrDestination[I];
+        arrDestination[I] := arrDestination[J];
+        arrDestination[J] := slorrie;
 
-          // Swap arrDays
-          rlorrie := arrHours[I];
-          arrHours[I] := arrHours[J];
-          arrHours[J] := rlorrie;
+        // Swap arrHours
+        rlorrie := arrHours[I];
+        arrHours[I] := arrHours[J];
+        arrHours[J] := rlorrie;
 
-          // Swap arrCost
-          rlorrie := arrCost[I];
-          arrCost[I] := arrCost[J];
-          arrCost[J] := rlorrie;
+        // Swap arrCost
+        rlorrie := arrCost[I];
+        arrCost[I] := arrCost[J];
+        arrCost[J] := rlorrie;
 
-          // Swap arrPopularity
-          rlorrie := arrPopularity[I];
-          arrPopularity[I] := arrPopularity[J];
-          arrPopularity[J] := rlorrie;
-        end;
+        // Swap arrIDs
+        ilorrie := arrIDs[I];
+        arrIDs[I] := arrIDs[J];
+        arrIDs[J] := ilorrie;
 
+        // Swap arrPopularity
+        rlorrie := arrPopularity[I];
+        arrPopularity[I] := arrPopularity[J];
+        arrPopularity[J] := rlorrie;
+      end;
     end;
 end;
 
@@ -414,9 +457,9 @@ var
 
 begin
   {
-   ==================================================================================
+   ==========================================================================
    Laai die user se profiel prent van Access database en wys dit in 'n TImage
-   ==================================================================================
+   ==========================================================================
   }
   bfound := false;
 

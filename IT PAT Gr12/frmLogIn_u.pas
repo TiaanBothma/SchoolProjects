@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, pngimage, IdHashMessageDigest, IdGlobal;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, pngimage, IdHashMessageDigest, IdGlobal, clsUser_u;
 
 type
   TfrmLogIn = class(TForm)
@@ -133,7 +133,7 @@ begin
           iUserid := tblUsers['userId'];
 
           { User Object }
-          frmFlylee.objUser.create(TblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent'], -1);
+          frmFlylee.objUser := TUser.create(TblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent']);
 
           MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
           frmFlylee.Show;

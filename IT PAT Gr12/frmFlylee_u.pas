@@ -56,32 +56,40 @@ type
     btnGetBooking: TButton;
     btnSaveInvoice: TButton;
     procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+
+    { Home Page }
+    procedure shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure posHomePageImages();
+    procedure initVarsHomePage();
+
+    { Info Page }
+    procedure imgArrowUpClick(Sender: TObject);
+    procedure imgArrowDownClick(Sender: TObject);
+
+    { Destination Page }
+    procedure createDestinationsPage();
+    procedure edtLowPriceClick(Sender: TObject);
+    procedure edtHighPriceClick(Sender: TObject);
+    procedure cbFiltersOnChange(Sender: TObject);
+    procedure btnApplyFiltersOnClick(Sender: TObject);
+    procedure lblFindMoreClick(Sender: TObject);
+
+    { Menu Bar }
     procedure createMenuBar(AOwner : TComponent; AParent : TWinControl);
+    procedure ProfileOnClick(Sender: TObject);
+    procedure lbProfileSettingsOnClick(Sender: TObject);
+    procedure lblDestinationsOnClick(Sender : TObject);
+    procedure lblHotelsOnClick(Sender : TObject);
+    procedure lblFlightsOnClick(Sender : TObject);
+    procedure lblBookingsOnClick(Sender : TObject);
     procedure lblDestinationsMouseEnter(Sender: TObject);
     procedure lblDestinationsMouseLeave(Sender: TObject);
     procedure lblHotelsMouseEnter(Sender: TObject);
     procedure lblHotelsMouseLeave(Sender: TObject);
     procedure lblBookingsMouseEnter(Sender: TObject);
     procedure lblBookingsMouseLeave(Sender: TObject);
-    procedure shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
-    procedure lblFindMoreClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure imgArrowUpClick(Sender: TObject);
-    procedure imgArrowDownClick(Sender: TObject);
-    procedure lblDestinationsOnClick(Sender : TObject);
-    procedure lblHotelsOnClick(Sender : TObject);
-    procedure lblFlightsOnClick(Sender : TObject);
-    procedure lblBookingsOnClick(Sender : TObject);
-    procedure createDestinationsPage();
-    procedure edtLowPriceClick(Sender: TObject);
-    procedure edtHighPriceClick(Sender: TObject);
-    procedure cbFiltersOnChange(Sender: TObject);
-    procedure btnApplyFiltersOnClick(Sender: TObject);
-
-    { Menu Bar }
-    procedure ProfileOnClick(Sender: TObject);
-    procedure lbProfileSettingsOnClick(Sender: TObject);
 
     { Hotel Page Buttons }
     procedure imgAboveRightClick(Sender: TObject);
@@ -93,10 +101,9 @@ type
     procedure createBookingsPage();
     procedure createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
     procedure createInfoPage();
-    procedure posHomePageImages();
-    procedure initVarsHomePage();
     procedure btnGetBookingClick(Sender: TObject);
     procedure btnSaveInvoiceClick(Sender: TObject);
+    procedure pcPagesChange(Sender: TObject);
 
   private
   { Private Scope }
@@ -123,10 +130,12 @@ type
 
     { Verklaar die kleure sodat alle vorme kan gebruik }
     clPrimary, clSecondary, clAccent, clTextColor : TColor;
+
     { Menu Bar }
     lblDestinations, lblBookings, lblHotels, lblUserName : TLabel;
     imgTitle, imgProfile : TImage;
     lbProfileSettings : TListBox;
+
     { View Review }
     ireviewcount, iMaxReviewCount : integer;
   end;
@@ -141,7 +150,7 @@ implementation
 
 {$R *.dfm}
 
-uses frmSignUp_u, dmData_u;
+uses frmSignUp_u, dmData_u, frmAdmin_u;
 
 procedure TfrmFlylee.FormActivate(Sender: TObject);
 begin
@@ -150,11 +159,14 @@ begin
    On Form Activate
    ================
   }
+
+
 //  pcPages.ActivePageIndex := 0; //! remove uncoment remove
 
+  createDestinationsPage();
   createMenuBar(tsHome, tsHome);
   createMenuBar(sbInfo, sbInfo);
-  createBookingsPage();
+  createInfoPage();
 end;
 
 procedure TfrmFlylee.FormCreate(Sender: TObject);
@@ -251,8 +263,6 @@ begin
  { positions and scales }
  posHomePageImages();
  initVarsHomePage();
- createInfoPage();
- createDestinationsPage();
  createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
 end;
 
@@ -313,9 +323,9 @@ begin
 
   with lblFindMore do
   begin
-    setLabelFont(lblFindMore, 14, true);
+    setlabelFont(lblFindMore, 14, true);
     font.color := clWhite;
-    //Center horizontal and vertical
+    // Center horizontal and vertical
     centerComponent(lblFindMore, shpFindMore);
   end;
 
@@ -403,7 +413,10 @@ begin
     end;
     1: objUser.setIsSubscribed(true);
     2: pcPages.ActivePage := tsBookings;
-   // 3: ! Remove
+    3: begin
+      frmAdmin.show;
+      frmFlylee.hide;
+    end;
   end;
 
   //Verwyder die listbox weer
@@ -603,8 +616,8 @@ begin
     top := redtBooking.top + redtBooking.Height + 15;
   end;
 
-  getBooking(sDestination, rHours, rCost, iBookingID);
-  createDestinationBox(40, 100, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, sbBookings);
+  getBookingDetails(sDestination, rHours, rCost, iBookingID);
+  createDestinationBox(40, 100, ibookingid, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, objUser, sbBookings);
 end;
 
 procedure TfrmFlylee.createDestinationsPage();
@@ -613,6 +626,7 @@ var
   lblPriceRange, lblFilterBy, lblTopDest, lblAllDestinations : TLabel;
 
   arrDestinations : array[0..100] of string;
+  arrIDs : array[0..100] of integer;
   arrHours : array[0..100] of real;
   arrCosts : array[0..100] of real;
   I, ileft, itop, icount : integer;
@@ -684,13 +698,13 @@ begin
   end;
 
   //Create top selling destination boxes
-  loadTopDestinations(arrDestinations, arrHours, arrCosts);
+  loadTopDestinations(arrDestinations, arrHours, arrCosts, arrIDs);
   ileft := 70;
 
   //1 tot 3 want ons soek net die top 3
   for I := 1 to 3 do
   begin
-    createDestinationBox(ileft, 125, 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbDestinations);
+    createDestinationBox(ileft, 125, arrIDs[i-1], 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], objUser, sbDestinations);
     inc(ileft, 440);
   end;
 
@@ -706,7 +720,7 @@ begin
     top := 600;
   end;
 
-  loadAllDestinations(arrDestinations, arrHours, arrCosts, icount, sFilterDestinations, rlowprice, rhighprice);
+  loadAllDestinations(arrDestinations, arrHours, arrCosts, arrIDs, icount, sFilterDestinations, rlowprice, rhighprice);
   ileft := 70;
   itop := 650;
   iprevrandom := -1;
@@ -719,7 +733,7 @@ begin
     until irandom <> iprevRandom;
     iprevRandom := irandom;
 
-    createDestinationBox(ileft, itop, 'Assets/Travel/' + inttostr(irandom) + '.jpg', arrDestinations[i], floattostr(arrHours[i]) + ' Hour Flight', arrCosts[i], sbDestinations);
+    createDestinationBox(ileft, itop, arrIds[i], 'Assets/Travel/' + inttostr(irandom) + '.jpg', arrDestinations[i], floattostr(arrHours[i]) + ' Hour Flight', arrCosts[i], objUser, sbDestinations);
     inc(ileft, 440);
     if ((i + 1) mod 3 = 0) and (i <> 0) then
     begin
@@ -830,6 +844,7 @@ var
   arrDestinations : array[0..100] of string;
   arrHours : array[0..100] of real;
   arrCosts : array[0..100] of real;
+  arrIds : array[0..100] of integer;
   I: Integer;
   ileft : integer;
 
@@ -885,13 +900,13 @@ begin
   end;
 
   //Create top selling destination boxes
-  loadTopDestinations(arrDestinations, arrHours, arrCosts);
+  loadTopDestinations(arrDestinations, arrHours, arrCosts, arrIds);
   ileft := 70;
 
   //1 tot 3 want ons soek net die top 3
   for I := 1 to 3 do
   begin
-    createDestinationBox(ileft, 800, 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], sbInfo);
+    createDestinationBox(ileft, 800, arrIds[i-1], 'Assets/Travel/' + inttostr(i) + '.jpg', arrDestinations[i-1], floattostr(arrHours[i-1]) + ' Hour Flight' , arrCosts[i-1], objUser, sbInfo);
     inc(ileft, 440);
   end;
 
@@ -938,6 +953,11 @@ begin
   end;
 
   createViewReviewBox(ireviewcount, sbInfo);
+end;
+
+procedure TfrmFlylee.pcPagesChange(Sender: TObject);
+begin
+  createBookingsPage();
 end;
 
 procedure TfrmFlylee.posHomePageImages();

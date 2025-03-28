@@ -10,7 +10,8 @@ uses
   uFunc in 'uFunc.pas',
   uComponents in 'uComponents.pas',
   clsAdvertiser_u in 'clsAdvertiser_u.pas',
-  clsUser_u in 'clsUser_u.pas';
+  clsUser_u in 'clsUser_u.pas',
+  frmAdmin_u in 'frmAdmin_u.pas' {frmAdmin};
 
 {$R *.res}
 
@@ -21,5 +22,6 @@ begin
   Application.CreateForm(TdmData, dmData);
   Application.CreateForm(TfrmLogIn, frmLogIn);
   Application.CreateForm(TfrmFlylee, frmFlylee);
+  Application.CreateForm(TfrmAdmin, frmAdmin);
   Application.Run;
 end.

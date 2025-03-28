@@ -3,7 +3,12 @@ unit clsUser_u;
 interface
 
 uses
-  System.SysUtils, System.DateUtils, dmData_u;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, JPEG, Vcl.StdCtrls,
+  Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
+  System.Skia, Vcl.Skia,
+  { Helper Files }
+  dmData_u, uDBCalls;
 
 type
   TUser = class(TObject)
@@ -19,7 +24,7 @@ type
 
   public
     { Constructor }
-    constructor Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real; iBookingID: Integer);
+    constructor Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real);
 
     { Accessors }
     function getName: string;
@@ -40,11 +45,12 @@ type
 
     { Auxiliary }
     procedure calculateAge(dtBirthDate: TDateTime);
+    procedure destinationOnClick(Sender : TObject);
   end;
 
 implementation
 
-constructor TUser.Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real; iBookingID: Integer);
+constructor TUser.Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real);
 begin
   fName := sName;
   fLastName := sLastName;
@@ -52,7 +58,7 @@ begin
   fIsSubscribed := bIsSubscribed;
   fIsAdmin := bIsAdmin;
   fTotalSpent := rTotalSpent;
-  fBookingID := iBookingID;
+  fBookingID := 0;
 end;
 
 function TUser.getName: string;
@@ -216,6 +222,87 @@ begin
   end;
 end;
 
+procedure TUser.destinationOnClick(Sender: TObject);
+var
+  iFlightID : integer;
+begin
+  {
+   ==================================
+   As die user op n destination click
+   ==================================
+  }
+
+  //Kyk watse image die user op geclick het
+  if Sender is TImage
+    then begin
+      iFlightID := TImage(sender).Tag;
+    end;
+
+  if Messagedlg('Do you want to book this flight?', TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbCancel,TMsgDlgBtn.mbOK], 0) = mrOK
+    then begin
+      with dmData do
+      begin
+        //Check of die flight vol is
+        tblFlights.open;
+        tblFlights.first;
+        while not tblFlights.Eof do
+        begin
+          if tblFlights['Flightid'] = iFlightid
+            then begin
+              if tblFlights['isFull'] = False
+                then setBookingID(iFlightID)  //Save dit in die user tabel
+                else showmessage('This Flight is Full');
+
+              break;
+            end;
+
+          tblFlights.next;
+        end;
+
+        //Save dit in die stats tabel
+        tblStats.Open;
+        tblStats.first;
+        while not tblStats.Eof do
+        begin
+          if tblStats['Flightid'] = iFlightid
+          then begin
+            tblStats.edit;
+            tblStats['Clicks'] := tblStats['Clicks'] + 1;
+            tblStats['bookings'] := tblStats['bookings'] + 1;
+            tblStats['dateRecorded'] := date();
+            tblStats.post;
+            updateStatsTable();
+
+            break;
+          end;
+
+          tblStats.next;
+        end;
+      end;
+    end
+    else begin
+      //Update die clicks in die Stats table
+      with dmdata do
+      begin
+        tblStats.open;
+        tblStats.first;
+        while not tblStats.Eof do
+        begin
+          if tblStats['Flightid'] = iFlightID
+            then begin
+              tblStats.edit;
+              tblStats['clicks'] := tblStats['clicks'] + 1;
+              tblStats.post;
+            end;
+
+
+          tblStats.next;
+        end;
+      end;
+    end;
+
+end;
+
 procedure TUser.setBookingID(iBookingID: Integer);
 begin
   fBookingID := iBookingID;
@@ -239,6 +326,7 @@ begin
       tblUsers.next;
     end;
   end;
+
 end;
 
 procedure TUser.calculateAge(dtBirthDate : TDateTime);
@@ -247,4 +335,3 @@ begin
 end;
 
 end.
-
