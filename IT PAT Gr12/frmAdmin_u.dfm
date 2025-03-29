@@ -4,7 +4,7 @@ object frmAdmin: TfrmAdmin
   Caption = 'Admin'
   ClientHeight = 621
   ClientWidth = 1228
-  Color = clBtnFace
+  Color = clCream
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -12
@@ -184,5 +184,82 @@ object frmAdmin: TfrmAdmin
     Caption = 'Sorting in ASC order'
     TabOrder = 2
     OnClick = cbSortingOrderClick
+  end
+  object btbtnSwitch: TBitBtn
+    Left = 1088
+    Top = 415
+    Width = 132
+    Height = 50
+    Caption = '&Switch DB'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Roboto'
+    Font.Style = [fsBold]
+    Kind = bkRetry
+    NumGlyphs = 2
+    ParentFont = False
+    TabOrder = 3
+    OnClick = btbtnSwitchClick
+  end
+  object btnSearch: TButton
+    Left = 216
+    Top = 368
+    Width = 120
+    Height = 40
+    Caption = 'Search Record'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 4
+    OnClick = btnSearchClick
+  end
+  object btbtnClose: TBitBtn
+    Left = 1128
+    Top = 576
+    Width = 92
+    Height = 37
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    Kind = bkClose
+    NumGlyphs = 2
+    ParentFont = False
+    TabOrder = 5
+  end
+  object btnAdd: TButton
+    Left = 352
+    Top = 369
+    Width = 120
+    Height = 39
+    Caption = 'Add Record'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 6
+    OnClick = btnAddClick
+  end
+  object pnlSelected: TPanel
+    Left = 1035
+    Top = 360
+    Width = 185
+    Height = 41
+    Caption = 'tblFlights'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 7
   end
 end

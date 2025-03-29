@@ -100,7 +100,4 @@ begin
   //Gooi die md5 object uit die RAM uit
   md5.Free;
 end;
-
-
-
 end.
