@@ -107,6 +107,9 @@ type
     procedure imgBelowRightClick(Sender: TObject);
     procedure imgBelowLeftClick(Sender: TObject);
 
+    { Booking Page }
+    procedure setStars(irating : integer);
+
     { Create Pages }
     procedure createBookingsPage();
     procedure createHotelPage(iCountHotel, iCountHotel2, iimage1, iimage2 : integer);
@@ -141,6 +144,8 @@ type
     { Booking }
     iBookingID : integer;
 
+    { Review }
+    istars : integer;
   public
   { Public Scope }
     objUser : TUser;
@@ -419,10 +424,23 @@ end;
 procedure TfrmFlylee.lblPostClick(Sender: TObject);
 begin
   with dmData do
-  begin
+    begin
+      tblReviews.open;
+      tblReviews.last;
+      tblReviews.insert;
 
-  end;
+      tblReviews['userID'] := iuserid;
+      tblReviews['FlightID'] := objUser.getBookingID;
+      tblReviews['Message'] := redtMessage.lines.Text;
+      tblReviews['to'] := objUser.getBookingDestination;
+      tblReviews['reviewDate'] := date();
+      tblReviews['Stars'] := istars;
+      tblReviews['wouldRecommend'] := cbWouldRecommend.Checked;
+
+      tblReviews.post;
+    end;
 end;
+
 
 procedure TfrmFlylee.lbProfileSettingsOnClick(Sender: TObject);
 var
@@ -528,27 +546,27 @@ end;
 
 procedure TfrmFlylee.imgStar1Click(Sender: TObject);
 begin
-  imgStar1.Picture.LoadFromFile('Assets/starFilled.png');
+  setStars(1);
 end;
 
 procedure TfrmFlylee.imgStar2Click(Sender: TObject);
 begin
-  imgStar2.Picture.LoadFromFile('Assets/starFilled.png');
+  setStars(2);
 end;
 
 procedure TfrmFlylee.imgStar3Click(Sender: TObject);
 begin
-  imgStar3.Picture.LoadFromFile('Assets/starFilled.png');
+  setStars(3);
 end;
 
 procedure TfrmFlylee.imgStar4Click(Sender: TObject);
 begin
-  imgStar4.Picture.LoadFromFile('Assets/starFilled.png');
+  setStars(4);
 end;
 
 procedure TfrmFlylee.imgStar5Click(Sender: TObject);
 begin
-  imgStar5.Picture.LoadFromFile('Assets/starFilled.png');
+  setStars(5);
 end;
 
 procedure TfrmFlylee.btnApplyFiltersOnClick(Sender: TObject);
@@ -1156,6 +1174,26 @@ end;
 procedure TfrmFlylee.redtMessageClick(Sender: TObject);
 begin
   redtMessage.clear;
+end;
+
+procedure TfrmFlylee.setStars(irating: integer);
+begin
+  if iRating >= 1 then imgStar1.Picture.LoadFromFile('Assets/starFilled.png')
+  else imgStar1.Picture.LoadFromFile('Assets/star.png');
+
+  if iRating >= 2 then imgStar2.Picture.LoadFromFile('Assets/starFilled.png')
+  else imgStar2.Picture.LoadFromFile('Assets/star.png');
+
+  if iRating >= 3 then imgStar3.Picture.LoadFromFile('Assets/starFilled.png')
+  else imgStar3.Picture.LoadFromFile('Assets/star.png');
+
+  if iRating >= 4 then imgStar4.Picture.LoadFromFile('Assets/starFilled.png')
+  else imgStar4.Picture.LoadFromFile('Assets/star.png');
+
+  if iRating >= 5 then imgStar5.Picture.LoadFromFile('Assets/starFilled.png')
+  else imgStar5.Picture.LoadFromFile('Assets/star.png');
+
+  istars := irating;
 end;
 
 procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;

@@ -339,7 +339,7 @@ begin
         arrUserReview[0] := Copy(smessage, 1, imiddle) + #13 + Copy(smessage, imiddle + 1, length(smessage) - imiddle);
 
         arruserReview[1] := tblReviews['to'];
-        arruserReview[3] := tblReviews['reviewDate'];
+        arruserReview[3] := formatDateTime('dd mmm yyyy', tblReviews['reviewDate']);
 
         //Kry die user se naam
         tblUsers.open;

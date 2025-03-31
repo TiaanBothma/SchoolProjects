@@ -192,7 +192,7 @@ begin
     parent := sbPage;
     setLabelFont(lblDate, 12, true);
     font.Color := rgb(9,98,130);
-    caption := FormatDateTime('dd mmm yyyy', strtodate(getUserReviews(iReviewCount)[3]));
+    caption := getUserReviews(iReviewCount)[3];
     left := shpReview.Left + shpReview.Width - Width - 20;
     top := shpReview.Top + 20;
   end;

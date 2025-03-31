@@ -34,6 +34,7 @@ type
     function getIsAdmin: Boolean;
     function getTotalSpent: Real;
     function getBookingID: Integer;
+    function getBookingDestination : string;
 
     { Mutators }
     procedure setName(sName: string);
@@ -58,7 +59,24 @@ begin
   fIsSubscribed := bIsSubscribed;
   fIsAdmin := bIsAdmin;
   fTotalSpent := rTotalSpent;
-  fBookingID := 0;
+
+  with dmData do
+  begin
+    tblUsers.open;
+    tblUsers.first;
+
+    while not tblUsers.eof do
+    begin
+      if tblUsers['userid'] = iUserId
+        then begin
+          fBookingID := tblUsers['flightid'];
+
+          break;
+        end;
+
+      tblUsers.next;
+    end;
+  end;
 end;
 
 function TUser.getName: string;
@@ -89,6 +107,28 @@ end;
 function TUser.getTotalSpent: Real;
 begin
   Result := fTotalSpent;
+end;
+
+function TUser.getBookingDestination: string;
+begin
+  with dmData do
+  begin
+    tblFlights.open;
+    tblFlights.first;
+
+    while not tblFLights.eof do
+    begin
+      if tblFlights['flightid'] = getBookingID
+        then begin
+          result := tblFlights['to'];
+
+          break;
+        end;
+
+
+      tblFlights.next;
+    end;
+  end;
 end;
 
 function TUser.getBookingID: Integer;
