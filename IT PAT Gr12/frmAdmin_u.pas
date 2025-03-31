@@ -19,16 +19,37 @@ type
     btbtnClose: TBitBtn;
     btnAdd: TButton;
     pnlSelected: TPanel;
+    btnRemove: TButton;
+    btnUpdate: TButton;
+    pnlLine: TPanel;
+    btnUSAFlights: TButton;
+    btnFlightRevenue: TButton;
+    btnAverageFlight: TButton;
+    btnMinMax: TButton;
+    btnUserFlight: TButton;
+    btnFindFlights: TButton;
+    btnAboveAverage: TButton;
+    btnAvailableFlights: TButton;
     procedure FormCreate(Sender: TObject);
     procedure rgSortClick(Sender: TObject);
     procedure cbSortingOrderClick(Sender: TObject);
     procedure btbtnSwitchClick(Sender: TObject);
     procedure btnSearchClick(Sender: TObject);
     procedure btnAddClick(Sender: TObject);
+    procedure btnRemoveClick(Sender: TObject);
+    procedure btnUpdateClick(Sender: TObject);
+    procedure btnUSAFlightsClick(Sender: TObject);
+    procedure btnFlightRevenueClick(Sender: TObject);
+    procedure btnAverageFlightClick(Sender: TObject);
+    procedure btnMinMaxClick(Sender: TObject);
+    procedure btnUserFlightClick(Sender: TObject);
+    procedure btnFindFlightsClick(Sender: TObject);
+    procedure btnAboveAverageClick(Sender: TObject);
+    procedure btnAvailableFlightsClick(Sender: TObject);
   private
     { Private declarations }
     bSortClick : Boolean;
-    sTable : string;
+    sTable, sIDField : string;
   public
     { Public declarations }
   end;
@@ -54,6 +75,13 @@ begin
     sTable := 'tblReviews';
   if pos('STAT', uppercase(sTable)) > 0 then
     sTable := 'tblStats';
+
+  if sTable = 'tblFlights' then
+    sIDField := 'FlightID'
+  else if sTable = 'tblUsers' then
+    sIDField := 'UserID'
+  else
+    sIDField := 'ID';
 
   pnlSelected.caption := sTable;
 
@@ -150,25 +178,153 @@ begin
 
 end;
 
+procedure TfrmAdmin.btnRemoveClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'DELETE FROM ' + sTable + ' where ' + sIDField + ' = ' + dbGrid.DataSource.DataSet.FieldByName(sIDField).AsString;
+    qryData.Active := true;
+  end;
+end;
+
 procedure TfrmAdmin.btnSearchClick(Sender: TObject);
 var
   iid: integer;
-  sField: string;
 begin
   iid := StrToInt(inputbox('Record ID','What ID of the record do you want to see?', ''));
-
-  if sTable = 'tblFlights' then
-    sField := 'FlightID'
-  else if sTable = 'tblUsers' then
-    sField := 'UserID'
-  else
-    sField := 'ID';
 
   with dmData do
   begin
     qryData.Active := False;
-    qryData.SQL.Text := 'select * from ' + sTable + ' where ' + sField + ' = ' + IntToStr(iid);
+    qryData.SQL.Text := 'select * from ' + sTable + ' where ' + sIDField + ' = ' + IntToStr(iid);
     qryData.Active := True;
+  end;
+end;
+
+procedure TfrmAdmin.btnUpdateClick(Sender: TObject);
+var
+  sid, svalue, sSql : string;
+begin
+  sid := inputbox('Record','Which ID do you want to update in ' + stable + ' ?','');
+
+  if sid = '' then
+  begin
+    showmessage('No ID entered');
+    exit;
+  end;
+
+  if sTable = 'tblFlights' then
+  begin
+    svalue := inputbox('Price','What should be the new price be?','');
+    sSql := 'Update tblFlights SET price = ' + svalue + ' where FlightID = ' + sid;
+  end;
+
+  if sTable = 'tblUsers' then
+  begin
+    svalue := inputbox('Name','What should the new name be?','');
+    sSql := 'Update tblUsers SET name = ' + QuotedStr(svalue) + ' where UserID = ' + sid;
+  end;
+
+  if sTable = 'tblStats' then
+  begin
+    svalue := inputbox('Clicks','What should the new Clicks value be?','');
+    sSql := 'Update tblStats SET clicks = ' + svalue + ' where id = ' + sid;
+  end;
+
+  if sTable = 'tblReviews' then
+  begin
+    svalue := inputbox('Message','What should the new message be?','');
+    sSql := 'Update tblReviews SET message = ' + QuotedStr(svalue) + ' where id = ' + sid;
+  end;
+
+  dmData.qryData.SQL.text := sSql;
+  dmData.qryData.ExecSQL;
+
+end;
+
+procedure TfrmAdmin.btnUSAFlightsClick(Sender: TObject);
+begin
+  { AND/OR }
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select * from tblFlights where to like "%USA%" and (price < 5000 or isFull = false)';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnFlightRevenueClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select dateRecorded, COUNT(id) as [Record Count], SUM(revenue) as [Total Revenue] from tblStats group by dateRecorded having SUM(revenue) > 10000';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnAverageFlightClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select AVG(price) as [Average Price] from tblFlights';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnMinMaxClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select COUNT(flightid) as [Total Flights], MIN(price) as [MIN Price], MAX(price) as [MAX Price] from tblFLights';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnUserFlightClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select U.Userid, U.name, F.to, F.isFull from tblUsers U, tblFlights F where U.flightID = F.FlightID';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnFindFlightsClick(Sender: TObject);
+var
+  sDestination : string;
+begin
+  sDestination := inputbox('Destination','What destination would you like to see?','');
+
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select * from tblFlights where to like ' + QuotedStr('%' + sDestination  + '%');
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnAboveAverageClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select FlightID, To as [Destination], Price from tblFlights where price > (select AVG(price) from tblFlights) order by price ASC';
+    qryData.Active := true;
+  end;
+end;
+
+procedure TfrmAdmin.btnAvailableFlightsClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+    qryData.Active := false;
+    qryData.SQL.text := 'select COUNT(*) as [Available Flights] from tblFlights where isFull = false';
+    qryData.Active := true;
   end;
 end;
 
@@ -176,11 +332,11 @@ procedure TfrmAdmin.cbSortingOrderClick(Sender: TObject);
 begin
   if cbSortingOrder.Checked then
   begin
-    caption := 'Sorting in ASC order';
+    cbSortingOrder.caption := 'Sorting in ASC order';
     bSortClick := cbSortingOrder.Checked;
   end
   else begin
-    caption := 'Sorting in DESC order';
+    cbSortingOrder.caption := 'Sorting in DESC order';
     bSortClick := cbSortingOrder.Checked;
   end;
   rgSort.ItemIndex := -1;
@@ -189,7 +345,7 @@ end;
 procedure TfrmAdmin.FormCreate(Sender: TObject);
 begin
   { Init Vars }
-  bSortClick := false;
+  bSortClick := true;
   rgSort.ItemIndex := -1;
   sTable := 'tblFlights';
 
@@ -202,6 +358,8 @@ begin
     GradientEndColor := frmFlylee.clSecondary;
     FixedColor := clCream;
   end;
+
+  pnlLine.Color := frmFlylee.clPrimary;
 end;
 
 procedure TfrmAdmin.rgSortClick(Sender: TObject);
@@ -213,23 +371,23 @@ begin
     if rgSort.ItemIndex = 0 then
     begin
       if bSortClick then
-        qryData.SQL.Text := 'select * from tblFlights order by from DESC'
+        qryData.SQL.Text := 'select * from tblFlights order by from ASC'
       else
-        qryData.SQL.Text := 'select * from tblFlights order by from ASC';
+        qryData.SQL.Text := 'select * from tblFlights order by from DESC';
     end
     else if rgSort.ItemIndex = 1 then
     begin
       if bSortClick then
-        qryData.SQL.Text := 'select * from tblFlights order by Price DESC'
+        qryData.SQL.Text := 'select * from tblFlights order by Price ASC'
       else
-        qryData.SQL.Text := 'select * from tblFlights order by Price ASC';
+        qryData.SQL.Text := 'select * from tblFlights order by Price DESC';
     end
     else if rgSort.ItemIndex = 2 then
     begin
       if bSortClick then
-        qryData.SQL.Text := 'select * from tblFlights order by tripLength DESC'
+        qryData.SQL.Text := 'select * from tblFlights order by tripLength ASC'
       else
-        qryData.SQL.Text := 'select * from tblFlights order by tripLength ASC';
+        qryData.SQL.Text := 'select * from tblFlights order by tripLength DESC';
     end;
 
     qryData.Active := True;

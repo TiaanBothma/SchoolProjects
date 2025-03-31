@@ -1,7 +1,7 @@
 object frmAdmin: TfrmAdmin
   Left = 0
   Top = 0
-  Caption = 'Admin'
+  Caption = 'Admin Page'
   ClientHeight = 621
   ClientWidth = 1228
   Color = clCream
@@ -182,6 +182,8 @@ object frmAdmin: TfrmAdmin
     Width = 177
     Height = 17
     Caption = 'Sorting in ASC order'
+    Checked = True
+    State = cbChecked
     TabOrder = 2
     OnClick = cbSortingOrderClick
   end
@@ -234,9 +236,9 @@ object frmAdmin: TfrmAdmin
   end
   object btnAdd: TButton
     Left = 352
-    Top = 369
+    Top = 368
     Width = 120
-    Height = 39
+    Height = 40
     Caption = 'Add Record'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
@@ -261,5 +263,171 @@ object frmAdmin: TfrmAdmin
     ParentBackground = False
     ParentFont = False
     TabOrder = 7
+  end
+  object btnRemove: TButton
+    Left = 486
+    Top = 369
+    Width = 120
+    Height = 40
+    Caption = 'Remove Current Record'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 8
+    WordWrap = True
+    OnClick = btnRemoveClick
+  end
+  object btnUpdate: TButton
+    Left = 624
+    Top = 368
+    Width = 120
+    Height = 40
+    Caption = 'Update Record'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 9
+    OnClick = btnUpdateClick
+  end
+  object pnlLine: TPanel
+    Left = 216
+    Top = 424
+    Width = 530
+    Height = 5
+    Color = clWhite
+    ParentBackground = False
+    TabOrder = 10
+  end
+  object btnUSAFlights: TButton
+    Left = 216
+    Top = 448
+    Width = 120
+    Height = 40
+    Caption = 'USA Flights under 5000'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 11
+    WordWrap = True
+    OnClick = btnUSAFlightsClick
+  end
+  object btnFlightRevenue: TButton
+    Left = 352
+    Top = 448
+    Width = 120
+    Height = 40
+    Caption = 'Flight Revenue'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 12
+    OnClick = btnFlightRevenueClick
+  end
+  object btnAverageFlight: TButton
+    Left = 486
+    Top = 448
+    Width = 120
+    Height = 40
+    Caption = 'Average Flight Price'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 13
+    WordWrap = True
+    OnClick = btnAverageFlightClick
+  end
+  object btnMinMax: TButton
+    Left = 624
+    Top = 448
+    Width = 120
+    Height = 40
+    Caption = 'Min and Max prices'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 14
+    WordWrap = True
+    OnClick = btnMinMaxClick
+  end
+  object btnUserFlight: TButton
+    Left = 216
+    Top = 512
+    Width = 120
+    Height = 40
+    Caption = 'Show User'#39's Flights'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 15
+    WordWrap = True
+    OnClick = btnUserFlightClick
+  end
+  object btnFindFlights: TButton
+    Left = 352
+    Top = 512
+    Width = 120
+    Height = 40
+    Caption = 'Find Specific Flights'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 16
+    WordWrap = True
+    OnClick = btnFindFlightsClick
+  end
+  object btnAboveAverage: TButton
+    Left = 486
+    Top = 512
+    Width = 120
+    Height = 40
+    Caption = 'Above Average Priced'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 17
+    WordWrap = True
+    OnClick = btnAboveAverageClick
+  end
+  object btnAvailableFlights: TButton
+    Left = 624
+    Top = 512
+    Width = 120
+    Height = 40
+    Caption = 'Available Flights'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 18
+    OnClick = btnAvailableFlightsClick
   end
 end
