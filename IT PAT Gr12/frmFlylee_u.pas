@@ -55,6 +55,16 @@ type
     redtBooking: TRichEdit;
     btnGetBooking: TButton;
     btnSaveInvoice: TButton;
+    redtMessage: TRichEdit;
+    imgStar1: TImage;
+    imgStar2: TImage;
+    imgStar3: TImage;
+    imgStar4: TImage;
+    imgStar5: TImage;
+    lblReviews: TLabel;
+    cbWouldRecommend: TCheckBox;
+    shpPostReview: TShape;
+    lblPost: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
 
@@ -104,6 +114,13 @@ type
     procedure btnGetBookingClick(Sender: TObject);
     procedure btnSaveInvoiceClick(Sender: TObject);
     procedure pcPagesChange(Sender: TObject);
+    procedure redtMessageClick(Sender: TObject);
+    procedure imgStar1Click(Sender: TObject);
+    procedure imgStar2Click(Sender: TObject);
+    procedure imgStar3Click(Sender: TObject);
+    procedure imgStar4Click(Sender: TObject);
+    procedure imgStar5Click(Sender: TObject);
+    procedure lblPostClick(Sender: TObject);
 
   private
   { Private Scope }
@@ -399,6 +416,14 @@ begin
   pcPages.ActivePageIndex := 3;
 end;
 
+procedure TfrmFlylee.lblPostClick(Sender: TObject);
+begin
+  with dmData do
+  begin
+
+  end;
+end;
+
 procedure TfrmFlylee.lbProfileSettingsOnClick(Sender: TObject);
 var
 
@@ -501,6 +526,31 @@ begin
   createHotelPage(ihotel, ihotel2, ihotelimage, ihotelimage2);
 end;
 
+procedure TfrmFlylee.imgStar1Click(Sender: TObject);
+begin
+  imgStar1.Picture.LoadFromFile('Assets/starFilled.png');
+end;
+
+procedure TfrmFlylee.imgStar2Click(Sender: TObject);
+begin
+  imgStar2.Picture.LoadFromFile('Assets/starFilled.png');
+end;
+
+procedure TfrmFlylee.imgStar3Click(Sender: TObject);
+begin
+  imgStar3.Picture.LoadFromFile('Assets/starFilled.png');
+end;
+
+procedure TfrmFlylee.imgStar4Click(Sender: TObject);
+begin
+  imgStar4.Picture.LoadFromFile('Assets/starFilled.png');
+end;
+
+procedure TfrmFlylee.imgStar5Click(Sender: TObject);
+begin
+  imgStar5.Picture.LoadFromFile('Assets/starFilled.png');
+end;
+
 procedure TfrmFlylee.btnApplyFiltersOnClick(Sender: TObject);
 var
 
@@ -593,7 +643,7 @@ begin
 
   with redtBooking do
   begin
-    top := 150;
+    top := 120;
     left := 700;
     height := 400;
     width := 400;
@@ -618,6 +668,97 @@ begin
 
   getBookingDetails(sDestination, rHours, rCost, iBookingID);
   createDestinationBox(40, 100, ibookingid, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, objUser, sbBookings);
+
+  { Maak review Seksie }
+  with lblReviews do
+  begin
+    setLabelFont(lblReviews, 20, true);
+    font.color := clTextColor;
+    left := 40;
+    top := 540;
+  end;
+
+  with redtMessage do
+  begin
+    font.name := 'Roboto';
+    font.Size := 12;
+    height := 140;
+    width := 400;
+    left := lblReviews.left;
+    top := lblReviews.top + lblReviews.Height + 15;
+  end;
+
+  with imgStar1 do
+  begin
+    Stretch := true;
+    width := 30;
+    height := 30;
+    left := redtMessage.left + redtMessage.Width + 20;
+    top := redtMessage.top + 10;
+    Picture.LoadFromFile('Assets/star.png');
+  end;
+
+  with imgStar2 do
+  begin
+    Stretch := true;
+    width := 30;
+    height := 30;
+    left := imgStar1.left + imgStar1.width + 10;
+    top := redtMessage.top + 10;
+    Picture.LoadFromFile('Assets/star.png');
+  end;
+
+  with imgStar3 do
+  begin
+    Stretch := true;
+    width := 30;
+    height := 30;
+    left := imgStar2.left + imgStar2.width + 10;
+    top := redtMessage.top + 10;
+    Picture.LoadFromFile('Assets/star.png');
+  end;
+
+  with imgStar4 do
+  begin
+    Stretch := true;
+    width := 30;
+    height := 30;
+    left := imgStar3.left + imgStar3.width + 10;
+    top := redtMessage.top + 10;
+    Picture.LoadFromFile('Assets/star.png');
+  end;
+
+  with imgStar5 do
+  begin
+    Stretch := true;
+    width := 30;
+    height := 30;
+    left := imgStar4.left + imgStar4.width + 10;
+    top := redtMessage.top + 10;
+    Picture.LoadFromFile('Assets/star.png');
+  end;
+
+  with cbWouldRecommend do
+  begin
+    left := redtMessage.left + redtMessage.Width + 20;
+    top := imgStar1.top + imgStar1.Height + 10;
+  end;
+
+  with shpPostReview do
+  begin
+    brush.Color := clPrimary;
+    width := 100;
+    height := 30;
+    left := redtMessage.left + redtMessage.Width + 20;
+    top := redtMessage.Top + redtMessage.Height - Height;
+  end;
+
+  with lblPost do
+  begin
+    setLabelFont(lblPost, 12, true);
+    centerComponent(lblPost, shpPostReview);
+    font.color := clWhite;
+  end;
 end;
 
 procedure TfrmFlylee.createDestinationsPage();
@@ -952,7 +1093,11 @@ begin
     left := imgArrowUp.left;
   end;
 
+  { Maak die box wat die review wys }
   createViewReviewBox(ireviewcount, sbInfo);
+
+  { Maak die advertiser seksie }
+  createAdvertiserBox();
 end;
 
 procedure TfrmFlylee.pcPagesChange(Sender: TObject);
@@ -1006,6 +1151,11 @@ end;
 procedure TfrmFlylee.ProfileOnClick(Sender: TObject);
 begin
   lbProfileSettings.Visible := true;
+end;
+
+procedure TfrmFlylee.redtMessageClick(Sender: TObject);
+begin
+  redtMessage.clear;
 end;
 
 procedure TfrmFlylee.shpFindMoreMouseDown(Sender: TObject; Button: TMouseButton;
@@ -1137,5 +1287,6 @@ procedure TfrmFlylee.edtLowPriceClick(Sender: TObject);
 begin
   edtLowPrice.text := '';
 end;
+
 
 end.

@@ -430,4 +430,19 @@ object frmAdmin: TfrmAdmin
     TabOrder = 18
     OnClick = btnAvailableFlightsClick
   end
+  object btnHome: TButton
+    Left = 8
+    Top = 576
+    Width = 92
+    Height = 37
+    Caption = '<- Home'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Roboto Lt'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 19
+    OnClick = btnHomeClick
+  end
 end

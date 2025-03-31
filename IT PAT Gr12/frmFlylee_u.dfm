@@ -413,6 +413,64 @@ object frmFlylee: TfrmFlylee
           Width = 65
           Height = 57
         end
+        object imgStar1: TImage
+          Left = 448
+          Top = 576
+          Width = 105
+          Height = 105
+          OnClick = imgStar1Click
+        end
+        object imgStar2: TImage
+          Left = 584
+          Top = 576
+          Width = 105
+          Height = 105
+          OnClick = imgStar2Click
+        end
+        object imgStar3: TImage
+          Left = 800
+          Top = 576
+          Width = 105
+          Height = 105
+          OnClick = imgStar3Click
+        end
+        object imgStar4: TImage
+          Left = 944
+          Top = 584
+          Width = 105
+          Height = 105
+          OnClick = imgStar4Click
+        end
+        object imgStar5: TImage
+          Left = 1088
+          Top = 592
+          Width = 105
+          Height = 105
+          OnClick = imgStar5Click
+        end
+        object lblReviews: TLabel
+          Left = 88
+          Top = 480
+          Width = 79
+          Height = 15
+          Caption = 'Leave a Review'
+        end
+        object shpPostReview: TShape
+          Left = 640
+          Top = 505
+          Width = 49
+          Height = 40
+          Pen.Style = psClear
+          Shape = stRoundRect
+        end
+        object lblPost: TLabel
+          Left = 680
+          Top = 528
+          Width = 63
+          Height = 15
+          Caption = 'Post Review'
+          OnClick = lblPostClick
+        end
         object redtBooking: TRichEdit
           Left = 960
           Top = 192
@@ -447,6 +505,30 @@ object frmFlylee: TfrmFlylee
           Caption = 'Save Invoice'
           TabOrder = 2
           OnClick = btnSaveInvoiceClick
+        end
+        object redtMessage: TRichEdit
+          Left = 216
+          Top = 528
+          Width = 185
+          Height = 89
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Segoe UI'
+          Font.Style = []
+          Lines.Strings = (
+            'What is your Review Message?')
+          ParentFont = False
+          TabOrder = 3
+          OnClick = redtMessageClick
+        end
+        object cbWouldRecommend: TCheckBox
+          Left = 448
+          Top = 496
+          Width = 137
+          Height = 17
+          Caption = 'Would Recommend?'
+          TabOrder = 4
         end
       end
     end

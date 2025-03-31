@@ -30,6 +30,7 @@ type
     btnFindFlights: TButton;
     btnAboveAverage: TButton;
     btnAvailableFlights: TButton;
+    btnHome: TButton;
     procedure FormCreate(Sender: TObject);
     procedure rgSortClick(Sender: TObject);
     procedure cbSortingOrderClick(Sender: TObject);
@@ -46,6 +47,7 @@ type
     procedure btnFindFlightsClick(Sender: TObject);
     procedure btnAboveAverageClick(Sender: TObject);
     procedure btnAvailableFlightsClick(Sender: TObject);
+    procedure btnHomeClick(Sender: TObject);
   private
     { Private declarations }
     bSortClick : Boolean;
@@ -262,6 +264,12 @@ begin
     qryData.SQL.text := 'select dateRecorded, COUNT(id) as [Record Count], SUM(revenue) as [Total Revenue] from tblStats group by dateRecorded having SUM(revenue) > 10000';
     qryData.Active := true;
   end;
+end;
+
+procedure TfrmAdmin.btnHomeClick(Sender: TObject);
+begin
+  frmFlylee.Show;
+  frmAdmin.Hide;
 end;
 
 procedure TfrmAdmin.btnAverageFlightClick(Sender: TObject);

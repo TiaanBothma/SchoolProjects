@@ -10,12 +10,25 @@ uses
   { Helper Files }
   uFunc, uDBCalls, dmData_u, clsUser_u;
 
+{ Stand Alone procedures }
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
 procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var user: TUser; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
+procedure createAdvertiserBox();
 
 implementation
+
+procedure createAdvertiserBox();
+begin
+  {
+   ========================
+   Maak die Advertiser boks
+   ========================
+  }
+
+
+end;
 
 procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
 var
