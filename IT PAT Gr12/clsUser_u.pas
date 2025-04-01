@@ -24,7 +24,7 @@ type
 
   public
     { Constructor }
-    constructor Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real);
+    constructor Create(iUID : integer);
 
     { Accessors }
     function getName: string;
@@ -51,15 +51,9 @@ type
 
 implementation
 
-constructor TUser.Create(sName, sLastName: string; dtBirthDate: TDateTime; bIsSubscribed, bIsAdmin: Boolean; rTotalSpent: Real);
+constructor TUser.Create(iUID : integer);
 begin
-  fName := sName;
-  fLastName := sLastName;
-  calculateAge(dtBirthDate);
-  fIsSubscribed := bIsSubscribed;
-  fIsAdmin := bIsAdmin;
-  fTotalSpent := rTotalSpent;
-
+  { Save die user locally vir beter en vinniger handeling }
   with dmData do
   begin
     tblUsers.open;
@@ -67,9 +61,15 @@ begin
 
     while not tblUsers.eof do
     begin
-      if tblUsers['userid'] = iUserId
+      if tblUsers['userid'] = iUID
         then begin
           fBookingID := tblUsers['flightid'];
+          fName := tblUsers['name'];
+          fLastName := tblUsers['lastname'];
+          calculateAge(tblUsers['birthDate']);
+          fIsSubscribed := tblUsers['isSubscribed'];
+          fIsAdmin := tblUsers['isAdmin'];
+          fTotalSpent := tblUsers['totalSpent'];
 
           break;
         end;
@@ -273,6 +273,7 @@ begin
   }
 
   //Kyk watse image die user op geclick het
+  //Kyk na die id wat op die image gestoor is
   if Sender is TImage
     then begin
       iFlightID := TImage(sender).Tag;
@@ -293,6 +294,7 @@ begin
                 then setBookingID(iFlightID)  //Save dit in die user tabel
                 else showmessage('This Flight is Full');
 
+              //Hou op soek as die regte flight gekry is
               break;
             end;
 

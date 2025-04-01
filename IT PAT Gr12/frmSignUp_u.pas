@@ -183,9 +183,9 @@ var
 
 begin
   {
-   =========================================================
-   Plaas die user se data in die databasis vir later gebruik
-   =========================================================
+   =======================================
+   Plaas die user se data in die databasis
+   =======================================
   }
 
   if isSignUpValidate then
@@ -198,21 +198,27 @@ begin
       tblUsers.last;
       tblUsers.Insert;
 
+      tblUsers['flightid'] := 1;
       tblUsers['name'] := edtName.text;
       tblUsers['lastname'] := edtlastname.text;
       tblUsers['isSubscribed'] := cbNotification.Checked;
       tblUsers['birthDate'] := dtpBirthDate.date;
       tblUsers['password'] := hashPassword(spassword);
+      tblUsers['isAdmin'] := false;
+      tblUsers['totalSpent'] := 0;
       //Save die profile pic
       saveProfilePictoDB(sfilename);
 
       tblUsers.post;
 
+      iUserId := tblUsers['userid'];
       //Save die user locally
-      frmFlylee.objUser := TUser.Create(edtname.text, edtlastname.text, dtpBirthDate.date, cbNotification.Checked, false, 0);
+      frmFlylee.objUser := TUser.Create(iuserid);
     end;
 
-    MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee',TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
+    MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee', TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
+    frmFlylee.Show;
+    frmSignUp.Hide;
   end
   else
   begin
@@ -232,13 +238,7 @@ begin
 
       if tblUsers['userid'] = 13
         then
-        frmFlylee.objUser := Tuser.create(
-          tblUsers['Name'],
-          tblUsers['LastName'],
-          tblUsers['birthDate'],
-          tblUsers['isSubscribed'],
-          tblUsers['isAdmin'],
-          tblusers['totalSpent']);
+        frmFlylee.objUser := Tuser.create(13);
   end;
 
   frmSignUp.Hide;
@@ -256,13 +256,7 @@ begin
 
       if tblUsers['userid'] = 13
         then
-        frmFlylee.objUser := Tuser.create(
-          tblUsers['Name'],
-          tblUsers['LastName'],
-          tblUsers['birthDate'],
-          tblUsers['isSubscribed'],
-          tblUsers['isAdmin'],
-          tblusers['totalSpent']);
+        frmFlylee.objUser := Tuser.create(13);
   end;
 
   frmAdmin.show;

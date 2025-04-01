@@ -121,6 +121,8 @@ var
   shpReview : TShape;
   lblMessage, lblUser, lblTo, lblDate : TLabel;
   imgProfile : TImage;
+  imgStar1, imgStar2, imgStar3, imgStar4, imgStar5 : TImage;
+  iStars : integer;
 
 begin
   {
@@ -148,7 +150,7 @@ begin
     Stretch := true;
     width := 70;
     height := 70;
-    loadProfilePic(imgProfile, 13);
+    loadProfilePic(imgProfile, getReviewUserID(ireviewcount));
     Top := shpReview.Top - (imgProfile.Height div 2);
     Left := shpReview.Left - (imgProfile.Width div 2);
   end;
@@ -195,6 +197,95 @@ begin
     caption := getUserReviews(iReviewCount)[3];
     left := shpReview.Left + shpReview.Width - Width - 20;
     top := shpReview.Top + 20;
+  end;
+
+  { Maak die stars wat die user gerate het }
+  //Kry die stars wat die user gerate het
+  istars := strtoint(getuserReviews(ireviewcount)[4]);
+
+  imgStar1 := TImage.Create(sbPage);
+  with imgStar1 do
+  begin
+    parent := sbpage;
+    stretch := true;
+    width := 30;
+    height := 30;
+    //Kyk of die ster gemerk is
+    if iStars >= 1 then
+      picture.LoadFromFile('Assets/starFilled.png')
+    else
+      picture.LoadFromFile('Assets/star.png');
+
+    top := lblUser.top;
+    left := lblTo.left + lblTo.width + 30;
+  end;
+
+  imgStar2 := TImage.Create(sbPage);
+  with imgStar2 do
+  begin
+    parent := sbpage;
+    stretch := true;
+    width := 30;
+    height := 30;
+    //Kyk of die ster gemerk is
+    if iStars >= 2 then
+      picture.LoadFromFile('Assets/starFilled.png')
+    else
+      picture.LoadFromFile('Assets/star.png');
+
+    top := lblUser.top;
+    left := imgStar1.left + imgStar1.width + 10;
+  end;
+
+  imgStar3 := TImage.Create(sbPage);
+  with imgStar3 do
+  begin
+    parent := sbpage;
+    stretch := true;
+    width := 30;
+    height := 30;
+    //Kyk of die ster gemerk is
+    if iStars >= 3 then
+      picture.LoadFromFile('Assets/starFilled.png')
+    else
+      picture.LoadFromFile('Assets/star.png');
+
+    top := lblUser.top;
+    left := imgStar2.left + imgStar2.width + 10;
+  end;
+
+  imgStar4 := TImage.Create(sbPage);
+  with imgStar4 do
+  begin
+    parent := sbpage;
+    stretch := true;
+    width := 30;
+    height := 30;
+    //Kyk of die ster gemerk is
+    if iStars >= 4 then
+      picture.LoadFromFile('Assets/starFilled.png')
+    else
+      picture.LoadFromFile('Assets/star.png');
+
+    top := lblUser.top;
+    left := imgStar3.left + imgStar3.width + 10;
+  end;
+
+  imgStar5 := TImage.Create(sbPage);
+  with imgStar5 do
+  begin
+    parent := sbpage;
+    stretch := true;
+    width := 30;
+    height := 30;
+    //Kyk of die ster gemerk is
+    if iStars >= 5 then
+      picture.LoadFromFile('Assets/starFilled.png')
+    else
+      picture.LoadFromFile('Assets/star.png');
+
+    top := lblUser.top;
+    left := imgStar4.left + imgStar4.width + 10;
   end;
 end;
 

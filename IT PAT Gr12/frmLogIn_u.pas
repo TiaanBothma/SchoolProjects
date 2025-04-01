@@ -133,7 +133,7 @@ begin
           iUserid := tblUsers['userId'];
 
           { User Object }
-          frmFlylee.objUser := TUser.create(TblUsers['Name'], tblUsers['LastName'], tblUsers['birthDate'], tblUsers['isSubscribed'], tblUsers['isAdmin'], tblusers['totalSpent']);
+          frmFlylee.objUser := TUser.create(iuserid);
 
           MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
           frmFlylee.Show;

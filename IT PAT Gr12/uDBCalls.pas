@@ -18,8 +18,31 @@ procedure getHotelInfo(var arrNames : array of string; var arrCosts : array of r
 procedure getBookingDetails(var sDestination : string; var rHours : real; var rCost : real ; var iBookingID : integer);
 procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
 procedure updateStatsTable();
+function getReviewUserID(ireviewID : integer) : integer;
 
 implementation
+
+function getReviewUserID(ireviewID : integer) : integer;
+begin
+  with dmData do
+  begin
+    tblReviews.open;
+    tblReviews.first;
+
+    while not tblReviews.Eof do
+    begin
+      if tblReviews['id'] = ireviewid
+        then begin
+          result := tblReviews['userid'];
+
+          break;
+        end;
+
+
+      tblReviews.next;
+    end;
+  end;
+end;
 
 procedure updateStatsTable();
 begin
@@ -323,7 +346,7 @@ begin
   }
 
   //initialize die array en stel dit op 3 plekke
-  SetLength(arrUserReview, 4);
+  SetLength(arrUserReview, 5);
 
   with dmData do
   begin
@@ -340,6 +363,7 @@ begin
 
         arruserReview[1] := tblReviews['to'];
         arruserReview[3] := formatDateTime('dd mmm yyyy', tblReviews['reviewDate']);
+        arrUserReview[4] := tblReviews['stars'];
 
         //Kry die user se naam
         tblUsers.open;

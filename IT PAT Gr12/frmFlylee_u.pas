@@ -450,16 +450,22 @@ var
 begin
 
   case lbProfileSettings.ItemIndex of
-    0: begin
-      sname := inputbox('Name','What should your new name be?'+#13+'(Keep in mind: Your name will change after restarting the program)','');
-      objUser.setName(sname);
-    end;
+    0:
+      begin
+        sname := inputbox('Name', 'What should your new name be?' + #13 +
+          '(Keep in mind: Your name will change after restarting the program)',
+          '');
+        objUser.setName(sname);
+      end;
     1: objUser.setIsSubscribed(true);
+
     2: pcPages.ActivePage := tsBookings;
-    3: begin
-      frmAdmin.show;
-      frmFlylee.hide;
-    end;
+
+    3:
+      begin
+        frmAdmin.show;
+        frmFlylee.hide;
+      end;
   end;
 
   //Verwyder die listbox weer
@@ -1016,7 +1022,7 @@ begin
    =========================================================
   }
 
-  { Services }
+  { Services seksie }
   with lblCategory do
   begin
     setLabelFont(lblCategory, 14, true);
@@ -1035,11 +1041,11 @@ begin
     top := 125;
   end;
 
-  //Create category info boxes for services
-  createInfoBox(40, 'Assets/weatherService.png', 'Calculated Weather', 'We offer only the best', sbInfo);
-  createInfoBox(390, 'Assets/flightService.png', 'Best Flights', 'We offer only theasdf best', sbInfo);
-  createInfoBox(740, 'Assets/eventService.png', 'Local Events', 'We offer only the beasdfst', sbInfo);
-  createInfoBox(1090, 'Assets/settingsService.png', 'Customization', 'We offer onasdfly the best', sbInfo);
+  //Maak die category services seksie in die info page
+  createInfoBox(40, 'Assets/weatherService.png', 'Calculated Weather', 'Predict weather for safe and ' + #13 + 'efficient flights', sbInfo);
+  createInfoBox(390, 'Assets/flightService.png', 'Best Flights', 'Only proficient pilots are ' + #13 + 'hired at FlyLee', sbInfo);
+  createInfoBox(740, 'Assets/eventService.png', 'Local Events', 'We provide flights to global ' + #13 + 'or local events', sbInfo);
+  createInfoBox(1090, 'Assets/settingsService.png', 'Customization', 'Customization is ensured in ' + #13 + 'our flights', sbInfo);
 
   { Top Selling Flights }
   with lblTopSelling do
@@ -1058,7 +1064,7 @@ begin
     top := 655;
   end;
 
-  //Create top selling destination boxes
+  //Maak die Top Selling Destination bokse
   loadTopDestinations(arrDestinations, arrHours, arrCosts, arrIds);
   ileft := 70;
 
@@ -1120,6 +1126,7 @@ end;
 
 procedure TfrmFlylee.pcPagesChange(Sender: TObject);
 begin
+  //Reset die user se booking elke keer as page verander
   createBookingsPage();
 end;
 
@@ -1168,16 +1175,19 @@ end;
 
 procedure TfrmFlylee.ProfileOnClick(Sender: TObject);
 begin
+  //Profile settings
   lbProfileSettings.Visible := true;
 end;
 
 procedure TfrmFlylee.redtMessageClick(Sender: TObject);
 begin
+  //Verwyder die hint message in die redt
   redtMessage.clear;
 end;
 
 procedure TfrmFlylee.setStars(irating: integer);
 begin
+  { Auto fill die stars in die review seksie en handel die icon change }
   if iRating >= 1 then imgStar1.Picture.LoadFromFile('Assets/starFilled.png')
   else imgStar1.Picture.LoadFromFile('Assets/star.png');
 
@@ -1268,7 +1278,7 @@ begin
     onClick := Profileonclick;
   end;
 
-    //Create user settigs                                             1
+  //Create user settigs
   lbProfileSettings := TListBox.Create(AOwner);
   with lbProfileSettings do
   begin
