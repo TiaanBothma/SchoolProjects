@@ -7,7 +7,7 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, pngimage, Vcl.StdCtrls,
   Vcl.Buttons, Vcl.ComCtrls, System.Skia, Vcl.Skia, DateUtils,
   { Helper Files }
-  uFunc, uDBCalls, clsUser_u;
+  uFunc, uDBCalls, clsUser_u, clsAdvertiser_u;
 
 type
   TfrmSignUp = class(TForm)
@@ -188,6 +188,13 @@ begin
    =======================================
   }
 
+  if (edtName.text = '') or (edtLastName.text = '') or (edtPassword.text = '') or (dtpBirthDate.Date = date)
+    then begin
+      showmessage('Please fill in fields');
+      exit;
+    end;
+
+
   if isSignUpValidate then
   begin
     spassword := edtPassword.text;
@@ -236,18 +243,19 @@ begin
     tblUsers.open;
     tblUsers.first;
 
-      if tblUsers['userid'] = 13
-        then
-        frmFlylee.objUser := Tuser.create(13);
+    if tblUsers['userid'] = 13 then
+      frmFlylee.objUser := TUser.Create(13);
   end;
 
+  frmFlylee.objAdvertiser := TAdvertiser.Create('Coca Cola', 'Medium', 2);
+
   frmSignUp.Hide;
-  frmFlylee.show;
+  frmFlylee.Show;
 end;
 
 procedure TfrmSignUp.Button2Click(Sender: TObject);
 begin
-    dmData.iUserId := 13;
+  dmData.iUserId := 13;
 
   with dmData do
   begin
@@ -255,9 +263,10 @@ begin
     tblUsers.first;
 
       if tblUsers['userid'] = 13
-        then
-        frmFlylee.objUser := Tuser.create(13);
+      then frmFlylee.objUser := Tuser.create(13);
   end;
+
+  frmFlylee.objAdvertiser := TAdvertiser.Create('Coca Cola', 'Medium', 2);
 
   frmAdmin.show;
   frmSignUp.Hide;
@@ -291,6 +300,9 @@ begin
    Form Create
    ===========
   }
+
+  { init vars }
+  dtpBirthDate.Date := date();
 
   //Load Images
   imgTitle.Picture.LoadFromFile('Assets/logoTitle.png');

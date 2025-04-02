@@ -8,18 +8,24 @@ uses
   Vcl.Buttons, Vcl.ComCtrls, DateUtils, Data.DB, Data.Win.ADODB,
   System.Skia, Vcl.Skia,
   { Helper Files }
-  uFunc, uDBCalls, dmData_u, clsUser_u;
+  uFunc, uDBCalls, dmData_u, clsUser_u, clsAdvertiser_u;
 
 { Stand Alone procedures }
 procedure createInfoBox(iLeft : Integer; sImage, sTitle, sSubtitle: string; sbPage : TScrollBox);
-procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var user: TUser; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var objUser: TUser; sbPage : TScrollBox);
 procedure createViewReviewBox(iReviewCount: integer; sbPage : TScrollBox);
 procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
-procedure createAdvertiserBox();
+procedure createAdvertiserBox(var objUser : TUser ;var objAdvertiser: TAdvertiser; sbPage : TScrollBox);
 
 implementation
 
-procedure createAdvertiserBox();
+procedure createAdvertiserBox(var objUser : TUser ;var objAdvertiser: TAdvertiser; sbPage : TScrollBox);
+var
+
+  shpAdvertise : TShape;
+  lblAdvertName, lblSize, lblDestination : TLabel;
+  imgAdvertiser : TImage;
+
 begin
   {
    ========================
@@ -27,7 +33,66 @@ begin
    ========================
   }
 
+  shpAdvertise := TShape.Create(sbPage);
+  with shpAdvertise do
+  begin
+    parent := sbPage;
+    width := 800;
+    height := 200;
+    top := 1650;
+    left := 400;
+    Pen.Style := psClear;
+    shape := stRoundRect;
+    brush.Color := clWhite;
+  end;
 
+  imgAdvertiser := TImage.Create(sbPage);
+  with imgAdvertiser do
+  begin
+    parent := sbPage;
+    stretch := true;
+    width := 400;
+    height := 100;
+    left := shpAdvertise.left + 20;
+    top := shpAdvertise.top + 40;
+    picture.LoadFromFile(objAdvertiser.getImage);
+    if objUser.getIsAdmin
+      then onClick := objAdvertiser.showAdvertCost
+      else onClick := objAdvertiser.changeAdvertWarning;
+  end;
+
+  lblAdvertName := TLabel.Create(sbPage);
+  with lblAdvertName do
+  begin
+    parent := sbPage;
+    setLabelFont(lblAdvertName, 20, true);
+    font.color := rgb(94, 98, 130);
+    left := imgAdvertiser.left + imgAdvertiser.Width + 40;
+    top := imgAdvertiser.top;
+    caption := objAdvertiser.getName;
+  end;
+
+  lblSize := TLabel.Create(sbpage);
+  with lblSize do
+  begin
+    parent := sbPage;
+    setlabelfont(lblSize, 15, true);
+    font.color := rgb(94, 98, 130);
+    caption := '"' + objAdvertiser.getSize + '" Ad Size';
+    top := lblAdvertName.top + lblAdvertname.Height + 20;
+    left := lblAdvertname.left;
+  end;
+
+  lblDestination := TLabel.Create(sbPage);
+  with lblDestination do
+  begin
+    parent := sbPage;
+    setlabelfont(lblDestination, 18, false);
+    font.Color := rgb(94, 98, 130);
+    caption := 'Advert on Plane to ' + objAdvertiser.getFlightDestination;
+    centerComponent(lblDestination, shpAdvertise);
+    top := imgAdvertiser.top + imgAdvertiser.Height + 30;
+  end;
 end;
 
 procedure createHotelBox(iimage : integer; shotelname, slocation : string; rhotelprice : real; isBelow: Boolean; tspage: TTabSheet);
@@ -289,7 +354,7 @@ begin
   end;
 end;
 
-procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var user: TUser; sbPage : TScrollBox);
+procedure createDestinationBox(iLeft, itop, FlightID : Integer; sImage, sTitle, sHours : string; rCost : real ; var objUser: TUser; sbPage : TScrollBox);
 var
 
   imgLocation, imgIcon : TImage;
@@ -314,7 +379,7 @@ begin
     top := itop;
     left := ileft;
     Tag := FlightID;
-    OnClick := user.destinationOnClick;
+    OnClick := objUser.destinationOnClick;
   end;
 
   shpDesc := TShape.Create(sbpage);

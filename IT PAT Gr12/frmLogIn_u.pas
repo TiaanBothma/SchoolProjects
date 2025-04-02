@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, pngimage, IdHashMessageDigest, IdGlobal, clsUser_u;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, pngimage, IdHashMessageDigest, IdGlobal, clsUser_u,
+  clsAdvertiser_u;
 
 type
   TfrmLogIn = class(TForm)
@@ -118,22 +119,39 @@ begin
 end;
 
 procedure TfrmLogIn.btnLogInClick(Sender: TObject);
+var
+
+  bfound : boolean;
+
 begin
+  bfound := false;
+
+  if (edtName.text = '') or (edtPassword.text = '')
+  then begin
+    showmessage('Please fill in fields');
+    exit;
+  end;
+
+
   with dmData do
   begin
     tblUsers.open;
     tblUsers.first;
 
-    while not tblUsers.Eof do
+    while (not tblUsers.Eof) and (bfound = false) do
     begin
       //Check of the hashed password met die edit password ooreenstem
       if (verifyPassword(tblUsers['password'], edtpassword.text)) and (tblUsers['name'] = edtName.text)
         then begin
+          //Die user is gevind hou op soek
+          bfound := true;
           //Allocate die user id aan die user sodat later kan opspoor wie die persoon is
           iUserid := tblUsers['userId'];
 
           { User Object }
           frmFlylee.objUser := TUser.create(iuserid);
+          { Advert object }
+          frmFlylee.objAdvertiser := TAdvertiser.Create('Coca Cola', 'Medium', 2);
 
           MessageDlg('Logged In! Welcome back ' + edtName.text, TMsgDlgType.mtInformation, [TMsgDlgBtn.mbOK], 0);
           frmFlylee.Show;
@@ -142,8 +160,11 @@ begin
 
       tblUsers.next;
     end;
-
   end;
+
+  if bfound = false
+    then MessageDLG('Account not found, try making an account first!', TMsgDlgType.mtError, [TMsgDlgBtn.mbOK], 0);
+
 end;
 
 procedure TfrmLogIn.FormCreate(Sender: TObject);

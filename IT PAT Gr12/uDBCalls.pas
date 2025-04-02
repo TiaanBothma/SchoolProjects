@@ -19,8 +19,35 @@ procedure getBookingDetails(var sDestination : string; var rHours : real; var rC
 procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit; sname, slastname, sAge : string);
 procedure updateStatsTable();
 function getReviewUserID(ireviewID : integer) : integer;
+function getFlightDuration(iFlightID : integer) : integer;
 
 implementation
+
+function getFlightDuration(iFlightID : integer) : integer;
+begin
+  //Kry die spesifieke flight se duration
+  with dmData do
+  begin
+    tblFLights.open;
+    tblFlights.first;
+
+    while not tblFlights.Eof do
+    begin
+      if tblFlights['flightid'] = iFlightID
+        then begin
+          //Stuur die tyd terug
+          result := tblFLights['tripLength'];
+
+          //Hou op soek as die regte rekord gevind is
+          break;
+        end;
+
+
+      tblFlights.next;
+    end;
+  end;
+
+end;
 
 function getReviewUserID(ireviewID : integer) : integer;
 begin
@@ -532,14 +559,15 @@ begin
    =================================================================================
   }
 
- // Stel die standaard prent as sFileName leeg is
-  if sFileName = '' then
-    sFileName := 'Assets/logo.png';
+  // Stel die standaard prent as sFileName leeg is
+  if sfilename = '' then
+    sfilename := 'Assets/logo.png';
 
   Stream := TMemoryStream.Create;
 
+  //Stel die image as n Long Binary sodat dit gesave kan word
   try
-    Stream.LoadFromFile(sFileName);
+    Stream.LoadFromFile(sfilename);
     Stream.Position := 0;
 
     BlobField := dmData.tblUsers.FieldByName('profilePic') as TBlobField;
@@ -547,6 +575,7 @@ begin
   finally
     Stream.Free;
   end;
+
 end;
 
 end.

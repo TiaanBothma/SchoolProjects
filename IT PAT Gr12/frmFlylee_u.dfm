@@ -146,7 +146,7 @@ object frmFlylee: TfrmFlylee
     Top = 0
     Width = 1425
     Height = 809
-    ActivePage = tsInfo
+    ActivePage = tsBookings
     TabOrder = 0
     OnChange = pcPagesChange
     object tsHome: TTabSheet
@@ -491,8 +491,8 @@ object frmFlylee: TfrmFlylee
         object btnGetBooking: TButton
           Left = 968
           Top = 120
-          Width = 185
-          Height = 49
+          Width = 160
+          Height = 35
           Caption = 'Get Booking Invoice'
           TabOrder = 1
           OnClick = btnGetBookingClick
@@ -500,8 +500,8 @@ object frmFlylee: TfrmFlylee
         object btnSaveInvoice: TButton
           Left = 968
           Top = 320
-          Width = 185
-          Height = 49
+          Width = 140
+          Height = 35
           Caption = 'Save Invoice'
           TabOrder = 2
           OnClick = btnSaveInvoiceClick

@@ -138,9 +138,6 @@ type
     tfile : textfile;
     ihotel, ihotel2, imaxhotel, ihotelimage, ihotelimage2 : integer;
 
-    { Object }
-    objAdvertiser : TAdvertiser;
-
     { Booking }
     iBookingID : integer;
 
@@ -148,6 +145,7 @@ type
     istars : integer;
   public
   { Public Scope }
+    objAdvertiser : TAdvertiser;
     objUser : TUser;
 
     { Verklaar die kleure sodat alle vorme kan gebruik }
@@ -645,6 +643,7 @@ begin
     setLabelFont(lblBookingsTitle, 26, True);
     font.color := clTextColor;
     left := 40;
+    top := 20;
   end;
 
   with imgBookingCorner do
@@ -667,7 +666,7 @@ begin
 
   with redtBooking do
   begin
-    top := 120;
+    top := 110;
     left := 700;
     height := 400;
     width := 400;
@@ -691,7 +690,7 @@ begin
   end;
 
   getBookingDetails(sDestination, rHours, rCost, iBookingID);
-  createDestinationBox(40, 100, ibookingid, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, objUser, sbBookings);
+  createDestinationBox(40, 85, ibookingid, 'Assets/Travel/' + inttostr(randomrange(1, 11)) +  '.jpg', sDestination, floattostr(rHours) + ' Hour Trip', rCost, objUser, sbBookings);
 
   { Maak review Seksie }
   with lblReviews do
@@ -1121,7 +1120,7 @@ begin
   createViewReviewBox(ireviewcount, sbInfo);
 
   { Maak die advertiser seksie }
-  createAdvertiserBox();
+  createAdvertiserBox(objUser, objAdvertiser, sbInfo);
 end;
 
 procedure TfrmFlylee.pcPagesChange(Sender: TObject);

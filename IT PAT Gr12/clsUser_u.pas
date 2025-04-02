@@ -63,6 +63,7 @@ begin
     begin
       if tblUsers['userid'] = iUID
         then begin
+          //Kry die user se details uit die databasis sodat dit locally gestoor is
           fBookingID := tblUsers['flightid'];
           fName := tblUsers['name'];
           fLastName := tblUsers['lastname'];
@@ -70,7 +71,7 @@ begin
           fIsSubscribed := tblUsers['isSubscribed'];
           fIsAdmin := tblUsers['isAdmin'];
           fTotalSpent := tblUsers['totalSpent'];
-
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -120,8 +121,9 @@ begin
     begin
       if tblFlights['flightid'] = getBookingID
         then begin
+          //Stuur die user se foreing key vir die flight
           result := tblFlights['to'];
-
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -151,8 +153,10 @@ begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Verander die user se display naam
           tblUsers['name'] := sname;
           tblusers.post;
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -176,8 +180,10 @@ begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Verander die user se van
           tblUsers['lastName'] := slastname;
           tblusers.post;
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -202,8 +208,10 @@ begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Verander die user se subskribsie
           tblUsers['isSubscribed'] := bIsSubscribed;
           tblusers.post;
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -227,8 +235,10 @@ begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Verander die user na Admin
           tblUsers['isAdmin'] := bisAdmin;
           tblusers.post;
+          //en dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -252,8 +262,10 @@ begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Verander die prys in die databasis
           tblUsers['totalSpent'] := rAmount;
           tblusers.post;
+          //En dan hou op soek as die regte rekord gevind is
           break;
         end;
 
@@ -309,10 +321,12 @@ begin
           if tblStats['Flightid'] = iFlightid
           then begin
             tblStats.edit;
+            //Update die stats wat die user veroorsaak het
             tblStats['Clicks'] := tblStats['Clicks'] + 1;
             tblStats['bookings'] := tblStats['bookings'] + 1;
             tblStats['dateRecorded'] := date();
             tblStats.post;
+            //Update die pryse in die stats tabel
             updateStatsTable();
 
             break;
@@ -333,6 +347,7 @@ begin
           if tblStats['Flightid'] = iFlightID
             then begin
               tblStats.edit;
+              //Update die clicks in die database omdat user dit geclick het
               tblStats['clicks'] := tblStats['clicks'] + 1;
               tblStats.post;
             end;
@@ -355,13 +370,33 @@ begin
     tblUsers.open;
     tblUsers.first;
 
+    tblFlights.open;
+    tblFlights.first;
+
     while not tblUsers.Eof do
     begin
       if tblUsers['Userid'] = iuserid
         then begin
           tblUsers.edit;
+          //Add die Foreign Key by die user
           tblUsers['FlightId'] := iBookingid;
+
+          while not tblFlights.Eof do
+          begin
+            if tblFlights['flightid'] = iBookingID
+              then begin
+                //add die prys by die user se spent
+                tblUsers['totalSpent'] := tblFlights['price'];
+                //Hou op soek as die flight gevind is
+                break;
+              end;
+
+
+            tblFlights.next;
+          end;
+
           tblusers.post;
+          //Hou op soek as die rekord gevind is
           break;
         end;
 
