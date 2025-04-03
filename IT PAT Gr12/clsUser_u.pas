@@ -47,6 +47,7 @@ type
     { Auxiliary }
     procedure calculateAge(dtBirthDate: TDateTime);
     procedure destinationOnClick(Sender : TObject);
+    function toString(): string;
   end;
 
 implementation
@@ -272,6 +273,26 @@ begin
       tblUsers.next;
     end;
   end;
+end;
+
+function TUser.toString: string;
+var
+  sline : string;
+begin
+  sline := fname + ' ' + fLastname + ' (' + inttostr(fage) + ')' + #13;
+
+  if fisAdmin
+    then sline := sline + ' - Admin: YES' + #13
+    else sline := sline + ' - Admin: NO' + #13;
+
+  if fIsSubscribed
+    then sline := sline + ' - Subscribed: YES' + #13
+    else sline := sline + ' - Subscribed: NO' + #13;
+
+  sline := sline + 'Has spent a total of ' + floattostrf(fTotalSpent, ffCurrency,8,2) + #13;
+  sline := sline + 'Currently planning on going to ' + getFlightDestination(fBookingID);
+
+  result := sline;
 end;
 
 procedure TUser.destinationOnClick(Sender: TObject);

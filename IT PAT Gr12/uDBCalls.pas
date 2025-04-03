@@ -20,8 +20,33 @@ procedure generateUserInvoice(ibookingID : integer ; var redtInvoice : TRichEdit
 procedure updateStatsTable();
 function getReviewUserID(ireviewID : integer) : integer;
 function getFlightDuration(iFlightID : integer) : integer;
+function getFlightDestination(iFLightID : integer) : string;
 
 implementation
+
+function getFlightDestination(iFLightID : integer) : string;
+begin
+  //Kry die destination van die spesifieke flight
+  with dmData do
+  begin
+    tblFlights.open;
+    tblFlights.first;
+
+    while not tblFlights.Eof do
+    begin
+      if tblFlights['flightid'] = iFlightID
+        then begin
+          //Stuur die destination terug
+          result := tblFlights['to'];
+
+          //Hou op soek as die regte rekord gevind is
+          break;
+        end;
+
+      tblFlights.next;
+    end;
+  end;
+end;
 
 function getFlightDuration(iFlightID : integer) : integer;
 begin

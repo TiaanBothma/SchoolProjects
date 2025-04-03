@@ -65,11 +65,12 @@ uses dmData_u, frmLogIn_u, frmFlylee_u, frmAdmin_u;
 procedure TfrmSignUp.posComponents();
 begin
   {
-   ===================================
-   Position the components on the form
-   ===================================
+   ==============================================
+   Posisie van die components moet reggemaak word
+   ==============================================
   }
 
+  //Gebruik die procedure om mooi te pos
   posInputFields(lblName, edtName, 150);
   posInputFields(lblLastName, edtLastName, 220);
   posInputFields(lblPassword, edtPassword, 290);
@@ -78,8 +79,7 @@ begin
   begin
     Height := 25;
     Width := 25;
-
-    //Postition generate button next to pass edit
+    //Sit die generate button langs die pass edit
     left := edtPassword.left + edtPassword.Width + 5;
     top := edtPassword.top;
   end;
@@ -126,12 +126,13 @@ end;
 
 procedure TfrmSignUp.posInputFields(currLabel : TLabel; currEdit : TEdit; ilbltop : integer);
 const
-
+  //Konstantes vir effektiewe positioning
   ispace = 8;
   ileft = 55;
-
 begin
-  //Fix label position and size
+  //Parameters word ingevoer met die components sodat ek daarmee kan werk met wisk
+
+  //Maak die label se size en pos reg
   with currLabel do
   begin
     Left := ileft;
@@ -140,12 +141,11 @@ begin
   end;
 
 
-  //Fix editbox position and size
+  //Maak die edit box pos reg
   with currEdit do
   begin
     height := 25;
     width := 180;
-
     Left := ileft;
     top := currLabel.Top + currLabel.Height + ispace;
   end;
@@ -165,15 +165,16 @@ begin
    ========================================
   }
 
+  //sChars alles wat die password uit gemaak kan word
   schars := 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefgihjklmnopqrstuvwxyz1234567890!@$%^&*()[]{}';
 
   for I := 1 to 8 do
   begin
+    //Gaan deur karakters en add dit randomly vir effektiewe password
     spass := spass + schars[random(length(schars)) + 1];
   end;
 
   edtPassword.text := spass;
-
 end;
 
 procedure TfrmSignUp.btnSignUpClick(Sender: TObject);
@@ -194,7 +195,7 @@ begin
       exit;
     end;
 
-
+  //Check of die details korrek is
   if isSignUpValidate then
   begin
     spassword := edtPassword.text;
@@ -205,6 +206,7 @@ begin
       tblUsers.last;
       tblUsers.Insert;
 
+      //Add die user in die databasis
       tblUsers['flightid'] := 1;
       tblUsers['name'] := edtName.text;
       tblUsers['lastname'] := edtlastname.text;
@@ -223,12 +225,14 @@ begin
       frmFlylee.objUser := TUser.Create(iuserid);
     end;
 
+    //As sukkesvol is - Show message en dan gaan na main form
     MessageDlg('Sign Up Successful.' + #13 + 'Welcome to Flylee', TMsgDlgType.mtConfirmation, [TMsgDlgBtn.mbOK], 0);
     frmFlylee.Show;
     frmSignUp.Hide;
   end
   else
   begin
+    //Laat die user weet dat hulle details nie reg is nie
     MessageDlg('An error has occured with the Sign Up.' + #13 + #9 + 'Please Try Again', TMsgDlgType.mtWarning, [TMsgDlgBtn.mbClose], 0);
   end;
 
@@ -365,20 +369,21 @@ end;
 
 procedure TfrmSignUp.lblLogInClick(Sender: TObject);
 begin
+  //Gaan na die log in page
   frmLogin.show;
   frmSignup.hide;
 end;
 
 procedure TfrmSignUp.lblLogInMouseEnter(Sender: TObject);
 begin
-  //Change font and color when hovered over
+  //Verander die font en kleur wanneer oor dit hover
   lblLogIn.font.color := frmFlylee.clPrimary;
   lblLogIn.font.Style := [TFontStyle.fsUnderline, TFontStyle.fsBold];
 end;
 
 procedure TfrmSignUp.lblLogInMouseLeave(Sender: TObject);
 begin
-  //Revert color and font when mouse leaves
+  //Maak die font en kleur weer reg
   lblLogIn.font.Color := clBlack;
   lblLogin.font.Style := [TFontStyle.fsBold];
 end;

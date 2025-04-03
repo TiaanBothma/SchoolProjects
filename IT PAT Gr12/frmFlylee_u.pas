@@ -455,11 +455,10 @@ begin
           '');
         objUser.setName(sname);
       end;
-    1: objUser.setIsSubscribed(true);
-
-    2: pcPages.ActivePage := tsBookings;
-
-    3:
+    1: showmessage(objUser.toString);
+    2: objUser.setIsSubscribed(true);
+    3: pcPages.ActivePage := tsBookings;
+    4:
       begin
         frmAdmin.show;
         frmFlylee.hide;
@@ -1284,13 +1283,14 @@ begin
     Parent := AParent;
     visible := false;
     top := 45;
-    Left := 1230;
-    Width := 135;
-    Height := 85;
+    Left := 1220;
+    Width := 160;
+    Height := 100;
     Font.Name := 'Roboto';
     font.size := 11;
     items.Add('Change User Name');
-    items.Add('Subscribe to Weekly Updates');
+    items.Add('View Profile Summary');
+    items.Add('Subscribe to News');
     items.Add('View My Bookings');
     items.Add('Go to Admin Page');
     OnClick := lbProfileSettingsOnClick;

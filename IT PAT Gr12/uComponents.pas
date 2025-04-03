@@ -89,7 +89,7 @@ begin
     parent := sbPage;
     setlabelfont(lblDestination, 18, false);
     font.Color := rgb(94, 98, 130);
-    caption := 'Advert on Plane to ' + objAdvertiser.getFlightDestination;
+    caption := 'Advert on Plane to ' + getFlightDestination(objAdvertiser.getFlightID);
     centerComponent(lblDestination, shpAdvertise);
     top := imgAdvertiser.top + imgAdvertiser.Height + 30;
   end;

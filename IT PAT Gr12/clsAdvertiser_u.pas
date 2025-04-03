@@ -27,8 +27,8 @@ uses
       function getName() : string;
       function getCost() : real;
       function getImage() : string;
-      function getFlightDestination() : string;
       function getSize() : string;
+      function getFlightID() : integer;
 
       { Mutators }
       procedure setName(sname : string);
@@ -91,29 +91,9 @@ begin
   Result := fTotalCost;
 end;
 
-function TAdvertiser.getFlightDestination: string;
+function TAdvertiser.getFlightID: integer;
 begin
-  //Kry die destination van die flight waarop die advert is
-  with dmData do
-  begin
-    tblFlights.open;
-    tblFlights.first;
-
-    while not tblFlights.Eof do
-    begin
-      if tblFlights['flightid'] = fFlightID
-        then begin
-          //Stuur die destination terug
-          result := tblFlights['to'];
-
-          //Hou op soek as die regte rekord gevind is
-          break;
-        end;
-
-      tblFlights.next;
-    end;
-  end;
-
+  result := fFlightID;
 end;
 
 function TAdvertiser.getImage: string;
